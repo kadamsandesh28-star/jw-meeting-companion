@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 import {
   Box,
   Button,
@@ -7,9 +9,9 @@ import {
   CardContent,
   Grid,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
-
 export default function Home() {
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -28,6 +30,18 @@ if (hour < 12) {
 } else {
   greeting = "🌙 Good Evening";
 }
+const [encouragement, setEncouragement] = useState("");
+
+useEffect(() => {
+  const saved = localStorage.getItem("weekly-encouragement");
+  if (saved) {
+    setEncouragement(saved);
+  }
+}, []);
+
+useEffect(() => {
+  localStorage.setItem("weekly-encouragement", encouragement);
+}, [encouragement]);
   const cards = [
     {
       title: "📚 Midweek Meeting",
@@ -152,13 +166,14 @@ if (hour < 12) {
             🌟 Weekly Encouragement
           </Typography>
 
-          <Typography sx={{ mt: 2 }}>
-            "Trust in Jehovah with all your heart."
-          </Typography>
-
-          <Typography color="text.secondary">
-            Proverbs 3:5
-          </Typography>
+          <TextField
+  fullWidth
+  multiline
+  rows={3}
+  placeholder="Write your weekly encouragement..."
+  value={encouragement}
+  onChange={(e) => setEncouragement(e.target.value)}
+/>
         </CardContent>
       </Card>
     </Box>
