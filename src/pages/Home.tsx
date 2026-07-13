@@ -17,7 +17,17 @@ export default function Home() {
     month: "long",
     year: "numeric",
   });
+const hour = new Date().getHours();
 
+let greeting = "Good Evening";
+
+if (hour < 12) {
+  greeting = "🌅 Good Morning";
+} else if (hour < 18) {
+  greeting = "☀️ Good Afternoon";
+} else {
+  greeting = "🌙 Good Evening";
+}
   const cards = [
     {
       title: "📚 Midweek Meeting",
@@ -47,9 +57,13 @@ export default function Home() {
         📖 My JW Companion
       </Typography>
 
-      <Typography variant="h6" color="text.secondary">
-        Welcome back!
-      </Typography>
+      <Typography variant="h5" color="primary" fontWeight="bold">
+  {greeting}
+</Typography>
+
+<Typography color="text.secondary" sx={{ mb: 2 }}>
+  Welcome back to My JW Companion.
+</Typography>
 
       <Typography sx={{ mb: 4 }}>
         {today}
