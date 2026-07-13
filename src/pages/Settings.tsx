@@ -1,8 +1,65 @@
+import { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  TextField,
+  Typography,
+} from "@mui/material";
+
 export default function Settings() {
-    return (
-      <div style={{ padding: 20 }}>
-        <h1>⚙️ Settings</h1>
-        <p>App settings will be here.</p>
-      </div>
-    );
-  }
+  const [midweekLink, setMidweekLink] = useState("");
+  const [weekendLink, setWeekendLink] = useState("");
+
+  useEffect(() => {
+    const savedMidweek = localStorage.getItem("midweek-link");
+    const savedWeekend = localStorage.getItem("weekend-link");
+
+    if (savedMidweek) setMidweekLink(savedMidweek);
+    if (savedWeekend) setWeekendLink(savedWeekend);
+  }, []);
+
+  const saveSettings = () => {
+    localStorage.setItem("midweek-link", midweekLink);
+    localStorage.setItem("weekend-link", weekendLink);
+
+    alert("✅ Settings saved successfully!");
+  };
+
+  return (
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h4" gutterBottom>
+        ⚙️ Settings
+      </Typography>
+
+      <Card>
+        <CardContent>
+          <TextField
+            fullWidth
+            label="Midweek Workbook URL"
+            margin="normal"
+            value={midweekLink}
+            onChange={(e) => setMidweekLink(e.target.value)}
+          />
+
+          <TextField
+            fullWidth
+            label="Weekend Study URL"
+            margin="normal"
+            value={weekendLink}
+            onChange={(e) => setWeekendLink(e.target.value)}
+          />
+
+          <Button
+            variant="contained"
+            sx={{ mt: 2 }}
+            onClick={saveSettings}
+          >
+            Save Settings
+          </Button>
+        </CardContent>
+      </Card>
+    </Box>
+  );
+}

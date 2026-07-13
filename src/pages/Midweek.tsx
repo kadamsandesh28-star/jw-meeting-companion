@@ -11,6 +11,7 @@ import {
 
 export default function Midweek() {
   const [notes, setNotes] = useState("");
+  const [workbookLink, setWorkbookLink] = useState("");
 
   useEffect(() => {
     const savedNotes = localStorage.getItem("midweek-notes");
@@ -23,6 +24,24 @@ export default function Midweek() {
     localStorage.setItem("midweek-notes", notes);
   }, [notes]);
 
+useEffect(() => {
+  const savedLink = localStorage.getItem("midweek-link");
+
+  if (savedLink) {
+    setWorkbookLink(savedLink);
+  } else {
+    setWorkbookLink("https://www.jw.org/en/library/jw-meeting-workbook/");
+  }
+}, []);
+useEffect(() => {
+  const savedLink = localStorage.getItem("midweek-link");
+
+  if (savedLink) {
+    setWorkbookLink(savedLink);
+  } else {
+    setWorkbookLink("https://www.jw.org/en/library/jw-meeting-workbook/");
+  }
+}, []);
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
@@ -43,7 +62,7 @@ export default function Midweek() {
 
           <Button
             variant="contained"
-            href="https://www.jw.org/en/library/jw-meeting-workbook/"
+           href={workbookLink}
             target="_blank"
           >
             Open Meeting Workbook
