@@ -11,7 +11,7 @@ import {
 
 export default function Weekend() {
   const [notes, setNotes] = useState("");
-
+const [watchtowerLink, setWatchtowerLink] = useState("");
   useEffect(() => {
     const savedNotes = localStorage.getItem("weekend-notes");
     if (savedNotes) {
@@ -22,7 +22,15 @@ export default function Weekend() {
   useEffect(() => {
     localStorage.setItem("weekend-notes", notes);
   }, [notes]);
+useEffect(() => {
+  const savedLink = localStorage.getItem("weekend-link");
 
+  if (savedLink) {
+    setWatchtowerLink(savedLink);
+  } else {
+    setWatchtowerLink("https://www.jw.org/en/library/magazines/");
+  }
+}, []);
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
@@ -43,7 +51,7 @@ export default function Weekend() {
 
           <Button
             variant="contained"
-            href="https://www.jw.org/en/library/magazines/watchtower-study/"
+            href={watchtowerLink}
             target="_blank"
           >
             Open Watchtower Study
