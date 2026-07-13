@@ -54,7 +54,14 @@ const [countdownRunning, setCountdownRunning] = useState(false);
       .toString()
       .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
+const formatCountdown = () => {
+  const mins = Math.floor(countdown / 60);
+  const secs = countdown % 60;
 
+  return `${mins.toString().padStart(2, "0")}:${secs
+    .toString()
+    .padStart(2, "0")}`;
+};
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
@@ -100,6 +107,77 @@ const [countdownRunning, setCountdownRunning] = useState(false);
             Reset
           </Button>
         </Stack>
+        <Typography variant="h3" fontWeight="bold" sx={{ mt: 3 }}>
+  {formatCountdown()}
+</Typography>
+<Stack
+  direction="row"
+  spacing={2}
+  justifyContent="center"
+  sx={{ mt: 2 }}
+>
+  <Button
+    variant="contained"
+    onClick={() => setCountdownRunning(true)}
+  >
+    ▶ Start
+  </Button>
+
+  <Button
+    variant="outlined"
+    onClick={() => setCountdownRunning(false)}
+  >
+    ⏸ Pause
+  </Button>
+
+  <Button
+    color="error"
+    variant="contained"
+    onClick={() => {
+      setCountdownRunning(false);
+      setCountdown(0);
+    }}
+  >
+    🔄 Reset
+  </Button>
+</Stack>
+
+<Stack
+  direction="row"
+  spacing={2}
+  justifyContent="center"
+  sx={{ mb: 2 }}
+>
+  <Button
+    variant="contained"
+ onClick={() => {
+  setCountdown(60);
+  setCountdownRunning(false);
+}}
+  >
+    1 Minute
+  </Button>
+
+  <Button
+  variant="contained"
+  onClick={() => {
+    setCountdown(120);
+    setCountdownRunning(false);
+  }}
+>
+  2 Minutes
+</Button>
+
+  <Button
+  variant="contained"
+  onClick={() => {
+    setCountdown(300);
+    setCountdownRunning(false);
+  }}
+>
+  5 Minutes
+</Button>
+</Stack>
       </Paper>
     </Box>
   );
