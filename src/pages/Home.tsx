@@ -54,6 +54,11 @@ useEffect(() => {
       link: "/weekend",
     },
     {
+  title: "📖 Daily Scripture 2026",
+  description: "Read today's Examine the Scriptures Daily.",
+  link: "/daily-scripture",
+},
+    {
       title: "📝 Personal Notes",
       description: "Keep all your personal study notes in one place.",
       link: "/notes",
@@ -85,8 +90,8 @@ useEffect(() => {
       <Stack
   direction="row"
   spacing={2}
-  flexWrap="wrap"
-  sx={{ mb: 4 }}
+  useFlexGap
+  sx={{ flexWrap: "wrap" }}
 >
   <Button
     component={Link}
@@ -119,6 +124,13 @@ useEffect(() => {
   >
     ⏱ Timers
   </Button>
+  <Button
+  component={Link}
+  to="/daily-scripture"
+  variant="outlined"
+>
+  📖 Daily Scripture
+</Button>
 </Stack>
 
       <Grid container spacing={3}>

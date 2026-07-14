@@ -14,7 +14,7 @@ import Weekend from "./pages/Weekend";
 import Notes from "./pages/Notes";
 import Timers from "./pages/Timers";
 import Settings from "./pages/Settings";
-
+import DailyScripture from "./pages/DailyScripture"; 
 function App() {
   return (
     <>
@@ -63,6 +63,7 @@ function App() {
           <Route path="/notes" element={<Notes />} />
           <Route path="/timers" element={<Timers />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/daily-scripture" element={<DailyScripture />} />
         </Routes>
       </Container>
     </>

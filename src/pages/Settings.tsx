@@ -11,10 +11,16 @@ import {
 export default function Settings() {
   const [midweekLink, setMidweekLink] = useState("");
   const [weekendLink, setWeekendLink] = useState("");
+  const [dailyScriptureLink, setDailyScriptureLink] = useState("");
 
   useEffect(() => {
     const savedMidweek = localStorage.getItem("midweek-link");
     const savedWeekend = localStorage.getItem("weekend-link");
+    const savedDaily = localStorage.getItem("daily-scripture-link");
+
+if (savedDaily) {
+  setDailyScriptureLink(savedDaily);
+}
 
     if (savedMidweek) setMidweekLink(savedMidweek);
     if (savedWeekend) setWeekendLink(savedWeekend);
@@ -23,7 +29,10 @@ export default function Settings() {
   const saveSettings = () => {
     localStorage.setItem("midweek-link", midweekLink);
     localStorage.setItem("weekend-link", weekendLink);
-
+localStorage.setItem(
+  "daily-scripture-link",
+  dailyScriptureLink
+);
     alert("✅ Settings saved successfully!");
   };
 
@@ -50,7 +59,13 @@ export default function Settings() {
             value={weekendLink}
             onChange={(e) => setWeekendLink(e.target.value)}
           />
-
+<TextField
+  fullWidth
+  label="Daily Scripture URL"
+  margin="normal"
+  value={dailyScriptureLink}
+  onChange={(e) => setDailyScriptureLink(e.target.value)}
+/>
           <Button
             variant="contained"
             sx={{ mt: 2 }}

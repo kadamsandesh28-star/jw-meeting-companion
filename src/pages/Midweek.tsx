@@ -11,8 +11,17 @@ import {
 
 export default function Midweek() {
   const [notes, setNotes] = useState("");
+
+  const [checklist, setChecklist] = useState({
+    readWorkbook: false,
+    prepareComments: false,
+    practiceAssignment: false,
+    reviewBibleReading: false,
+  });
+
   const [workbookLink, setWorkbookLink] = useState("");
 
+  // Load notes
   useEffect(() => {
     const savedNotes = localStorage.getItem("midweek-notes");
     if (savedNotes) {
@@ -20,28 +29,41 @@ export default function Midweek() {
     }
   }, []);
 
+  // Save notes
   useEffect(() => {
     localStorage.setItem("midweek-notes", notes);
   }, [notes]);
 
-useEffect(() => {
-  const savedLink = localStorage.getItem("midweek-link");
+  // Load checklist
+  useEffect(() => {
+    const savedChecklist = localStorage.getItem("midweek-checklist");
 
-  if (savedLink) {
-    setWorkbookLink(savedLink);
-  } else {
-    setWorkbookLink("https://www.jw.org/en/library/jw-meeting-workbook/");
-  }
-}, []);
-useEffect(() => {
-  const savedLink = localStorage.getItem("midweek-link");
+    if (savedChecklist) {
+      setChecklist(JSON.parse(savedChecklist));
+    }
+  }, []);
 
-  if (savedLink) {
-    setWorkbookLink(savedLink);
-  } else {
-    setWorkbookLink("https://www.jw.org/en/library/jw-meeting-workbook/");
-  }
-}, []);
+  // Save checklist
+  useEffect(() => {
+    localStorage.setItem(
+      "midweek-checklist",
+      JSON.stringify(checklist)
+    );
+  }, [checklist]);
+
+  // Load workbook link
+  useEffect(() => {
+    const savedLink = localStorage.getItem("midweek-link");
+
+    if (savedLink) {
+      setWorkbookLink(savedLink);
+    } else {
+      setWorkbookLink(
+        "https://www.jw.org/en/library/jw-meeting-workbook/"
+      );
+    }
+  }, []);
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
@@ -61,12 +83,34 @@ useEffect(() => {
           <Divider sx={{ my: 2 }} />
 
           <Button
-            variant="contained"
-           href={workbookLink}
-            target="_blank"
-          >
-            Open Meeting Workbook
-          </Button>
+  variant="contained"
+  component="a"
+  href={workbookLink}
+  target="_blank"
+  rel="noopener noreferrer"
+  disabled={!workbookLink}
+>
+  Open Meeting Workbook
+</Button>
+          <Divider sx={{ my: 3 }} />
+
+          <Typography variant="h6" gutterBottom>
+            ✅ Preparation Checklist
+          </Typography>
+
+          <label>
+            <input
+              type="checkbox"
+              checked={checklist.readWorkbook}
+              onChange={(e) =>
+                setChecklist({
+                  ...checklist,
+                  readWorkbook: e.target.checked,
+                })
+              }
+            />
+            {" "}Read Workbook
+          </label>
 
           <Divider sx={{ my: 3 }} />
 
