@@ -8,6 +8,7 @@ import {
   ListItem,
   ListItemText,
   IconButton,
+  Paper,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -50,8 +51,8 @@ export default function Notes() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Personal Notes
+      <Typography variant="h4" gutterBottom fontWeight="bold">
+        📝 Personal Notes
       </Typography>
 
       <TextField
@@ -60,16 +61,26 @@ export default function Notes() {
         margin="normal"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
+        InputProps={{
+          sx: {
+            color: "text.primary",
+          },
+        }}
       />
 
       <TextField
         fullWidth
         multiline
-        rows={4}
+        rows={5}
         label="Note"
         margin="normal"
         value={content}
         onChange={(e) => setContent(e.target.value)}
+        InputProps={{
+          sx: {
+            color: "text.primary",
+          },
+        }}
       />
 
       <Button
@@ -82,19 +93,39 @@ export default function Notes() {
 
       <List>
         {notes.map((note) => (
-          <ListItem
+          <Paper
             key={note.id}
-            secondaryAction={
-              <IconButton onClick={() => deleteNote(note.id)}>
-                <DeleteIcon />
-              </IconButton>
-            }
+            elevation={2}
+            sx={{
+              mb: 2,
+              p: 1,
+              borderRadius: 2,
+            }}
           >
-            <ListItemText
-              primary={note.title}
-              secondary={note.content}
-            />
-          </ListItem>
+            <ListItem
+              secondaryAction={
+                <IconButton
+                  color="error"
+                  onClick={() => deleteNote(note.id)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              }
+            >
+              <ListItemText
+                primary={
+                  <Typography fontWeight="bold">
+                    {note.title}
+                  </Typography>
+                }
+                secondary={
+                  <Typography color="text.secondary">
+                    {note.content}
+                  </Typography>
+                }
+              />
+            </ListItem>
+          </Paper>
         ))}
       </List>
     </Box>
