@@ -15,7 +15,9 @@ import Notes from "./pages/Notes";
 import Timers from "./pages/Timers";
 import Settings from "./pages/Settings";
 import DailyScripture from "./pages/DailyScripture";
-import PracticeTimer from "./pages/PracticeTimer"; 
+import PracticeTimer from "./pages/PracticeTimer";
+import MeetingTimerSettings from "./pages/MeetingTimerSettings";
+
 function App() {
   return (
     <>
@@ -66,6 +68,10 @@ function App() {
           <Route path="/settings" element={<Settings />} />
           <Route path="/daily-scripture" element={<DailyScripture />} />
           <Route path="/practice-timer" element={<PracticeTimer />} />
+          <Route
+            path="/meeting-timer-settings"
+            element={<MeetingTimerSettings />}
+          />
         </Routes>
       </Container>
     </>

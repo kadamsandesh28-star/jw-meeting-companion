@@ -1,4 +1,6 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Button, Divider, Stack, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 import MeetingTimerCard from "../Components/MeetingTimerCard";
 import {
   midweekTimers,
@@ -6,11 +8,27 @@ import {
 } from "../data/meetingTimers";
 
 export default function Timers() {
+  const navigate = useNavigate();
+
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        ⏱ JW Meeting Timers
-      </Typography>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ mb: 3 }}
+      >
+        <Typography variant="h4">
+          ⏱ JW Meeting Timers
+        </Typography>
+
+        <Button
+          variant="outlined"
+          onClick={() => navigate("/meeting-timer-settings")}
+        >
+          ⚙ Timer Settings
+        </Button>
+      </Stack>
 
       <Typography color="text.secondary" sx={{ mb: 4 }}>
         Practice your meeting assignments.

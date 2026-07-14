@@ -1,54 +1,55 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Button,
   Card,
   CardContent,
   Divider,
+  IconButton,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
+
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 import {
   midweekTimers,
   weekendTimers,
-  MeetingTimer,
 } from "../data/meetingTimers";
 
-import {
-  loadMeetingTimers,
-  saveMeetingTimers,
-} from "../services/timerSettings";
-
 export default function MeetingTimerSettings() {
-  const defaults = [...midweekTimers, ...weekendTimers];
+  const [midweek, setMidweek] = useState(midweekTimers);
+  const [weekend, setWeekend] = useState(weekendTimers);
 
-  const [timers, setTimers] = useState<MeetingTimer[]>([]);
-
-  useEffect(() => {
-    setTimers(loadMeetingTimers(defaults));
-  }, []);
-
-  const updateMinutes = (id: string, minutes: number) => {
-    setTimers((prev) =>
-      prev.map((timer) =>
-        timer.id === id
-          ? { ...timer, minutes }
-          : timer
-      )
-    );
-  };
-
-  const save = () => {
-    saveMeetingTimers(timers);
-    alert("✅ Timer settings saved.");
-  };
-
-  const restoreDefaults = () => {
-    setTimers(defaults);
-    saveMeetingTimers(defaults);
-    alert("Default timers restored.");
+  const changeMinutes = (
+    id: string,
+    change: number,
+    meeting: "midweek" | "weekend"
+  ) => {
+    if (meeting === "midweek") {
+      setMidweek((prev) =>
+        prev.map((timer) =>
+          timer.id === id
+            ? {
+                ...timer,
+                minutes: Math.max(1, timer.minutes + change),
+              }
+            : timer
+        )
+      );
+    } else {
+      setWeekend((prev) =>
+        prev.map((timer) =>
+          timer.id === id
+            ? {
+                ...timer,
+                minutes: Math.max(1, timer.minutes + change),
+              }
+            : timer
+        )
+      );
+    }
   };
 
   return (
@@ -57,63 +58,103 @@ export default function MeetingTimerSettings() {
         ⚙ Meeting Timer Settings
       </Typography>
 
-      <Typography
-        color="text.secondary"
-        sx={{ mb: 3 }}
-      >
-        Customize your meeting assignment times.
+      <Typography color="text.secondary" sx={{ mb: 3 }}>
+        Adjust assignment times for your congregation.
       </Typography>
 
-      <Card>
-        <CardContent>
+      <Typography variant="h5" sx={{ mb: 2 }}>
+        📚 Midweek Meeting
+      </Typography>
 
-          {timers.map((timer) => (
-            <Box key={timer.id} sx={{ mb: 3 }}>
-
+      {midweek.map((timer) => (
+        <Card key={timer.id} sx={{ mb: 2 }}>
+          <CardContent>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
               <Typography fontWeight="bold">
                 {timer.title}
               </Typography>
 
-              <TextField
-                type="number"
-                label="Minutes"
-                value={timer.minutes}
-                onChange={(e) =>
-                  updateMinutes(
-                    timer.id,
-                    Number(e.target.value)
-                  )
-                }
-                sx={{ mt: 1 }}
-              />
+              <Stack direction="row" spacing={1} alignItems="center">
+                <IconButton
+                  onClick={() =>
+                    changeMinutes(timer.id, -1, "midweek")
+                  }
+                >
+                  <RemoveIcon />
+                </IconButton>
 
-              <Divider sx={{ mt: 2 }} />
+                <Typography fontWeight="bold">
+                  {timer.minutes} min
+                </Typography>
 
-            </Box>
-          ))}
+                <IconButton
+                  onClick={() =>
+                    changeMinutes(timer.id, 1, "midweek")
+                  }
+                >
+                  <AddIcon />
+                </IconButton>
+              </Stack>
+            </Stack>
+          </CardContent>
+        </Card>
+      ))}
 
-          <Stack
-            direction="row"
-            spacing={2}
-          >
-            <Button
-              variant="contained"
-              onClick={save}
+      <Divider sx={{ my: 4 }} />
+
+      <Typography variant="h5" sx={{ mb: 2 }}>
+        📖 Weekend Meeting
+      </Typography>
+
+      {weekend.map((timer) => (
+        <Card key={timer.id} sx={{ mb: 2 }}>
+          <CardContent>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
             >
-              💾 Save
-            </Button>
+              <Typography fontWeight="bold">
+                {timer.title}
+              </Typography>
 
-            <Button
-              color="error"
-              variant="outlined"
-              onClick={restoreDefaults}
-            >
-              Restore Defaults
-            </Button>
-          </Stack>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <IconButton
+                  onClick={() =>
+                    changeMinutes(timer.id, -1, "weekend")
+                  }
+                >
+                  <RemoveIcon />
+                </IconButton>
 
-        </CardContent>
-      </Card>
+                <Typography fontWeight="bold">
+                  {timer.minutes} min
+                </Typography>
+
+                <IconButton
+                  onClick={() =>
+                    changeMinutes(timer.id, 1, "weekend")
+                  }
+                >
+                  <AddIcon />
+                </IconButton>
+              </Stack>
+            </Stack>
+          </CardContent>
+        </Card>
+      ))}
+
+      <Button
+        variant="contained"
+        fullWidth
+        sx={{ mt: 3 }}
+      >
+        💾 Save Settings
+      </Button>
     </Box>
   );
 }
