@@ -1,14 +1,26 @@
-import { Box, Button, Divider, Stack, Typography } from "@mui/material";
+import { useState } from "react";
+import {
+  Box,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
 
-import MeetingTimerCard from "../Components/MeetingTimerCard";
+import TimerTabs from "../Components/TimerTabs";
+import AssignmentRow from "../Components/AssignmentRow";
+import MeetingSectionCard from "../Components/MeetingSectionCard";
+import StopwatchPanel from "../Components/StopwatchPanel";
+
 import {
-  midweekTimers,
-  weekendTimers,
-} from "../data/meetingTimers";
+  midweekSections,
+  weekendSections,
+} from "../data/meetingSections";
 
 export default function Timers() {
   const navigate = useNavigate();
+  const [tab, setTab] = useState(0);
 
   return (
     <Box sx={{ p: 3 }}>
@@ -16,53 +28,84 @@ export default function Timers() {
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        sx={{ mb: 3 }}
+        sx={{ mb: 2 }}
       >
-        <Typography variant="h4">
-          ⏱ JW Meeting Timers
+        <Typography
+          variant="h4"
+          fontWeight="bold"
+        >
+          ⏱ Meeting Timers
         </Typography>
 
-        <Button
-          variant="outlined"
-          onClick={() => navigate("/meeting-timer-settings")}
+        <IconButton
+          color="primary"
+          onClick={() =>
+            navigate("/meeting-timer-settings")
+          }
         >
-          ⚙ Timer Settings
-        </Button>
+          <SettingsIcon />
+        </IconButton>
       </Stack>
 
-      <Typography color="text.secondary" sx={{ mb: 4 }}>
+      <Typography
+        color="text.secondary"
+        sx={{ mb: 3 }}
+      >
         Practice your meeting assignments.
       </Typography>
 
-      <Typography variant="h5" sx={{ mb: 2 }}>
-        📚 Midweek Meeting
-      </Typography>
+      <TimerTabs
+        value={tab}
+        onChange={setTab}
+      />
 
-      {midweekTimers.map((timer) => (
-        <MeetingTimerCard
-          key={timer.id}
-          id={timer.id}
-          title={timer.title}
-          minutes={timer.minutes}
-          category="Midweek"
-        />
-      ))}
+      {/* ================= MIDWEEK ================= */}
 
-      <Divider sx={{ my: 4 }} />
+      {tab === 0 && (
+        <>
+          {midweekSections.map((section) => (
+            <MeetingSectionCard
+              key={section.title}
+              title={section.title}
+            >
+              {section.assignments.map((assignment) => (
+                <AssignmentRow
+                  key={assignment.id}
+                  id={assignment.id}
+                  title={assignment.title}
+                  minutes={assignment.minutes}
+                />
+              ))}
+            </MeetingSectionCard>
+          ))}
+        </>
+      )}
 
-      <Typography variant="h5" sx={{ mb: 2 }}>
-        📖 Weekend Meeting
-      </Typography>
+      {/* ================= WEEKEND ================= */}
 
-      {weekendTimers.map((timer) => (
-        <MeetingTimerCard
-          key={timer.id}
-          id={timer.id}
-          title={timer.title}
-          minutes={timer.minutes}
-          category="Weekend"
-        />
-      ))}
+      {tab === 1 && (
+        <>
+          {weekendSections.map((section) => (
+            <MeetingSectionCard
+              key={section.title}
+              title={section.title}
+            >
+              {section.assignments.map((assignment) => (
+                <AssignmentRow
+                  key={assignment.id}
+                  id={assignment.id}
+                  title={assignment.title}
+                  minutes={assignment.minutes}
+                />
+              ))}
+            </MeetingSectionCard>
+          ))}
+        </>
+      )}
+
+      {/* ================= STOPWATCH ================= */}
+
+      {tab === 2 && <StopwatchPanel />}
     </Box>
   );
 }

@@ -17,6 +17,7 @@ import Settings from "./pages/Settings";
 import DailyScripture from "./pages/DailyScripture";
 import PracticeTimer from "./pages/PracticeTimer";
 import MeetingTimerSettings from "./pages/MeetingTimerSettings";
+import AssignmentPreparation from "./pages/AssignmentPreparation";
 
 function App() {
   return (
@@ -25,12 +26,21 @@ function App() {
         <Toolbar>
           <Typography
             variant="h6"
-            sx={{ flexGrow: 1, fontWeight: "bold" }}
+            sx={{
+              flexGrow: 1,
+              fontWeight: "bold",
+            }}
           >
             📖 My JW Companion
           </Typography>
 
-          <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              flexWrap: "wrap",
+            }}
+          >
             <Button color="inherit" component={Link} to="/">
               Home
             </Button>
@@ -58,20 +68,44 @@ function App() {
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="lg" sx={{ py: 3 }}>
+      <Container
+        maxWidth="lg"
+        sx={{ py: 3 }}
+      >
         <Routes>
+
           <Route path="/" element={<Home />} />
+
           <Route path="/midweek" element={<Midweek />} />
+
           <Route path="/weekend" element={<Weekend />} />
+
           <Route path="/notes" element={<Notes />} />
+
           <Route path="/timers" element={<Timers />} />
+
           <Route path="/settings" element={<Settings />} />
-          <Route path="/daily-scripture" element={<DailyScripture />} />
-          <Route path="/practice-timer" element={<PracticeTimer />} />
+
+          <Route
+            path="/daily-scripture"
+            element={<DailyScripture />}
+          />
+
+          <Route
+            path="/practice-timer"
+            element={<PracticeTimer />}
+          />
+
           <Route
             path="/meeting-timer-settings"
             element={<MeetingTimerSettings />}
           />
+
+          <Route
+            path="/assignment-preparation"
+            element={<AssignmentPreparation />}
+          />
+
         </Routes>
       </Container>
     </>
