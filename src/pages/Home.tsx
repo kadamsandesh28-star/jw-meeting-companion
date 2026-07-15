@@ -12,6 +12,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+
+import PlannerCard from "../Components/PlannerCard";
+
 export default function Home() {
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -19,123 +22,177 @@ export default function Home() {
     month: "long",
     year: "numeric",
   });
-const hour = new Date().getHours();
 
-let greeting = "Good Evening";
+  const hour = new Date().getHours();
 
-if (hour < 12) {
-  greeting = "🌅 Good Morning";
-} else if (hour < 18) {
-  greeting = "☀️ Good Afternoon";
-} else {
-  greeting = "🌙 Good Evening";
-}
-const [encouragement, setEncouragement] = useState("");
+  let greeting = "🌙 Good Evening";
 
-useEffect(() => {
-  const saved = localStorage.getItem("weekly-encouragement");
-  if (saved) {
-    setEncouragement(saved);
+  if (hour < 12) {
+    greeting = "🌅 Good Morning";
+  } else if (hour < 18) {
+    greeting = "☀️ Good Afternoon";
   }
-}, []);
 
-useEffect(() => {
-  localStorage.setItem("weekly-encouragement", encouragement);
-}, [encouragement]);
+  const [encouragement, setEncouragement] = useState("");
+
+  useEffect(() => {
+    const saved = localStorage.getItem(
+      "weekly-encouragement"
+    );
+
+    if (saved) {
+      setEncouragement(saved);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "weekly-encouragement",
+      encouragement
+    );
+  }, [encouragement]);
+
   const cards = [
     {
       title: "📚 Midweek Meeting",
-      description: "Open the workbook and write your meeting notes.",
+      description:
+        "Open the workbook and write your meeting notes.",
       link: "/midweek",
     },
     {
       title: "📖 Weekend Meeting",
-      description: "Open the Watchtower study and save your notes.",
+      description:
+        "Open the Watchtower study and save your notes.",
       link: "/weekend",
     },
     {
-  title: "📖 Daily Scripture 2026",
-  description: "Read today's Examine the Scriptures Daily.",
-  link: "/daily-scripture",
-},
+      title: "📚 Personal Study",
+      description:
+        "Continue your Bible reading and personal study.",
+      link: "/personal-study",
+    },
+    {
+      title: "📖 Daily Scripture 2026",
+      description:
+        "Read today's Examine the Scriptures Daily.",
+      link: "/daily-scripture",
+    },
     {
       title: "📝 Personal Notes",
-      description: "Keep all your personal study notes in one place.",
+      description:
+        "Keep all your personal study notes in one place.",
       link: "/notes",
     },
     {
       title: "⏱ Meeting Timers",
-      description: "Practice your assignments with built-in timers.",
+      description:
+        "Practice your meeting assignments.",
       link: "/timers",
     },
   ];
 
   return (
     <Box>
-      <Typography variant="h3" fontWeight="bold" gutterBottom>
+      <Typography
+        variant="h3"
+        fontWeight="bold"
+        gutterBottom
+      >
         📖 My JW Companion
       </Typography>
 
-      <Typography variant="h5" color="primary" fontWeight="bold">
-  {greeting}
-</Typography>
+      <Typography
+        variant="h5"
+        color="primary"
+        fontWeight="bold"
+      >
+        {greeting}
+      </Typography>
 
-<Typography color="text.secondary" sx={{ mb: 2 }}>
-  Welcome back to My JW Companion.
-</Typography>
+      <Typography
+        color="text.secondary"
+        sx={{ mb: 2 }}
+      >
+        Welcome back to My JW Companion.
+      </Typography>
 
       <Typography sx={{ mb: 4 }}>
         {today}
       </Typography>
+
+      <PlannerCard />
+
+      <Typography
+        variant="h5"
+        sx={{ mb: 2 }}
+      >
+        🚀 Quick Actions
+      </Typography>
+
       <Stack
-  direction="row"
-  spacing={2}
-  useFlexGap
-  sx={{ flexWrap: "wrap" }}
->
-  <Button
-    component={Link}
-    to="/midweek"
-    variant="contained"
-  >
-    📚 Midweek
-  </Button>
+        direction="row"
+        spacing={2}
+        useFlexGap
+        sx={{
+          flexWrap: "wrap",
+          mb: 4,
+        }}
+      >
+        <Button
+          component={Link}
+          to="/midweek"
+          variant="contained"
+        >
+          📚 Midweek
+        </Button>
 
-  <Button
-    component={Link}
-    to="/weekend"
-    variant="contained"
-  >
-    📖 Weekend
-  </Button>
+        <Button
+          component={Link}
+          to="/weekend"
+          variant="contained"
+        >
+          📖 Weekend
+        </Button>
 
-  <Button
-    component={Link}
-    to="/notes"
-    variant="outlined"
-  >
-    📝 Notes
-  </Button>
+        <Button
+          component={Link}
+          to="/personal-study"
+          variant="contained"
+        >
+          📚 Study
+        </Button>
 
-  <Button
-    component={Link}
-    to="/timers"
-    variant="outlined"
-  >
-    ⏱ Timers
-  </Button>
-  <Button
-  component={Link}
-  to="/daily-scripture"
-  variant="outlined"
->
-  📖 Daily Scripture
-</Button>
-</Stack>
+        <Button
+          component={Link}
+          to="/notes"
+          variant="outlined"
+        >
+          📝 Notes
+        </Button>
+
+        <Button
+          component={Link}
+          to="/timers"
+          variant="outlined"
+        >
+          ⏱ Timers
+        </Button>
+
+        <Button
+          component={Link}
+          to="/daily-scripture"
+          variant="outlined"
+        >
+          📖 Daily Scripture
+        </Button>
+      </Stack>
 
       <Grid container spacing={3}>
         {cards.map((card) => (
-          <Grid key={card.title} size={{ xs: 12, md: 6 }}>
+          <Grid
+            key={card.title}
+            size={{ xs: 12, md: 6 }}
+          >
             <Card
               sx={{
                 borderRadius: 3,
@@ -152,7 +209,10 @@ useEffect(() => {
                 sx={{ height: "100%" }}
               >
                 <CardContent sx={{ p: 4 }}>
-                  <Typography variant="h5" gutterBottom>
+                  <Typography
+                    variant="h5"
+                    gutterBottom
+                  >
                     {card.title}
                   </Typography>
 
@@ -174,18 +234,23 @@ useEffect(() => {
         }}
       >
         <CardContent>
-          <Typography variant="h6">
+          <Typography
+            variant="h6"
+            gutterBottom
+          >
             🌟 Weekly Encouragement
           </Typography>
 
           <TextField
-  fullWidth
-  multiline
-  rows={3}
-  placeholder="Write your weekly encouragement..."
-  value={encouragement}
-  onChange={(e) => setEncouragement(e.target.value)}
-/>
+            fullWidth
+            multiline
+            rows={3}
+            placeholder="Write your weekly encouragement..."
+            value={encouragement}
+            onChange={(e) =>
+              setEncouragement(e.target.value)
+            }
+          />
         </CardContent>
       </Card>
     </Box>
