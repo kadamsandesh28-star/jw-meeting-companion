@@ -18,9 +18,28 @@ import {
   weekendTimers,
 } from "../data/meetingTimers";
 
+import {
+  loadMeetingTimers,
+  saveMeetingTimers,
+} from "../services/timerSettings";
+
 export default function MeetingTimerSettings() {
-  const [midweek, setMidweek] = useState(midweekTimers);
-  const [weekend, setWeekend] = useState(weekendTimers);
+  const savedTimers = loadMeetingTimers([
+    ...midweekTimers,
+    ...weekendTimers,
+  ]);
+
+  const [midweek, setMidweek] = useState(
+    savedTimers.filter((t) =>
+      midweekTimers.some((m) => m.id === t.id)
+    )
+  );
+
+  const [weekend, setWeekend] = useState(
+    savedTimers.filter((t) =>
+      weekendTimers.some((w) => w.id === t.id)
+    )
+  );
 
   const changeMinutes = (
     id: string,
@@ -52,6 +71,11 @@ export default function MeetingTimerSettings() {
     }
   };
 
+  const handleSave = () => {
+    saveMeetingTimers([...midweek, ...weekend]);
+    alert("✅ Timer settings saved!");
+  };
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
@@ -78,7 +102,11 @@ export default function MeetingTimerSettings() {
                 {timer.title}
               </Typography>
 
-              <Stack direction="row" spacing={1} alignItems="center">
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+              >
                 <IconButton
                   onClick={() =>
                     changeMinutes(timer.id, -1, "midweek")
@@ -122,7 +150,11 @@ export default function MeetingTimerSettings() {
                 {timer.title}
               </Typography>
 
-              <Stack direction="row" spacing={1} alignItems="center">
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+              >
                 <IconButton
                   onClick={() =>
                     changeMinutes(timer.id, -1, "weekend")
@@ -152,6 +184,7 @@ export default function MeetingTimerSettings() {
         variant="contained"
         fullWidth
         sx={{ mt: 3 }}
+        onClick={handleSave}
       >
         💾 Save Settings
       </Button>

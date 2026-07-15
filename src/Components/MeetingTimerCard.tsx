@@ -10,12 +10,14 @@ import {
 import { useNavigate } from "react-router-dom";
 
 interface Props {
+  id: string;
   title: string;
   minutes: number;
   category: "Midweek" | "Weekend";
 }
 
 export default function MeetingTimerCard({
+  id,
   title,
   minutes,
   category,
@@ -63,7 +65,15 @@ export default function MeetingTimerCard({
           <Button
             variant="contained"
             size="large"
-            onClick={() => navigate("/practice-timer")}
+            onClick={() =>
+              navigate("/practice-timer", {
+                state: {
+                  id,
+                  title,
+                  minutes,
+                },
+              })
+            }
           >
             ▶ Practice
           </Button>

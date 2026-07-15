@@ -11,6 +11,11 @@ import {
 } from "react-router-dom";
 
 import useCountdown from "../hooks/useCountdown";
+import { loadMeetingTimers } from "../services/timerSettings";
+import {
+  midweekTimers,
+  weekendTimers,
+} from "../data/meetingTimers";
 
 export default function PracticeTimer() {
   const navigate = useNavigate();
@@ -19,8 +24,25 @@ export default function PracticeTimer() {
   const title =
     location.state?.title ?? "Practice Timer";
 
+  const timerId =
+    location.state?.id ?? "";
+
+  // Load saved timers (or defaults if none have been saved)
+  const savedTimers = loadMeetingTimers([
+    ...midweekTimers,
+    ...weekendTimers,
+  ]);
+
+  // Find the matching timer
+  const savedTimer = savedTimers.find(
+    (timer) => timer.id === timerId
+  );
+
+  // Use saved minutes if available, otherwise use the value passed in
   const minutes =
-    location.state?.minutes ?? 2;
+    savedTimer?.minutes ??
+    location.state?.minutes ??
+    2;
 
   const initialSeconds = minutes * 60;
 

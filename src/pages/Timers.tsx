@@ -41,6 +41,7 @@ export default function Timers() {
       {midweekTimers.map((timer) => (
         <MeetingTimerCard
           key={timer.id}
+          id={timer.id}
           title={timer.title}
           minutes={timer.minutes}
           category="Midweek"
@@ -56,6 +57,7 @@ export default function Timers() {
       {weekendTimers.map((timer) => (
         <MeetingTimerCard
           key={timer.id}
+          id={timer.id}
           title={timer.title}
           minutes={timer.minutes}
           category="Weekend"
