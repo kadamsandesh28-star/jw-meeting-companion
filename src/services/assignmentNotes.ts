@@ -1,6 +1,16 @@
-const STORAGE_KEY = "jw-assignment-notes";
+export interface AssignmentPreparation {
+  scripture: string;
+  objective: string;
+  notes: string;
+  reminder: string;
+}
 
-export function loadAssignmentNotes() {
+const STORAGE_KEY = "jw-assignment-preparation";
+
+export function loadAssignmentPreparation(): Record<
+  string,
+  AssignmentPreparation
+> {
   const saved = localStorage.getItem(STORAGE_KEY);
 
   if (!saved) {
@@ -10,16 +20,16 @@ export function loadAssignmentNotes() {
   return JSON.parse(saved);
 }
 
-export function saveAssignmentNote(
+export function saveAssignmentPreparation(
   id: string,
-  note: string
+  preparation: AssignmentPreparation
 ) {
-  const notes = loadAssignmentNotes();
+  const allPreparation = loadAssignmentPreparation();
 
-  notes[id] = note;
+  allPreparation[id] = preparation;
 
   localStorage.setItem(
     STORAGE_KEY,
-    JSON.stringify(notes)
+    JSON.stringify(allPreparation)
   );
 }

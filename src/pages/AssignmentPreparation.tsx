@@ -9,8 +9,8 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 
 import {
-  loadAssignmentNotes,
-  saveAssignmentNote,
+  loadAssignmentPreparation,
+  saveAssignmentPreparation,
 } from "../services/assignmentNotes";
 
 export default function AssignmentPreparation() {
@@ -21,16 +21,31 @@ export default function AssignmentPreparation() {
   const title = location.state?.title ?? "Assignment";
   const minutes = location.state?.minutes ?? 2;
 
-  const [note, setNote] = useState("");
+  const [scripture, setScripture] = useState("");
+  const [objective, setObjective] = useState("");
+  const [notes, setNotes] = useState("");
+  const [reminder, setReminder] = useState("");
 
   useEffect(() => {
-    const notes = loadAssignmentNotes();
-    setNote(notes[id] ?? "");
+    const data = loadAssignmentPreparation();
+
+    if (data[id]) {
+      setScripture(data[id].scripture);
+      setObjective(data[id].objective);
+      setNotes(data[id].notes);
+      setReminder(data[id].reminder);
+    }
   }, [id]);
 
   const save = () => {
-    saveAssignmentNote(id, note);
-    alert("✅ Notes saved.");
+    saveAssignmentPreparation(id, {
+      scripture,
+      objective,
+      notes,
+      reminder,
+    });
+
+    alert("✅ Preparation saved.");
   };
 
   return (
@@ -53,33 +68,51 @@ export default function AssignmentPreparation() {
           ⏱ {minutes} Minutes
         </Typography>
 
-        <Typography
-          variant="h6"
-          gutterBottom
-        >
-          📝 Preparation Notes
-        </Typography>
+        <TextField
+          label="📖 Key Scripture"
+          fullWidth
+          value={scripture}
+          onChange={(e) => setScripture(e.target.value)}
+          sx={{ mb: 3 }}
+        />
 
         <TextField
-          multiline
-          rows={10}
+          label="🎯 Objective"
           fullWidth
-          value={note}
-          onChange={(e) =>
-            setNote(e.target.value)
-          }
+          value={objective}
+          onChange={(e) => setObjective(e.target.value)}
+          sx={{ mb: 3 }}
+        />
+
+        <TextField
+          label="📝 Preparation Notes"
+          multiline
+          rows={6}
+          fullWidth
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          sx={{ mb: 3 }}
+        />
+
+        <TextField
+          label="💡 Personal Reminder"
+          multiline
+          rows={3}
+          fullWidth
+          value={reminder}
+          onChange={(e) => setReminder(e.target.value)}
+          sx={{ mb: 3 }}
         />
 
         <Button
-          sx={{ mt: 3, mr: 2 }}
           variant="contained"
+          sx={{ mr: 2 }}
           onClick={save}
         >
-          💾 Save Notes
+          💾 Save
         </Button>
 
         <Button
-          sx={{ mt: 3 }}
           variant="outlined"
           onClick={() =>
             navigate("/practice-timer", {
