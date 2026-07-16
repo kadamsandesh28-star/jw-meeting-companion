@@ -36,9 +36,7 @@ export default function Home() {
   const [encouragement, setEncouragement] = useState("");
 
   useEffect(() => {
-    const saved = localStorage.getItem(
-      "weekly-encouragement"
-    );
+    const saved = localStorage.getItem("weekly-encouragement");
 
     if (saved) {
       setEncouragement(saved);
@@ -113,7 +111,7 @@ export default function Home() {
         color="text.secondary"
         sx={{ mb: 2 }}
       >
-        Welcome back to My JW Companion.
+        Welcome back!
       </Typography>
 
       <Typography sx={{ mb: 4 }}>
