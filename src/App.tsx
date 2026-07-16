@@ -18,7 +18,15 @@ import DailyScripture from "./pages/DailyScripture";
 import PracticeTimer from "./pages/PracticeTimer";
 import MeetingTimerSettings from "./pages/MeetingTimerSettings";
 import AssignmentPreparation from "./pages/AssignmentPreparation";
-import PersonalStudy from "./pages/PersonalStudy";
+
+import SpiritualLibrary from "./pages/SpiritualLibrary";
+
+import Research from "./pages/library/Research";
+import ResearchCollection from "./pages/library/ResearchCollection";
+import Understanding from "./pages/library/Understanding";
+import Gems from "./pages/library/Gems";
+import Goals from "./pages/library/Goals";
+import Ministry from "./pages/library/Ministry";
 
 function App() {
   return (
@@ -42,59 +50,31 @@ function App() {
               flexWrap: "wrap",
             }}
           >
-            <Button
-              color="inherit"
-              component={Link}
-              to="/"
-            >
+            <Button color="inherit" component={Link} to="/">
               Home
             </Button>
 
-            <Button
-              color="inherit"
-              component={Link}
-              to="/midweek"
-            >
+            <Button color="inherit" component={Link} to="/midweek">
               Midweek
             </Button>
 
-            <Button
-              color="inherit"
-              component={Link}
-              to="/weekend"
-            >
+            <Button color="inherit" component={Link} to="/weekend">
               Weekend
             </Button>
 
-            <Button
-              color="inherit"
-              component={Link}
-              to="/personal-study"
-            >
-              Study
+            <Button color="inherit" component={Link} to="/library">
+              Library
             </Button>
 
-            <Button
-              color="inherit"
-              component={Link}
-              to="/notes"
-            >
+            <Button color="inherit" component={Link} to="/notes">
               Notes
             </Button>
 
-            <Button
-              color="inherit"
-              component={Link}
-              to="/timers"
-            >
+            <Button color="inherit" component={Link} to="/timers">
               Timers
             </Button>
 
-            <Button
-              color="inherit"
-              component={Link}
-              to="/settings"
-            >
+            <Button color="inherit" component={Link} to="/settings">
               Settings
             </Button>
           </Box>
@@ -106,40 +86,49 @@ function App() {
         sx={{ py: 3 }}
       >
         <Routes>
+          <Route path="/" element={<Home />} />
+
+          <Route path="/midweek" element={<Midweek />} />
+
+          <Route path="/weekend" element={<Weekend />} />
+
+          <Route path="/library" element={<SpiritualLibrary />} />
+
           <Route
-            path="/"
-            element={<Home />}
+            path="/library/research"
+            element={<Research />}
           />
 
           <Route
-            path="/midweek"
-            element={<Midweek />}
+            path="/library/research/:id"
+            element={<ResearchCollection />}
           />
 
           <Route
-            path="/weekend"
-            element={<Weekend />}
+            path="/library/understanding"
+            element={<Understanding />}
           />
 
           <Route
-            path="/personal-study"
-            element={<PersonalStudy />}
+            path="/library/gems"
+            element={<Gems />}
           />
 
           <Route
-            path="/notes"
-            element={<Notes />}
+            path="/library/goals"
+            element={<Goals />}
           />
 
           <Route
-            path="/timers"
-            element={<Timers />}
+            path="/library/ministry"
+            element={<Ministry />}
           />
 
-          <Route
-            path="/settings"
-            element={<Settings />}
-          />
+          <Route path="/notes" element={<Notes />} />
+
+          <Route path="/timers" element={<Timers />} />
+
+          <Route path="/settings" element={<Settings />} />
 
           <Route
             path="/daily-scripture"
