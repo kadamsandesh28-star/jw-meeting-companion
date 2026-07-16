@@ -28,6 +28,12 @@ import Gems from "./pages/library/Gems";
 import Goals from "./pages/library/Goals";
 import Ministry from "./pages/library/Ministry";
 
+import CongregationResponsibilities from "./pages/congregation/CongregationResponsibilities";
+import CongregationDirectory from "./pages/congregation/CongregationDirectory";
+import FieldServiceGroups from "./pages/congregation/FieldServiceGroups";
+import CongregationDepartments from "./pages/congregation/CongregationDepartments";
+import ShepherdingPlanner from "./pages/congregation/ShepherdingPlanner";
+
 function App() {
   return (
     <>
@@ -148,6 +154,33 @@ function App() {
           <Route
             path="/assignment-preparation"
             element={<AssignmentPreparation />}
+          />
+
+          {/* Congregation Module */}
+
+          <Route
+            path="/congregation"
+            element={<CongregationResponsibilities />}
+          />
+
+          <Route
+            path="/congregation/directory"
+            element={<CongregationDirectory />}
+          />
+
+          <Route
+            path="/congregation/groups"
+            element={<FieldServiceGroups />}
+          />
+
+          <Route
+            path="/congregation/departments"
+            element={<CongregationDepartments />}
+          />
+
+          <Route
+            path="/congregation/shepherding"
+            element={<ShepherdingPlanner />}
           />
         </Routes>
       </Container>
