@@ -34,6 +34,9 @@ import FieldServiceGroups from "./pages/congregation/FieldServiceGroups";
 import CongregationDepartments from "./pages/congregation/CongregationDepartments";
 import ShepherdingPlanner from "./pages/congregation/ShepherdingPlanner";
 
+/* Elder Workspace */
+import SecureElderWorkspace from "./Elders/pages/SecureElderWorkspace";
+
 function App() {
   return (
     <>
@@ -83,14 +86,15 @@ function App() {
             <Button color="inherit" component={Link} to="/settings">
               Settings
             </Button>
+
+            <Button color="inherit" component={Link} to="/elder">
+              🔒 Elder
+            </Button>
           </Box>
         </Toolbar>
       </AppBar>
 
-      <Container
-        maxWidth="lg"
-        sx={{ py: 3 }}
-      >
+      <Container maxWidth="lg" sx={{ py: 3 }}>
         <Routes>
           <Route path="/" element={<Home />} />
 
@@ -156,7 +160,7 @@ function App() {
             element={<AssignmentPreparation />}
           />
 
-          {/* Congregation Module */}
+          {/* Congregation */}
 
           <Route
             path="/congregation"
@@ -181,6 +185,13 @@ function App() {
           <Route
             path="/congregation/shepherding"
             element={<ShepherdingPlanner />}
+          />
+
+          {/* Elder Workspace */}
+
+          <Route
+            path="/elder"
+            element={<SecureElderWorkspace />}
           />
         </Routes>
       </Container>

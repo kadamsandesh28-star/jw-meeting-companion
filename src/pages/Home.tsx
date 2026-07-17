@@ -4,8 +4,11 @@ import HeroCard from "../Components/HeroCard";
 import PlannerCard from "../Components/PlannerCard";
 
 import FocusCard from "../Components/dashboard/FocusCard";
+import TodayTasksCard from "../Components/dashboard/TodayTasksCard";
 import ContinueResearchCard from "../Components/dashboard/ContinueResearchCard";
 import DailyScriptureCard from "../Components/dashboard/DailyScriptureCard";
+import UpcomingEventsCard from "../Components/dashboard/UpcomingEventsCard";
+import CongregationSummaryCard from "../Components/dashboard/CongregationSummaryCard";
 import SnapshotCard from "../Components/dashboard/SnapshotCard";
 import QuickActionsCard from "../Components/dashboard/QuickActionsCard";
 import CongregationResponsibilitiesCard from "../Components/dashboard/CongregationResponsibilitiesCard";
@@ -25,16 +28,25 @@ export default function Home() {
       {/* Today's Focus */}
       <FocusCard />
 
+      {/* Today's Tasks */}
+      <TodayTasksCard />
+
       {/* Continue Research */}
       <ContinueResearchCard />
 
       {/* Daily Scripture */}
       <DailyScriptureCard />
 
-      {/* Responsible Brothers Only */}
+      {/* Upcoming Events */}
+      <UpcomingEventsCard />
+
+      {/* Responsible Brothers */}
       {isResponsibleBrother() && (
         <CongregationResponsibilitiesCard />
       )}
+
+      {/* Congregation Summary */}
+      <CongregationSummaryCard />
 
       {/* Spiritual Snapshot */}
       <SnapshotCard />

@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
+
 import {
   Box,
   Button,
@@ -28,10 +30,18 @@ import {
 } from "../../services/congregationService";
 
 export default function CongregationDirectory() {
+  const location = useLocation();
+
+  const initialSearch =
+    (location.state as { search?: string } | null)?.search ?? "";
+
+  const selectedId =
+    (location.state as { selectedId?: string } | null)?.selectedId ?? "";
+
   const [publishers, setPublishers] =
     useState<Publisher[]>(loadPublishers());
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(initialSearch);
 
   const [deleteId, setDeleteId] =
     useState<string | null>(null);
@@ -128,9 +138,21 @@ export default function CongregationDirectory() {
 
       <Stack spacing={3}>
         {filteredPublishers.map((publisher) => (
-          <Card key={publisher.id}>
+          <Card
+            key={publisher.id}
+            sx={{
+              border:
+                publisher.id === selectedId
+                  ? "3px solid"
+                  : undefined,
+              borderColor:
+                publisher.id === selectedId
+                  ? "primary.main"
+                  : undefined,
+              transition: "0.3s",
+            }}
+          >
             <CardContent>
-
               <Typography
                 variant="h6"
                 gutterBottom
@@ -141,7 +163,6 @@ export default function CongregationDirectory() {
               <Divider sx={{ mb: 2 }} />
 
               <Stack spacing={2}>
-
                 <TextField
                   label="First Name"
                   value={publisher.firstName}
@@ -227,7 +248,6 @@ export default function CongregationDirectory() {
                     )
                   }
                 />
-
               </Stack>
             </CardContent>
 

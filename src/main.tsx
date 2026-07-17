@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
 import { AppThemeProvider } from "./theme/ThemeContext";
+import { ElderAuthProvider } from "./contexts/ElderAuthContext";
 
 import App from "./App";
 import "./index.css";
@@ -10,9 +11,11 @@ import "./index.css";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AppThemeProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ElderAuthProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ElderAuthProvider>
     </AppThemeProvider>
   </React.StrictMode>
 );
