@@ -1,6 +1,5 @@
 import {
   Button,
-  Card,
   CardContent,
   Divider,
   Stack,
@@ -8,6 +7,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
+import DashboardCard from "./DashboardCard";
 import { getLatestResearch } from "../../services/dashboardService";
 
 export default function ContinueResearchCard() {
@@ -16,13 +16,7 @@ export default function ContinueResearchCard() {
   const latest = getLatestResearch();
 
   return (
-    <Card
-      sx={{
-        borderRadius: 4,
-        boxShadow: 3,
-        mb: 4,
-      }}
-    >
+    <DashboardCard>
       <CardContent>
         <Typography
           variant="h5"
@@ -34,9 +28,7 @@ export default function ContinueResearchCard() {
 
         <Divider sx={{ mb: 2 }} />
 
-        <Typography
-          variant="h6"
-        >
+        <Typography variant="h6">
           {latest.title}
         </Typography>
 
@@ -54,14 +46,12 @@ export default function ContinueResearchCard() {
         >
           <Button
             variant="contained"
-            onClick={() =>
-              navigate("/library/research")
-            }
+            onClick={() => navigate("/library/research")}
           >
             Continue →
           </Button>
         </Stack>
       </CardContent>
-    </Card>
+    </DashboardCard>
   );
 }

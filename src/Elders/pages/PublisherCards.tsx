@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Button,
@@ -16,29 +16,62 @@ import { createPublisher } from "../models/publisherFactory";
 import { publisherService } from "../services/publisherService";
 
 export default function PublisherCards() {
-  const [search, setSearch] = useState("");
+  const [publishers, setPublishers] = useState<Publisher[]>([]);
+  const [selectedPublisher, setSelectedPublisher] =
+    useState<Publisher>(createPublisher());
+
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
-  // Temporary refresh mechanism (we'll improve this later)
-  const [, setVersion] = useState(0);
+  useEffect(() => {
+    refresh();
+  }, []);
 
-  const publishers = useMemo(
-    () => publisherService.getAll(),
-    [dialogOpen]
-  );
+  function refresh() {
+    setPublishers(publisherService.getAll());
+  }
 
-  const filtered = publishers.filter((publisher) => {
-    const fullName =
-      `${publisher.firstName} ${publisher.lastName}`.toLowerCase();
+  function handleAdd() {
+    setSelectedPublisher(createPublisher());
+    setDialogOpen(true);
+  }
 
-    return fullName.includes(search.toLowerCase());
-  });
+  function handleEdit(publisher: Publisher) {
+    setSelectedPublisher({ ...publisher });
+    setDialogOpen(true);
+  }
 
   function handleSave(publisher: Publisher) {
-    publisherService.add(publisher);
-    setVersion((v) => v + 1);
+    if (publisherService.getById(publisher.id)) {
+      publisherService.update(publisher);
+    } else {
+      publisherService.add(publisher);
+    }
+
+    refresh();
     setDialogOpen(false);
   }
+
+  function handleDelete(publisher: Publisher) {
+    const confirmed = window.confirm(
+      `Delete ${publisher.firstName} ${publisher.lastName}?`
+    );
+
+    if (!confirmed) return;
+
+    publisherService.delete(publisher.id);
+    refresh();
+    setDialogOpen(false);
+  }
+
+  const filtered = useMemo(() => {
+    return publishers.filter((publisher) => {
+      const text =
+        `${publisher.firstName} ${publisher.lastName}`.toLowerCase();
+
+      return text.includes(search.toLowerCase());
+    });
+  }, [publishers, search]);
 
   return (
     <>
@@ -54,7 +87,7 @@ export default function PublisherCards() {
 
           <Button
             variant="contained"
-            onClick={() => setDialogOpen(true)}
+            onClick={handleAdd}
           >
             Add Publisher
           </Button>
@@ -80,6 +113,7 @@ export default function PublisherCards() {
             >
               <PublisherCard
                 publisher={publisher}
+                onClick={() => handleEdit(publisher)}
               />
             </Grid>
           ))}
@@ -97,10 +131,15 @@ export default function PublisherCards() {
 
       <PublisherDialog
         open={dialogOpen}
-        title="Add Publisher"
-        publisher={createPublisher()}
+        title={
+          publisherService.getById(selectedPublisher.id)
+            ? "Edit Publisher"
+            : "Add Publisher"
+        }
+        publisher={selectedPublisher}
         onClose={() => setDialogOpen(false)}
         onSave={handleSave}
+        onDelete={handleDelete}
       />
     </>
   );

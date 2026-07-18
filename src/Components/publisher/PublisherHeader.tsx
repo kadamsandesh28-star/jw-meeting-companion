@@ -1,14 +1,12 @@
 import {
   Avatar,
   Box,
-  Card,
-  CardContent,
   Chip,
   Stack,
   Typography,
 } from "@mui/material";
 
-import { Publisher } from "../../services/congregationService";
+import { Publisher } from "../../models/Publisher";
 
 interface PublisherHeaderProps {
   publisher: Publisher;
@@ -21,157 +19,97 @@ export default function PublisherHeader({
     0
   )}`.toUpperCase();
 
+  const fullName =
+    publisher.displayName ||
+    `${publisher.firstName} ${publisher.lastName}`;
+
   return (
-    <Card
-      elevation={4}
-      sx={{
-        borderRadius: 4,
-        overflow: "hidden",
-        mb: 3,
-      }}
+    <Stack
+      direction={{ xs: "column", sm: "row" }}
+      spacing={3}
+      alignItems={{ xs: "flex-start", sm: "center" }}
+      sx={{ mb: 3 }}
     >
-      <Box
+      <Avatar
+        src={publisher.photoUrl}
         sx={{
-          background:
-            "linear-gradient(135deg,#1565C0,#42A5F5)",
-          color: "white",
-          py: 5,
-          px: 3,
+          width: 72,
+          height: 72,
+          bgcolor: "primary.main",
+          fontSize: 26,
+          fontWeight: 700,
         }}
       >
-        <Stack
-          spacing={2}
-          alignItems="center"
+        {!publisher.photoUrl && initials}
+      </Avatar>
+
+      <Box flex={1}>
+        <Typography variant="h5" fontWeight={700}>
+          {fullName}
+        </Typography>
+
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ mt: 0.5 }}
         >
-          <Avatar
-            sx={{
-              width: 100,
-              height: 100,
-              fontSize: 40,
-              bgcolor: "white",
-              color: "primary.main",
-              fontWeight: "bold",
-            }}
-          >
-            {initials}
-          </Avatar>
+          {publisher.publisherStatus}
+        </Typography>
 
-          <Typography
-            variant="h4"
-            fontWeight="bold"
-            textAlign="center"
-          >
-            {publisher.firstName} {publisher.lastName}
-          </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+        >
+          Congregation Group: {publisher.congregationGroup}
+        </Typography>
 
-          <Stack
-            direction="row"
-            spacing={1}
-            justifyContent="center"
-            flexWrap="wrap"
-            useFlexGap
-          >
-            {publisher.privileges && (
-              <Chip
-                label={publisher.privileges}
-                color="secondary"
-              />
-            )}
+        <Typography
+          variant="body2"
+          color="text.secondary"
+        >
+          📞 {publisher.mobile || publisher.phone || "No phone number"}
+        </Typography>
 
-            {publisher.serviceGroup && (
-              <Chip
-                label={`Group ${publisher.serviceGroup}`}
-                color="success"
-              />
-            )}
+        <Typography
+          variant="body2"
+          color="text.secondary"
+        >
+          ✉️ {publisher.email || "No email address"}
+        </Typography>
 
-            {publisher.hope && (
-              <Chip
-                label={publisher.hope}
-                color="warning"
-              />
-            )}
-          </Stack>
-        </Stack>
-      </Box>
-
-      <CardContent>
         <Stack
           direction="row"
-          spacing={2}
-          justifyContent="space-around"
+          spacing={1}
           flexWrap="wrap"
           useFlexGap
+          sx={{ mt: 2 }}
         >
-          <Box textAlign="center">
-            <Typography
-              variant="h5"
-              fontWeight="bold"
-            >
-              {publisher.baptized ? "✔" : "—"}
-            </Typography>
+          <Chip
+            size="small"
+            color={publisher.active ? "success" : "default"}
+            label={publisher.active ? "Active" : "Inactive"}
+          />
 
-            <Typography
-              variant="body2"
-              color="text.secondary"
-            >
-              Baptized
-            </Typography>
-          </Box>
+          <Chip
+            size="small"
+            color={publisher.baptized ? "primary" : "default"}
+            label={
+              publisher.baptized
+                ? "Baptized"
+                : "Unbaptized"
+            }
+          />
 
-          <Box textAlign="center">
-            <Typography
-              variant="h5"
-              fontWeight="bold"
-            >
-              {publisher.auxiliaryPioneerThisMonth
-                ? "✔"
-                : "—"}
-            </Typography>
-
-            <Typography
-              variant="body2"
-              color="text.secondary"
-            >
-              Auxiliary Pioneer
-            </Typography>
-          </Box>
-
-          <Box textAlign="center">
-            <Typography
-              variant="h5"
-              fontWeight="bold"
-            >
-              {publisher.participatedThisMonth
-                ? "✔"
-                : "—"}
-            </Typography>
-
-            <Typography
-              variant="body2"
-              color="text.secondary"
-            >
-              Participated
-            </Typography>
-          </Box>
-
-          <Box textAlign="center">
-            <Typography
-              variant="h5"
-              fontWeight="bold"
-            >
-              {publisher.bibleStudiesThisMonth ?? 0}
-            </Typography>
-
-            <Typography
-              variant="body2"
-              color="text.secondary"
-            >
-              Bible Studies
-            </Typography>
-          </Box>
+          {publisher.privileges.map((privilege) => (
+            <Chip
+              key={privilege.id}
+              size="small"
+              color="secondary"
+              label={privilege.type}
+            />
+          ))}
         </Stack>
-      </CardContent>
-    </Card>
+      </Box>
+    </Stack>
   );
 }

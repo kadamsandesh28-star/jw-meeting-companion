@@ -16,6 +16,7 @@ interface PublisherDialogProps {
   title: string;
   onClose: () => void;
   onSave: (publisher: Publisher) => void;
+  onDelete?: (publisher: Publisher) => void;
 }
 
 export default function PublisherDialog({
@@ -24,6 +25,7 @@ export default function PublisherDialog({
   title,
   onClose,
   onSave,
+  onDelete,
 }: PublisherDialogProps) {
   const [current, setCurrent] = useState<Publisher>(publisher);
 
@@ -31,9 +33,7 @@ export default function PublisherDialog({
     setCurrent(publisher);
   }, [publisher]);
 
-  const handleSave = () => {
-    onSave(current);
-  };
+  const isExistingPublisher = current.id.trim() !== "";
 
   return (
     <Dialog
@@ -52,13 +52,22 @@ export default function PublisherDialog({
       </DialogContent>
 
       <DialogActions>
+        {isExistingPublisher && onDelete && (
+          <Button
+            color="error"
+            onClick={() => onDelete(current)}
+          >
+            Delete
+          </Button>
+        )}
+
         <Button onClick={onClose}>
           Cancel
         </Button>
 
         <Button
           variant="contained"
-          onClick={handleSave}
+          onClick={() => onSave(current)}
         >
           Save
         </Button>

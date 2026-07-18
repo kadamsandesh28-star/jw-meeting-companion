@@ -18,6 +18,7 @@ import DailyScripture from "./pages/DailyScripture";
 import PracticeTimer from "./pages/PracticeTimer";
 import MeetingTimerSettings from "./pages/MeetingTimerSettings";
 import AssignmentPreparation from "./pages/AssignmentPreparation";
+import PublisherProfile from "./pages/congregation/PublisherProfile";
 
 import SpiritualLibrary from "./pages/SpiritualLibrary";
 
@@ -171,6 +172,10 @@ function App() {
             path="/congregation/directory"
             element={<CongregationDirectory />}
           />
+          <Route
+  path="/congregation/publisher/:id"
+  element={<PublisherProfile />}
+/>
 
           <Route
             path="/congregation/groups"

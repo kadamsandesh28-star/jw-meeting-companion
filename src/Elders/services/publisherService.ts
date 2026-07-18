@@ -1,22 +1,63 @@
 import { Publisher } from "../models/Publisher";
 
+const STORAGE_KEY = "jw-companion-publishers";
+
 class PublisherService {
-  private publishers: Publisher[] = [
-    {
-      id: "1",
-      firstName: "John",
-      lastName: "Smith",
-      preferredName: "John",
-      gender: "Male",
-      status: "Elder",
-      active: true,
-      serviceGroup: "Group 1",
-      phone: "082 123 4567",
-      email: "john.smith@example.com",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-  ];
+  private publishers: Publisher[] = [];
+
+  constructor() {
+    this.load();
+
+    // Seed initial data only if storage is empty
+    if (this.publishers.length === 0) {
+      this.publishers = [
+        {
+          id: crypto.randomUUID(),
+          firstName: "John",
+          lastName: "Smith",
+          preferredName: "",
+          gender: "Male",
+          dateOfBirth: "",
+          baptismDate: "",
+          phone: "",
+          email: "",
+          address: "",
+          emergencyContactName: "",
+          emergencyContactPhone: "",
+          serviceGroup: "",
+          status: "Publisher",
+          active: true,
+          notes: "",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      ];
+
+      this.save();
+    }
+  }
+
+  private load() {
+    const json = localStorage.getItem(STORAGE_KEY);
+
+    if (!json) {
+      this.publishers = [];
+      return;
+    }
+
+    try {
+      this.publishers = JSON.parse(json);
+    } catch {
+      this.publishers = [];
+    }
+  }
+
+  private save() {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(this.publishers)
+    );
+  }
 
   getAll(): Publisher[] {
     return [...this.publishers];
@@ -26,22 +67,35 @@ class PublisherService {
     return this.publishers.find((p) => p.id === id);
   }
 
-  add(publisher: Publisher): void {
+  add(publisher: Publisher) {
+    publisher.createdAt = new Date().toISOString();
+    publisher.updatedAt = new Date().toISOString();
+
     this.publishers.push(publisher);
+
+    this.save();
   }
 
-  update(updatedPublisher: Publisher): void {
+  update(publisher: Publisher) {
     const index = this.publishers.findIndex(
-      (p) => p.id === updatedPublisher.id
+      (p) => p.id === publisher.id
     );
 
-    if (index !== -1) {
-      this.publishers[index] = updatedPublisher;
-    }
+    if (index === -1) return;
+
+    publisher.updatedAt = new Date().toISOString();
+
+    this.publishers[index] = publisher;
+
+    this.save();
   }
 
-  delete(id: string): void {
-    this.publishers = this.publishers.filter((p) => p.id !== id);
+  delete(id: string) {
+    this.publishers = this.publishers.filter(
+      (p) => p.id !== id
+    );
+
+    this.save();
   }
 
   count(): number {
