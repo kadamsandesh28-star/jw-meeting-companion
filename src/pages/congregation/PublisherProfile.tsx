@@ -2,7 +2,7 @@ import { Alert, Box, Button, Grid, Stack } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, useParams } from "react-router-dom";
 
-import publisherService from "../../services/publisherService";
+import { publisherService } from "../../services/publisherService";
 
 import PublisherHeader from "../../Components/publisher/PublisherHeader";
 import ContactCard from "../../Components/publisher/profile/ContactCard";

@@ -1,121 +1,161 @@
-import { mockPublishers } from "../data/mockPublishers";
-import { Publisher, PublisherStatus } from "../models/Publisher";
+import { Publisher } from "../models/Publisher";
+import { createEmptyPublisher } from "../models/createEmptyPublisher";
+
+const STORAGE_KEY = "jw-companion-publishers";
 
 class PublisherService {
-  private publishers: Publisher[] = [...mockPublishers];
+  private publishers: Publisher[] = [];
 
-  /**
-   * Returns all publishers.
-   */
-  public getAll(): Publisher[] {
-    return [...this.publishers];
+  constructor() {
+    this.load();
+
+    if (this.publishers.length === 0) {
+      this.seed();
+    }
   }
 
-  /**
-   * Returns only active publishers.
-   */
-  public getActive(): Publisher[] {
-    return this.publishers.filter((publisher) => publisher.active);
+  private seed() {
+    const publisher = createEmptyPublisher();
+
+    publisher.firstName = "John";
+    publisher.lastName = "Smith";
+    publisher.displayName = "John Smith";
+    publisher.gender = "Brother";
+    publisher.publisherStatus = "Publisher";
+    publisher.baptized = true;
+    publisher.active = true;
+    publisher.congregationGroup = 1;
+
+    this.publishers = [publisher];
+
+    this.save();
   }
 
-  /**
-   * Returns a publisher by ID.
-   */
-  public getById(id: string): Publisher | undefined {
-    return this.publishers.find((publisher) => publisher.id === id);
+  private load() {
+    const json = localStorage.getItem(STORAGE_KEY);
+
+    if (!json) {
+      this.publishers = [];
+      return;
+    }
+
+    try {
+      this.publishers = JSON.parse(json);
+    } catch {
+      this.publishers = [];
+    }
   }
 
-  /**
-   * Returns publishers matching a publisher status.
-   */
-  public getByStatus(status: PublisherStatus): Publisher[] {
-    return this.publishers.filter(
-      (publisher) => publisher.publisherStatus === status
+  private save() {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(this.publishers)
     );
   }
 
-  /**
-   * Performs a simple search across common publisher fields.
-   */
-  public search(searchTerm: string): Publisher[] {
-    const term = searchTerm.trim().toLowerCase();
+  getAll(): Publisher[] {
+    return [...this.publishers];
+  }
 
-    if (!term) {
+  getActive(): Publisher[] {
+    return this.publishers.filter(
+      (publisher) => publisher.active
+    );
+  }
+
+  getById(id: string): Publisher | undefined {
+    return this.publishers.find(
+      (publisher) => publisher.id === id
+    );
+  }
+
+  getByStatus(status: string): Publisher[] {
+    return this.publishers.filter(
+      (publisher) =>
+        publisher.publisherStatus === status
+    );
+  }
+
+  search(searchText: string): Publisher[] {
+    const text = searchText.trim().toLowerCase();
+
+    if (!text) {
       return this.getAll();
     }
 
     return this.publishers.filter((publisher) => {
       return (
-        publisher.firstName.toLowerCase().includes(term) ||
-        publisher.lastName.toLowerCase().includes(term) ||
-        publisher.displayName.toLowerCase().includes(term) ||
-        publisher.publisherStatus.toLowerCase().includes(term) ||
-        publisher.email?.toLowerCase().includes(term) ||
-        publisher.mobile?.toLowerCase().includes(term) ||
-        publisher.phone?.toLowerCase().includes(term)
+        publisher.firstName
+          .toLowerCase()
+          .includes(text) ||
+        publisher.lastName
+          .toLowerCase()
+          .includes(text) ||
+        publisher.displayName
+          .toLowerCase()
+          .includes(text) ||
+       (publisher.email ?? "")
+  .toLowerCase()
+  .includes(text) ||
+        (publisher.phone ?? "")
+  .toLowerCase()
+  .includes(text)
       );
     });
   }
 
-  /**
-   * Adds a new publisher.
-   */
-  public create(publisher: Publisher): Publisher {
+  create(publisher: Publisher) {
+    publisher.createdAt = new Date().toISOString();
+    publisher.updatedAt = new Date().toISOString();
+
     this.publishers.push(publisher);
-    return publisher;
+
+    this.save();
   }
 
-  /**
-   * Updates an existing publisher.
-   */
-  public update(updatedPublisher: Publisher): Publisher | null {
+  update(publisher: Publisher) {
     const index = this.publishers.findIndex(
-      (publisher) => publisher.id === updatedPublisher.id
+      (p) => p.id === publisher.id
     );
 
-    if (index === -1) {
-      return null;
-    }
+    if (index === -1) return;
 
-    this.publishers[index] = {
-      ...updatedPublisher,
-      updatedAt: new Date().toISOString(),
-    };
+    publisher.updatedAt = new Date().toISOString();
 
-    return this.publishers[index];
+    this.publishers[index] = publisher;
+
+    this.save();
   }
 
-  /**
-   * Deletes a publisher.
-   */
-  public delete(id: string): boolean {
-    const index = this.publishers.findIndex(
-      (publisher) => publisher.id === id
+  delete(id: string) {
+    this.publishers = this.publishers.filter(
+      (publisher) => publisher.id !== id
     );
 
-    if (index === -1) {
-      return false;
-    }
-
-    this.publishers.splice(index, 1);
-    return true;
+    this.save();
   }
 
-  /**
-   * Returns the total number of publishers.
-   */
-  public count(): number {
+  archive(id: string) {
+    const publisher = this.getById(id);
+
+    if (!publisher) return;
+
+    publisher.active = false;
+    publisher.updatedAt = new Date().toISOString();
+
+    this.save();
+  }
+
+  count(): number {
     return this.publishers.length;
   }
 
-  /**
-   * Returns the number of active publishers.
-   */
-  public countActive(): number {
-    return this.getActive().length;
+  countActive(): number {
+    return this.publishers.filter(
+      (publisher) => publisher.active
+    ).length;
   }
 }
 
-export const publisherService = new PublisherService();
-
-export default publisherService;
+export const publisherService =
+  new PublisherService();
