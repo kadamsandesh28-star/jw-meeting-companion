@@ -2,9 +2,7 @@ import { ReactNode } from "react";
 import {
   Box,
   Button,
-  Divider,
   Paper,
-  Stack,
   Typography,
 } from "@mui/material";
 
@@ -32,54 +30,36 @@ export default function ElderWorkspaceLayout({
         elevation={3}
         sx={{
           display: "flex",
+          flexDirection: "column",
           height: "100%",
           overflow: "hidden",
           borderRadius: 3,
         }}
       >
-        {/* Sidebar */}
+        {/* Header */}
 
         <Box
           sx={{
-            width: 250,
-            borderRight: 1,
+            px: 4,
+            py: 3,
+            borderBottom: 1,
             borderColor: "divider",
-            p: 2,
             display: "flex",
-            flexDirection: "column",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          <Typography variant="h6" gutterBottom>
-            Elder Workspace
-          </Typography>
+          <Box>
+            <Typography variant="h4">
+              {title}
+            </Typography>
 
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            mb={3}
-          >
-            Secure Congregation Tools
-          </Typography>
-
-          <Stack spacing={1}>
-            <Button fullWidth variant="contained">
-              Dashboard
-            </Button>
-
-            <Button fullWidth>Secretary</Button>
-
-            <Button fullWidth>CBOE</Button>
-
-            <Button fullWidth>Service Overseer</Button>
-
-            <Button fullWidth>Service Committee</Button>
-
-            <Button fullWidth>Publisher Cards</Button>
-          </Stack>
-
-          <Box sx={{ flexGrow: 1 }} />
-
-          <Divider sx={{ my: 2 }} />
+            {subtitle && (
+              <Typography color="text.secondary">
+                {subtitle}
+              </Typography>
+            )}
+          </Box>
 
           <Button
             color="error"
@@ -90,28 +70,15 @@ export default function ElderWorkspaceLayout({
           </Button>
         </Box>
 
-        {/* Main Content */}
+        {/* Content */}
 
         <Box
           sx={{
             flex: 1,
+            overflow: "auto",
             p: 4,
-            overflowY: "auto",
           }}
         >
-          <Typography variant="h4" gutterBottom>
-            {title}
-          </Typography>
-
-          {subtitle && (
-            <Typography
-              color="text.secondary"
-              mb={4}
-            >
-              {subtitle}
-            </Typography>
-          )}
-
           {children}
         </Box>
       </Paper>

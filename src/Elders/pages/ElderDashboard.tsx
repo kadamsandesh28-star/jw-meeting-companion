@@ -5,6 +5,8 @@ import ElderWorkspaceLayout from "../components/ElderWorkspaceLayout";
 import ElderSidebar from "../components/ElderSidebar";
 import { ElderModule } from "../models/ElderModule";
 
+import CongregationDirectory from "../../pages/congregation/CongregationDirectory";
+
 export default function ElderDashboard() {
   const [module, setModule] = useState<ElderModule>("dashboard");
 
@@ -44,11 +46,7 @@ export default function ElderDashboard() {
         );
 
       case "publishers":
-        return (
-          <Typography variant="h4">
-            Publisher Cards
-          </Typography>
-        );
+        return <CongregationDirectory />;
 
       default:
         return null;
