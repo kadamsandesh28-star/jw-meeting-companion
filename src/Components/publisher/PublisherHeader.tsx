@@ -1,115 +1,111 @@
 import {
   Avatar,
   Box,
+  Button,
   Chip,
   Stack,
   Typography,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 
 import { Publisher } from "../../models/Publisher";
 
 interface PublisherHeaderProps {
   publisher: Publisher;
+  onEdit?: () => void;
 }
 
 export default function PublisherHeader({
   publisher,
+  onEdit,
 }: PublisherHeaderProps) {
   const initials = `${publisher.firstName.charAt(0)}${publisher.lastName.charAt(
     0
   )}`.toUpperCase();
 
   const fullName =
-    publisher.displayName ||
-    `${publisher.firstName} ${publisher.lastName}`;
+  `${publisher.firstName} ${publisher.lastName}`.trim();
 
   return (
-    <Stack
-      direction={{ xs: "column", sm: "row" }}
-      spacing={3}
-      alignItems={{ xs: "flex-start", sm: "center" }}
-      sx={{ mb: 3 }}
+    <Box
+      sx={{
+        mb: 3,
+        p: 3,
+        borderRadius: 3,
+        bgcolor: "background.paper",
+        boxShadow: 2,
+      }}
     >
-      <Avatar
-        src={publisher.photoUrl}
-        sx={{
-          width: 72,
-          height: 72,
-          bgcolor: "primary.main",
-          fontSize: 26,
-          fontWeight: 700,
-        }}
+      <Stack
+        direction={{ xs: "column", md: "row" }}
+        spacing={3}
+        alignItems={{ xs: "flex-start", md: "center" }}
       >
-        {!publisher.photoUrl && initials}
-      </Avatar>
-
-      <Box flex={1}>
-        <Typography variant="h5" fontWeight={700}>
-          {fullName}
-        </Typography>
-
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ mt: 0.5 }}
+        <Avatar
+          src={publisher.photoUrl}
+          sx={{
+            width: 88,
+            height: 88,
+            bgcolor: "primary.main",
+            fontSize: 32,
+            fontWeight: 700,
+          }}
         >
-          {publisher.publisherStatus}
-        </Typography>
+          {!publisher.photoUrl && initials}
+        </Avatar>
 
-        <Typography
-          variant="body2"
-          color="text.secondary"
-        >
-          Congregation Group: {publisher.congregationGroup}
-        </Typography>
+        <Box flex={1}>
+          <Typography variant="h4" fontWeight={700}>
+            {fullName}
+          </Typography>
 
-        <Typography
-          variant="body2"
-          color="text.secondary"
-        >
-          📞 {publisher.mobile || publisher.phone || "No phone number"}
-        </Typography>
+          <Typography
+            color="text.secondary"
+            sx={{ mt: 0.5 }}
+          >
+            {publisher.publisherStatus}
+          </Typography>
 
-        <Typography
-          variant="body2"
-          color="text.secondary"
-        >
-          ✉️ {publisher.email || "No email address"}
-        </Typography>
+          <Typography color="text.secondary">
+            Service Group: {publisher.congregationGroup}
+          </Typography>
 
-        <Stack
-          direction="row"
-          spacing={1}
-          flexWrap="wrap"
-          useFlexGap
-          sx={{ mt: 2 }}
-        >
-          <Chip
-            size="small"
-            color={publisher.active ? "success" : "default"}
-            label={publisher.active ? "Active" : "Inactive"}
-          />
+          <Typography color="text.secondary">
+            📞 {publisher.mobile || publisher.phone || "No phone"}
+          </Typography>
 
-          <Chip
-            size="small"
-            color={publisher.baptized ? "primary" : "default"}
-            label={
-              publisher.baptized
-                ? "Baptized"
-                : "Unbaptized"
-            }
-          />
+          <Typography color="text.secondary">
+            ✉ {publisher.email || "No email"}
+          </Typography>
 
-          {publisher.privileges.map((privilege) => (
-            <Chip
-              key={privilege.id}
-              size="small"
-              color="secondary"
-              label={privilege.type}
-            />
-          ))}
+          <Stack
+            direction="row"
+            spacing={1}
+            flexWrap="wrap"
+            useFlexGap
+            sx={{ mt: 2 }}
+          >
+            {publisher.privileges.map((privilege) => (
+              <Chip
+                key={privilege.id}
+                label={privilege.type}
+                size="small"
+                color="secondary"
+              />
+            ))}
+          </Stack>
+        </Box>
+
+        <Stack spacing={1}>
+          <Button
+            variant="contained"
+            startIcon={<EditIcon />}
+            onClick={onEdit}
+          >
+            Edit
+          </Button>
         </Stack>
-      </Box>
-    </Stack>
+      </Stack>
+    </Box>
   );
 }

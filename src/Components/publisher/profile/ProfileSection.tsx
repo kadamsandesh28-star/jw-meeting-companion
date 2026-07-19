@@ -1,7 +1,9 @@
 import {
+  Box,
   Card,
   CardContent,
   Divider,
+  Stack,
   Typography,
 } from "@mui/material";
 import { ReactNode } from "react";
@@ -9,11 +11,13 @@ import { ReactNode } from "react";
 interface ProfileSectionProps {
   title: string;
   children: ReactNode;
+  actions?: ReactNode;
 }
 
 export default function ProfileSection({
   title,
   children,
+  actions,
 }: ProfileSectionProps) {
   return (
     <Card
@@ -24,15 +28,26 @@ export default function ProfileSection({
       }}
     >
       <CardContent>
-        <Typography
-          variant="h6"
-          fontWeight={700}
-          gutterBottom
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
         >
-          {title}
-        </Typography>
+          <Typography
+            variant="h6"
+            fontWeight={700}
+          >
+            {title}
+          </Typography>
 
-        <Divider sx={{ mb: 3 }} />
+          {actions && (
+            <Box>
+              {actions}
+            </Box>
+          )}
+        </Stack>
+
+        <Divider sx={{ my: 2 }} />
 
         {children}
       </CardContent>

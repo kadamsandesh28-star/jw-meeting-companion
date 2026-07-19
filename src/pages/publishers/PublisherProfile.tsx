@@ -7,6 +7,7 @@ import InfoCard from "../../Components/publisher/InfoCard";
 import InfoRow from "../../Components/publisher/InfoRow";
 import PrivilegeChip from "../../Components/publisher/PrivilegeChip";
 
+
 const publisher = {
   fullName: "John Smith",
   displayName: "John",

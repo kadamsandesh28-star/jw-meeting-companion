@@ -18,8 +18,7 @@ export default function PublisherForm({
   value,
   onChange,
 }: PublisherFormProps) {
-  const [publisher, setPublisher] =
-    useState<Publisher>(value);
+  const [publisher, setPublisher] = useState<Publisher>(value);
 
   useEffect(() => {
     setPublisher(value);

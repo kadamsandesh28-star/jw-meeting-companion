@@ -1,10 +1,29 @@
-import { Alert, Box, Button, Grid, Stack } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  Grid,
+  Stack,
+} from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate, useParams } from "react-router-dom";
+
+import {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  useNavigate,
+  useParams,
+} from "react-router-dom";
+
+import { Publisher } from "../../models/Publisher";
 
 import { publisherService } from "../../services/publisherService";
 
 import PublisherHeader from "../../Components/publisher/PublisherHeader";
+import PublisherDialog from "../../Components/publisher/dialog/PublisherDialog";
+
 import ContactCard from "../../Components/publisher/profile/ContactCard";
 import SpiritualStatusCard from "../../Components/publisher/profile/SpiritualStatusCard";
 import PrivilegesCard from "../../Components/publisher/profile/PrivilegesCard";
@@ -15,11 +34,22 @@ import NotesCard from "../../Components/publisher/profile/NotesCard";
 
 export default function PublisherProfile() {
   const { id } = useParams();
+
   const navigate = useNavigate();
 
-  const publisher = id
-    ? publisherService.getById(id)
-    : undefined;
+  const [publisher, setPublisher] =
+    useState<Publisher>();
+
+  const [editOpen, setEditOpen] =
+    useState(false);
+
+  useEffect(() => {
+    if (id) {
+      setPublisher(
+        publisherService.getById(id)
+      );
+    }
+  }, [id]);
 
   if (!publisher) {
     return (
@@ -27,6 +57,26 @@ export default function PublisherProfile() {
         Publisher not found.
       </Alert>
     );
+  }
+
+  function handleSave(
+    updatedPublisher: Publisher
+  ) {
+    publisherService.update(updatedPublisher);
+
+    setPublisher(updatedPublisher);
+
+    setEditOpen(false);
+  }
+
+  function handleArchive(
+    publisherToArchive: Publisher
+  ) {
+    publisherService.archive(
+      publisherToArchive.id
+    );
+
+    navigate("/congregation/directory");
   }
 
   return (
@@ -47,7 +97,13 @@ export default function PublisherProfile() {
         </Button>
       </Stack>
 
-      <PublisherHeader publisher={publisher} />
+      <PublisherHeader
+        publisher={publisher}
+       onEdit={() => {
+  console.log("Edit clicked");
+  setEditOpen(true);
+}}
+      />
 
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 6 }}>
@@ -77,7 +133,16 @@ export default function PublisherProfile() {
         <Grid size={{ xs: 12 }}>
           <NotesCard publisher={publisher} />
         </Grid>
-      </Grid>
+      </Grid>   
+
+      <PublisherDialog
+        open={editOpen}
+        publisher={publisher}
+        title="Edit Publisher"
+        onClose={() => setEditOpen(false)}
+        onSave={handleSave}
+        onArchive={handleArchive}
+      />
     </Box>
-  );
+      );
 }
