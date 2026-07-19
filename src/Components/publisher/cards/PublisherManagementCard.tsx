@@ -13,9 +13,8 @@ import {
   Typography,
 } from "@mui/material";
 
-import PublisherHeader from "../PublisherHeader";
-
 import { Publisher } from "../../../models/Publisher";
+import PublisherCardHeader from "./PublisherCardHeader";
 
 interface PublisherManagementCardProps {
   publisher: Publisher;
@@ -40,95 +39,74 @@ export default function PublisherManagementCard({
         height: "100%",
         display: "flex",
         flexDirection: "column",
+        borderRadius: 3,
       }}
     >
       <CardContent sx={{ flexGrow: 1 }}>
-        <PublisherHeader publisher={publisher} />
+        <PublisherCardHeader publisher={publisher} />
 
         <Divider sx={{ my: 2 }} />
 
-        <Stack spacing={2}>
-          <Stack
-            direction="row"
-            spacing={1}
-            flexWrap="wrap"
-            useFlexGap
-          >
-            <Chip
-              label={
-                publisher.active
-                  ? "Active"
-                  : "Inactive"
-              }
-              color={
-                publisher.active
-                  ? "success"
-                  : "default"
-              }
-              size="small"
-            />
+        <Stack
+          direction="row"
+          spacing={1}
+          flexWrap="wrap"
+          useFlexGap
+          sx={{ mb: 2 }}
+        >
+          <Chip
+            label={publisher.active ? "Active" : "Inactive"}
+            color={publisher.active ? "success" : "default"}
+            size="small"
+          />
 
-            <Chip
-              label={
-                publisher.baptized
-                  ? "Baptized"
-                  : "Unbaptized"
-              }
-              color={
-                publisher.baptized
-                  ? "primary"
-                  : "default"
-              }
-              size="small"
-            />
+          <Chip
+            label={publisher.baptized ? "Baptized" : "Unbaptized"}
+            color={publisher.baptized ? "primary" : "default"}
+            size="small"
+          />
 
-            <Chip
-              label={publisher.publisherStatus}
-              color="secondary"
-              size="small"
-            />
-          </Stack>
-
-          <Divider />
-
-          <Typography variant="body2">
-            <strong>Assignments:</strong>{" "}
-            {publisher.assignments.length}
-          </Typography>
-
-          <Typography variant="body2">
-            <strong>Privileges:</strong>{" "}
-            {publisher.privileges.length}
-          </Typography>
-
-          <Typography variant="body2">
-            <strong>Family Members:</strong>{" "}
-            {publisher.family.length}
-          </Typography>
-
-          <Typography variant="body2">
-            <strong>Timeline Events:</strong>{" "}
-            {publisher.timeline.length}
-          </Typography>
-
-          {publisher.notes && (
-            <>
-              <Divider />
-
-              <Typography
-                variant="body2"
-                color="text.secondary"
-              >
-                {publisher.notes.length > 120
-                  ? `${publisher.notes.substring(
-                      0,
-                      120
-                    )}...`
-                  : publisher.notes}
-              </Typography>
-            </>
-          )}
+          <Chip
+            label={publisher.publisherStatus}
+            color="secondary"
+            size="small"
+          />
         </Stack>
+
+        <Divider sx={{ mb: 2 }} />
+
+        <Stack spacing={1}>
+          <Typography variant="body2">
+            <strong>Assignments:</strong> {publisher.assignments.length}
+          </Typography>
+
+          <Typography variant="body2">
+            <strong>Privileges:</strong> {publisher.privileges.length}
+          </Typography>
+
+          <Typography variant="body2">
+            <strong>Family:</strong> {publisher.family.length}
+          </Typography>
+
+          <Typography variant="body2">
+            <strong>Timeline:</strong> {publisher.timeline.length}
+          </Typography>
+        </Stack>
+
+        {publisher.notes && (
+          <>
+            <Divider sx={{ my: 2 }} />
+
+            <Typography
+              variant="body2"
+              color="text.secondary"
+            >
+              {publisher.notes.length > 120
+                ? `${publisher.notes.substring(0, 120)}...`
+                : publisher.notes}
+            </Typography>
+          </>
+        )}
       </CardContent>
 
       <Divider />
@@ -141,9 +119,7 @@ export default function PublisherManagementCard({
       >
         <Button
           startIcon={<VisibilityIcon />}
-          onClick={() =>
-            onViewProfile?.(publisher.id)
-          }
+          onClick={() => onViewProfile?.(publisher.id)}
         >
           View
         </Button>
@@ -151,9 +127,7 @@ export default function PublisherManagementCard({
         <Button
           startIcon={<EditIcon />}
           color="primary"
-          onClick={() =>
-            onEdit?.(publisher)
-          }
+          onClick={() => onEdit?.(publisher)}
         >
           Edit
         </Button>
@@ -161,9 +135,7 @@ export default function PublisherManagementCard({
         <Button
           startIcon={<ArchiveIcon />}
           color="warning"
-          onClick={() =>
-            onArchive?.(publisher)
-          }
+          onClick={() => onArchive?.(publisher)}
         >
           Archive
         </Button>

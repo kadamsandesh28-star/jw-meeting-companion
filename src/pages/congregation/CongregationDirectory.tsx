@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import AddIcon from "@mui/icons-material/Add";
 
 import {
   Box,
@@ -12,70 +10,89 @@ import {
   Typography,
 } from "@mui/material";
 
-import PageHeader from "../../Components/PageHeader";
-import PublisherCard from "../../Components/publisher/PublisherCard";
+import AddIcon from "@mui/icons-material/Add";
+
+import PublisherManagementCard from "../../Components/publisher/cards/PublisherManagementCard";
 import PublisherDialog from "../../Components/publisher/dialog/PublisherDialog";
 
 import { Publisher } from "../../models/Publisher";
 import { createEmptyPublisher } from "../../models/createEmptyPublisher";
+
 import { publisherService } from "../../services/publisherService";
 
 export default function CongregationDirectory() {
   const navigate = useNavigate();
 
-  const [search, setSearch] = useState("");
-  const [publishers, setPublishers] = useState<Publisher[]>([]);
-
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [newPublisher, setNewPublisher] = useState<Publisher>(
-    createEmptyPublisher()
+  const [publishers, setPublishers] = useState(
+    publisherService.getAll()
   );
 
-  function loadPublishers() {
-    setPublishers(publisherService.search(search));
-  }
+  const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    loadPublishers();
-  }, [search]);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-  function viewPublisherProfile(id: string) {
-    navigate(`/congregation/publisher/${id}`);
-  }
+  const [editingPublisher, setEditingPublisher] =
+    useState<Publisher>(createEmptyPublisher());
 
-  function handleAddPublisher() {
-    setNewPublisher(createEmptyPublisher());
+  const filteredPublishers = useMemo(() => {
+    const term = search.toLowerCase();
+
+    return publishers.filter((publisher) =>
+      [
+        publisher.firstName,
+        publisher.lastName,
+        publisher.email,
+        publisher.mobile,
+        publisher.publisherStatus,
+        publisher.congregationGroup,
+      ]
+        .join(" ")
+        .toLowerCase()
+        .includes(term)
+    );
+  }, [publishers, search]);
+
+  const refreshPublishers = () => {
+    setPublishers(publisherService.getAll());
+  };
+
+  const handleAddPublisher = () => {
+    setEditingPublisher(createEmptyPublisher());
     setDialogOpen(true);
-  }
+  };
 
-  function handleSavePublisher(publisher: Publisher) {
-    publisher.displayName =
-      `${publisher.firstName} ${publisher.lastName}`.trim();
+  const handleEditPublisher = (publisher: Publisher) => {
+    setEditingPublisher({ ...publisher });
+    setDialogOpen(true);
+  };
 
-    publisherService.create(publisher);
+  const handleSavePublisher = (publisher: Publisher) => {
+    const existing = publisherService.getById(publisher.id);
 
+    if (existing) {
+      publisherService.update(publisher);
+    } else {
+      publisherService.create(publisher);
+    }
+
+    refreshPublishers();
     setDialogOpen(false);
-
-    loadPublishers();
-  }
+  };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <PageHeader title="👥 Congregation Directory" />
-
+    <Box p={3}>
       <Stack
-        direction="row"
+        direction={{
+          xs: "column",
+          md: "row",
+        }}
+        justifyContent="space-between"
         spacing={2}
-        sx={{ mb: 3 }}
+        mb={3}
       >
-        <TextField
-          fullWidth
-          placeholder="Search publishers..."
-          value={search}
-          onChange={(event) =>
-            setSearch(event.target.value)
-          }
-        />
+        <Typography variant="h4">
+          Congregation Directory
+        </Typography>
 
         <Button
           variant="contained"
@@ -86,28 +103,37 @@ export default function CongregationDirectory() {
         </Button>
       </Stack>
 
-      <Typography
-        variant="body2"
-        color="text.secondary"
+      <TextField
+        fullWidth
+        placeholder="Search publishers..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
         sx={{ mb: 3 }}
-      >
-        Showing {publishers.length} of{" "}
-        {publisherService.count()} publishers
-      </Typography>
+      />
 
       <Grid container spacing={3}>
-        {publishers.map((publisher) => (
+        {filteredPublishers.map((publisher) => (
           <Grid
             key={publisher.id}
             size={{
               xs: 12,
-              md: 6,
+              sm: 6,
+              md: 4,
               lg: 4,
             }}
           >
-            <PublisherCard
+            <PublisherManagementCard
               publisher={publisher}
-              onViewProfile={viewPublisherProfile}
+              onViewProfile={(id) =>
+                navigate(`/congregation/publisher/${id}`)
+              }
+              onEdit={handleEditPublisher}
+              onArchive={(publisher) => {
+                console.log(
+                  "Archive:",
+                  publisher.firstName
+                );
+              }}
             />
           </Grid>
         ))}
@@ -115,8 +141,12 @@ export default function CongregationDirectory() {
 
       <PublisherDialog
         open={dialogOpen}
-        title="Add Publisher"
-        publisher={newPublisher}
+        title={
+          publisherService.getById(editingPublisher.id)
+            ? "Edit Publisher"
+            : "Add Publisher"
+        }
+        publisher={editingPublisher}
         onClose={() => setDialogOpen(false)}
         onSave={handleSavePublisher}
       />
