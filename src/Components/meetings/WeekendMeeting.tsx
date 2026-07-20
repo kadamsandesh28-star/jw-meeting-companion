@@ -21,6 +21,7 @@ export default function WeekendMeeting() {
         return (
           <MeetingSectionCard
             key={section.id}
+            id={section.id}
             icon={Icon}
             title={section.title}
             description={section.description}

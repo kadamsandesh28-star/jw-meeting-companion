@@ -5,6 +5,7 @@ import { MeetingStatus } from "../../data/mock/meetingData";
 import NotesPanel from "./panels/NotesPanel";
 
 interface MeetingSectionCardProps {
+  id: string;
   icon: LucideIcon;
   title: string;
   description: string;
@@ -13,6 +14,7 @@ interface MeetingSectionCardProps {
 }
 
 const MeetingSectionCard: React.FC<MeetingSectionCardProps> = ({
+  id,
   icon: Icon,
   title,
   description,
@@ -38,7 +40,7 @@ const MeetingSectionCard: React.FC<MeetingSectionCardProps> = ({
         );
 
       case "Notes":
-        return <NotesPanel />;
+        return <NotesPanel sectionId={id} />;
 
       case "Study":
         return (

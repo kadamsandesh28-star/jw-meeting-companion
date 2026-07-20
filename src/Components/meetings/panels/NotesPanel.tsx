@@ -1,23 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const STORAGE_KEY = "jw-meeting-notes";
+interface NotesPanelProps {
+  sectionId: string;
+}
 
-export default function NotesPanel() {
-  const [notes, setNotes] = useState("");
+export default function NotesPanel({ sectionId }: NotesPanelProps) {
+  const storageKey = useMemo(() => `jw-notes-${sectionId}`, [sectionId]);
 
-  // Load saved notes when the component mounts
+  const [notes, setNotes] = useState(() => {
+    return localStorage.getItem(storageKey) ?? "";
+  });
+
+  // If the section changes, load its notes.
   useEffect(() => {
-    const savedNotes = localStorage.getItem(STORAGE_KEY);
+    setNotes(localStorage.getItem(storageKey) ?? "");
+  }, [storageKey]);
 
-    if (savedNotes) {
-      setNotes(savedNotes);
-    }
-  }, []);
-
-  // Save notes whenever they change
+  // Save whenever notes change.
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, notes);
-  }, [notes]);
+    localStorage.setItem(storageKey, notes);
+  }, [storageKey, notes]);
 
   return (
     <div className="space-y-4">
