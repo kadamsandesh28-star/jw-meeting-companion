@@ -2,6 +2,7 @@ import GreetingCard from "../../components/dashboard/GreetingCard";
 import NextMeetingCard from "../../components/dashboard/NextMeetingCard";
 import ReminderCard from "../../components/dashboard/ReminderCard";
 import WeeklyProgressCard from "../../components/dashboard/WeeklyProgressCard";
+import QuickActionsCard from "../../components/dashboard/QuickActionsCard";
 
 import { dashboardData } from "../../data/mockDashboard";
 
@@ -23,6 +24,7 @@ export default function Home() {
 
       {/* Weekly Progress */}
       <WeeklyProgressCard progress={dashboardData.progress} />
+      <QuickActionsCard />
     </div>
   );
 }
