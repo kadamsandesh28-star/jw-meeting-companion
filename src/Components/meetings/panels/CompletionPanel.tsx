@@ -1,25 +1,14 @@
-import { useEffect, useState } from "react";
 import { MeetingStatus } from "../../../data/mock/meetingData";
 
 interface CompletionPanelProps {
-  sectionId: string;
+  status: MeetingStatus;
+  onStatusChange: (status: MeetingStatus) => void;
 }
 
 export default function CompletionPanel({
-  sectionId,
+  status,
+  onStatusChange,
 }: CompletionPanelProps) {
-  const storageKey = `meeting-status-${sectionId}`;
-
-  const [status, setStatus] = useState<MeetingStatus>(() => {
-    const saved = localStorage.getItem(storageKey);
-
-    return (saved as MeetingStatus) ?? "not-started";
-  });
-
-  useEffect(() => {
-    localStorage.setItem(storageKey, status);
-  }, [storageKey, status]);
-
   return (
     <div className="space-y-4">
       <div>
@@ -42,7 +31,7 @@ export default function CompletionPanel({
       </div>
 
       <button
-        onClick={() => setStatus("completed")}
+        onClick={() => onStatusChange("completed")}
         disabled={status === "completed"}
         className={`rounded-lg px-4 py-2 font-medium transition ${
           status === "completed"

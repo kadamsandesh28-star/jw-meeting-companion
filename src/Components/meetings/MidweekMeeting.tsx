@@ -11,6 +11,7 @@ import MeetingSectionCard from "./MeetingSectionCard";
 import {
   meetingData,
   MeetingSection,
+  MeetingStatus,
 } from "../../data/mock/meetingData";
 
 const iconMap: Record<string, LucideIcon> = {
@@ -21,9 +22,22 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 export default function MidweekMeeting() {
-  const [sections] = useState<MeetingSection[]>(
+  const [sections, setSections] = useState<MeetingSection[]>(
     meetingData.midweek.sections
   );
+
+  const handleStatusChange = (
+    sectionId: string,
+    status: MeetingStatus
+  ) => {
+    setSections((current) =>
+      current.map((section) =>
+        section.id === sectionId
+          ? { ...section, status }
+          : section
+      )
+    );
+  };
 
   return (
     <div className="space-y-6">
@@ -39,6 +53,9 @@ export default function MidweekMeeting() {
             description={section.description}
             status={section.status}
             actions={section.actions}
+            onStatusChange={(status) =>
+              handleStatusChange(section.id, status)
+            }
           />
         );
       })}

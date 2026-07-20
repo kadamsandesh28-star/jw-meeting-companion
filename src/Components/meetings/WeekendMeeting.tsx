@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   MicVocal,
   BookMarked,
@@ -5,7 +6,11 @@ import {
 } from "lucide-react";
 
 import MeetingSectionCard from "./MeetingSectionCard";
-import { meetingData } from "../../data/mock/meetingData";
+import {
+  meetingData,
+  MeetingSection,
+  MeetingStatus,
+} from "../../data/mock/meetingData";
 
 const iconMap: Record<string, LucideIcon> = {
   "public-talk": MicVocal,
@@ -13,9 +18,26 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 export default function WeekendMeeting() {
+  const [sections, setSections] = useState<MeetingSection[]>(
+    meetingData.weekend.sections
+  );
+
+  const handleStatusChange = (
+    sectionId: string,
+    status: MeetingStatus
+  ) => {
+    setSections((current) =>
+      current.map((section) =>
+        section.id === sectionId
+          ? { ...section, status }
+          : section
+      )
+    );
+  };
+
   return (
     <div className="space-y-6">
-      {meetingData.weekend.sections.map((section) => {
+      {sections.map((section) => {
         const Icon = iconMap[section.id];
 
         return (
@@ -27,6 +49,9 @@ export default function WeekendMeeting() {
             description={section.description}
             status={section.status}
             actions={section.actions}
+            onStatusChange={(status) =>
+              handleStatusChange(section.id, status)
+            }
           />
         );
       })}

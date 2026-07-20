@@ -12,6 +12,7 @@ interface MeetingSectionCardProps {
   description: string;
   status: MeetingStatus;
   actions: string[];
+  onStatusChange: (status: MeetingStatus) => void;
 }
 
 const MeetingSectionCard: React.FC<MeetingSectionCardProps> = ({
@@ -21,13 +22,19 @@ const MeetingSectionCard: React.FC<MeetingSectionCardProps> = ({
   description,
   status,
   actions,
+  onStatusChange,
 }) => {
   const [activeAction, setActiveAction] = useState<string | null>(null);
 
   const renderPanel = () => {
     switch (activeAction) {
       case "Mark Complete":
-        return <CompletionPanel sectionId={id} />;
+        return (
+          <CompletionPanel
+            status={status}
+            onStatusChange={onStatusChange}
+          />
+        );
 
       case "Notes":
         return <NotesPanel sectionId={id} />;
