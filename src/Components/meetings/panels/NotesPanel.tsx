@@ -1,7 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
+const STORAGE_KEY = "jw-meeting-notes";
 
 export default function NotesPanel() {
   const [notes, setNotes] = useState("");
+
+  // Load saved notes when the component mounts
+  useEffect(() => {
+    const savedNotes = localStorage.getItem(STORAGE_KEY);
+
+    if (savedNotes) {
+      setNotes(savedNotes);
+    }
+  }, []);
+
+  // Save notes whenever they change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, notes);
+  }, [notes]);
 
   return (
     <div className="space-y-4">
@@ -28,12 +44,9 @@ export default function NotesPanel() {
           {notes.length} characters
         </span>
 
-        <button
-          disabled
-          className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white opacity-50"
-        >
-          Save (Coming Soon)
-        </button>
+        <span className="text-xs font-medium text-green-600 dark:text-green-400">
+          ✓ Auto-saved
+        </span>
       </div>
     </div>
   );
