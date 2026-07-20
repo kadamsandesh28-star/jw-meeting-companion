@@ -3,19 +3,40 @@ export const dashboardData = {
 
   nextMeeting: {
     title: "Midweek Meeting",
-    countdown: "2 Days 18 Hours",
+    countdown: "2 days",
   },
 
   reminders: [
-    "Read Weekly Bible Reading",
-    "Prepare Study Gems",
-    "Review Initial Call",
+    {
+      title: "Finish Bible Reading",
+      done: true,
+    },
+    {
+      title: "Prepare Living as Christians",
+      done: false,
+    },
   ],
 
-  weekEvents: [
-    "Tuesday - Midweek Meeting",
-    "Friday - Hospitality",
-    "Saturday - Field Service",
-    "Sunday - Weekend Meeting",
+  progress: [
+    {
+      title: "Bible Reading",
+      completed: true,
+    },
+    {
+      title: "Midweek Workbook",
+      completed: true,
+    },
+    {
+      title: "Living as Christians",
+      completed: true,
+    },
+    {
+      title: "Watchtower",
+      completed: false,
+    },
+    {
+      title: "Public Talk",
+      completed: false,
+    },
   ],
 };

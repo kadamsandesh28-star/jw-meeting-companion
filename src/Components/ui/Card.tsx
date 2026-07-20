@@ -19,12 +19,14 @@ export default function Card({
   return (
     <div
       className={clsx(
-        "rounded-2xl border border-gray-200 dark:border-gray-700",
-        "bg-white dark:bg-gray-900",
-        "shadow-sm hover:shadow-md transition-shadow",
-        "p-5",
-        className
-      )}
+  "rounded-2xl border border-gray-200 dark:border-gray-700",
+  "bg-white dark:bg-gray-900",
+  "shadow-sm hover:shadow-lg",
+  "transition-all duration-300",
+  "hover:-translate-y-1",
+  "p-5",
+  className
+)}
     >
       {(title || icon) && (
         <div className="mb-4 flex items-center gap-2">

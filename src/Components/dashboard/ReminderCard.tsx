@@ -1,7 +1,12 @@
 import Card from "../ui/Card";
 
+interface Reminder {
+  title: string;
+  done: boolean;
+}
+
 interface Props {
-  reminders: string[];
+  reminders: Reminder[];
 }
 
 export default function ReminderCard({
@@ -12,10 +17,20 @@ export default function ReminderCard({
       <ul className="space-y-2">
         {reminders.map((item) => (
           <li
-            key={item}
+            key={item.title}
             className="flex items-center gap-2"
           >
-            ☐ {item}
+            <span>{item.done ? "✅" : "⬜"}</span>
+
+            <span
+              className={
+                item.done
+                  ? "line-through text-gray-500"
+                  : ""
+              }
+            >
+              {item.title}
+            </span>
           </li>
         ))}
       </ul>
