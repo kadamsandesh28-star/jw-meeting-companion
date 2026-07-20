@@ -10,11 +10,11 @@ import { useNavigate } from "react-router-dom";
 import Card from "../ui/Card";
 
 const actions = [
-  {
-    label: "Meeting Schedule",
-    icon: CalendarDays,
-    route: "/schedule",
-  },
+{
+  label: "Meetings",
+  icon: CalendarDays,
+  route: "/meetings",
+},
   {
     label: "Workbook",
     icon: BookOpen,

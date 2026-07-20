@@ -9,7 +9,7 @@ import { NavLink } from "react-router-dom";
 
 const items = [
   { to: "/", icon: Home, label: "Home" },
-  { to: "/schedule", icon: CalendarDays, label: "Schedule" },
+  { to: "/meetings", icon: CalendarDays, label: "Meetings" },
   { to: "/workbook", icon: BookOpen, label: "Workbook" },
   { to: "/service", icon: ClipboardList, label: "Service" },
   { to: "/settings", icon: Settings, label: "Settings" },
