@@ -7,25 +7,22 @@ import { dashboardData } from "../../data/mockDashboard";
 
 export default function Home() {
   return (
-    <div className="space-y-6">
-      <GreetingCard
-        greeting={dashboardData.greeting}
-      />
+    <div className="mx-auto max-w-7xl space-y-8 p-6">
+      {/* Greeting */}
+      <GreetingCard greeting={dashboardData.greeting} />
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      {/* Next Meeting + Reminder */}
+      <div className="grid gap-6 md:grid-cols-2">
         <NextMeetingCard
           title={dashboardData.nextMeeting.title}
           countdown={dashboardData.nextMeeting.countdown}
         />
 
-        <ReminderCard
-          reminders={dashboardData.reminders}
-        />
+        <ReminderCard reminders={dashboardData.reminders} />
       </div>
 
-      <WeeklyProgressCard
-        progress={dashboardData.progress}
-      />
+      {/* Weekly Progress */}
+      <WeeklyProgressCard progress={dashboardData.progress} />
     </div>
   );
 }

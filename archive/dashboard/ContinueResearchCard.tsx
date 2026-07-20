@@ -8,7 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import DashboardCard from "./DashboardCard";
-import { getLatestResearch } from "../../services/dashboardService";
+import { getLatestResearch } from "../../src/services/dashboardService";
 
 export default function ContinueResearchCard() {
   const navigate = useNavigate();

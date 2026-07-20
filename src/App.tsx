@@ -14,7 +14,7 @@ import Weekend from "./pages/Weekend";
 import Notes from "./pages/Notes";
 import Timers from "./pages/Timers";
 import Settings from "./pages/Settings";
-import DailyScripture from "./pages/DailyScripture";
+
 import PracticeTimer from "./pages/PracticeTimer";
 import MeetingTimerSettings from "./pages/MeetingTimerSettings";
 import AssignmentPreparation from "./pages/AssignmentPreparation";
@@ -95,7 +95,10 @@ function App() {
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="lg" sx={{ py: 3 }}>
+   <Container
+  maxWidth="lg"
+  sx={{ py: 3 }}
+>
         <Routes>
           <Route path="/" element={<Home />} />
 
@@ -141,11 +144,7 @@ function App() {
 
           <Route path="/settings" element={<Settings />} />
 
-          <Route
-            path="/daily-scripture"
-            element={<DailyScripture />}
-          />
-
+         
           <Route
             path="/practice-timer"
             element={<PracticeTimer />}

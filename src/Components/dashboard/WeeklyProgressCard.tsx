@@ -1,3 +1,6 @@
+import Card from "../ui/Card";
+import { BarChart3 } from "lucide-react";
+
 interface ProgressItem {
   title: string;
   completed: boolean;
@@ -16,44 +19,61 @@ export default function WeeklyProgressCard({
   );
 
   return (
-    <div className="rounded-xl bg-white shadow-md p-6">
+    <Card
+      title="Weekly Preparation"
+      icon={<BarChart3 className="h-6 w-6 text-blue-600" />}
+    >
+      {/* Percentage Header */}
+      <div className="mb-4 flex items-center justify-between">
+        <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+          Overall Progress
+        </span>
 
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold">
-          Weekly Preparation
-        </h2>
-
-        <span className="text-blue-600 font-bold">
+        <span className="text-lg font-bold text-blue-600">
           {percentage}%
         </span>
       </div>
 
-      <div className="w-full bg-gray-200 rounded-full h-3 mb-5">
+      {/* Progress Bar */}
+      <div className="mb-6 h-3 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
         <div
-          className="bg-blue-600 h-3 rounded-full transition-all duration-500"
-          style={{ width: `${percentage}%` }}
+          className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-700"
+          style={{
+            width: `${percentage}%`,
+          }}
         />
       </div>
 
-      <div className="space-y-2">
+      {/* Checklist */}
+      <div className="space-y-3">
         {progress.map((item) => (
           <div
             key={item.title}
-            className="flex justify-between items-center"
+            className="flex items-center justify-between"
           >
-            <span>{item.title}</span>
+            <span
+              className={
+                item.completed
+                  ? "text-gray-500 line-through"
+                  : "text-gray-800 dark:text-gray-200"
+              }
+            >
+              {item.title}
+            </span>
 
-            <span>
+            <span className="text-lg">
               {item.completed ? "✅" : "⬜"}
             </span>
           </div>
         ))}
       </div>
 
-      <div className="mt-5 text-sm text-gray-500">
-        {completed} of {progress.length} completed
+      {/* Footer */}
+      <div className="mt-6 border-t pt-4 text-center">
+        <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+          {completed} of {progress.length} completed
+        </span>
       </div>
-
-    </div>
+    </Card>
   );
 }

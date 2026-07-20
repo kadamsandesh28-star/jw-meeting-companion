@@ -9,7 +9,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import DashboardCard from "./DashboardCard";
-import { getDashboardDailyScripture } from "../../services/dashboardService";
+import { getDashboardDailyScripture } from "../../src/services/dashboardService";
 
 export default function DailyScriptureCard() {
   const navigate = useNavigate();

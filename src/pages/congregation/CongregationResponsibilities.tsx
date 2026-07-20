@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 import PageHeader from "../../components/PageHeader";
 import DashboardCard from "../../components/DashboardCard";
-import CongregationDashboardCard from "../../components/congregation/CongregationDashboardCard";
+import CongregationDashboardCard from "../../../archive/dashboard/CongregationDashboardCard";
 
 export default function CongregationResponsibilities() {
   const navigate = useNavigate();

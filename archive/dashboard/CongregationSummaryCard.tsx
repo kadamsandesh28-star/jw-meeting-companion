@@ -12,7 +12,7 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 
-import { getCongregationDashboardSummary } from "../../services/congregationDashboardService";
+import { getCongregationDashboardSummary } from "../../src/services/congregationDashboardService";
 
 export default function CongregationSummaryCard() {
   const summary = getCongregationDashboardSummary();

@@ -8,7 +8,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import DashboardCard from "./DashboardCard";
-import { getTodaysFocus } from "../../services/dashboardService";
+import { getTodaysFocus } from "../../src/services/dashboardService";
 
 export default function FocusCard() {
   const navigate = useNavigate();

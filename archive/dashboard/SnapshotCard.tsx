@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 
 import DashboardCard from "./DashboardCard";
-import { getDashboardSummary } from "../../services/dashboardService";
+import { getDashboardSummary } from "../../src/services/dashboardService";
 
 export default function SnapshotCard() {
   const summary = getDashboardSummary();

@@ -24,7 +24,7 @@ export default function Card({
   "shadow-sm hover:shadow-lg",
   "transition-all duration-300",
   "hover:-translate-y-1",
-  "p-5",
+  "p-6",
   className
 )}
     >
