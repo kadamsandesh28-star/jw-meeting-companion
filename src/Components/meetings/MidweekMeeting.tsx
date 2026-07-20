@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   BookOpen,
   Gem,
@@ -7,7 +8,10 @@ import {
 } from "lucide-react";
 
 import MeetingSectionCard from "./MeetingSectionCard";
-import { meetingData } from "../../data/mock/meetingData";
+import {
+  meetingData,
+  MeetingSection,
+} from "../../data/mock/meetingData";
 
 const iconMap: Record<string, LucideIcon> = {
   treasures: BookOpen,
@@ -17,9 +21,13 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 export default function MidweekMeeting() {
+  const [sections] = useState<MeetingSection[]>(
+    meetingData.midweek.sections
+  );
+
   return (
     <div className="space-y-6">
-      {meetingData.midweek.sections.map((section) => {
+      {sections.map((section) => {
         const Icon = iconMap[section.id];
 
         return (

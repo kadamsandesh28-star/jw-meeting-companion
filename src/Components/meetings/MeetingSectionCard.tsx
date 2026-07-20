@@ -3,6 +3,7 @@ import { LucideIcon } from "lucide-react";
 import StatusBadge from "../common/StatusBadge";
 import { MeetingStatus } from "../../data/mock/meetingData";
 import NotesPanel from "./panels/NotesPanel";
+import CompletionPanel from "./panels/CompletionPanel";
 
 interface MeetingSectionCardProps {
   id: string;
@@ -25,24 +26,15 @@ const MeetingSectionCard: React.FC<MeetingSectionCardProps> = ({
 
   const renderPanel = () => {
     switch (activeAction) {
-      case "Mark":
-        return (
-          <div>
-            <h4 className="mb-2 text-lg font-semibold text-slate-900 dark:text-white">
-              ✅ Mark Complete
-            </h4>
-
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              In a future sprint this will update the meeting status and save
-              your progress.
-            </p>
-          </div>
-        );
+      case "Mark Complete":
+        return <CompletionPanel sectionId={id} />;
 
       case "Notes":
         return <NotesPanel sectionId={id} />;
 
       case "Study":
+      case "Workbook":
+      case "Prepare":
         return (
           <div>
             <h4 className="mb-2 text-lg font-semibold text-slate-900 dark:text-white">
@@ -50,8 +42,7 @@ const MeetingSectionCard: React.FC<MeetingSectionCardProps> = ({
             </h4>
 
             <p className="text-sm text-slate-600 dark:text-slate-400">
-              Scriptures, references, and study resources will appear here in a
-              future sprint.
+              This feature will be implemented in a future sprint.
             </p>
           </div>
         );
