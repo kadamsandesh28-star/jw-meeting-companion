@@ -8,7 +8,7 @@ import {
   Box,
 } from "@mui/material";
 
-import Home from "./pages/Home";
+import Home from "./pages/home/Home";
 import Midweek from "./pages/Midweek";
 import Weekend from "./pages/Weekend";
 import Notes from "./pages/Notes";

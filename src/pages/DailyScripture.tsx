@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import DashboardCard from "../Components/dashboard/DashboardCard";
+import DashboardCard from "../components/dashboard/DashboardCard";
 
 import {
   DailyScriptureEntry,
