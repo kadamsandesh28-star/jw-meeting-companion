@@ -3,6 +3,7 @@ import { useState } from "react";
 import MeetingTabs from "../../components/meetings/MeetingTabs";
 import MidweekMeeting from "../../components/meetings/MidweekMeeting";
 import WeekendMeeting from "../../components/meetings/WeekendMeeting";
+import MeetingHeader from "../../components/meetings/MeetingHeader";
 
 export default function Meetings() {
   const [activeTab, setActiveTab] = useState<"midweek" | "weekend">(
@@ -22,7 +23,7 @@ export default function Meetings() {
           everything you need in one place.
         </p>
       </div>
-
+<MeetingHeader />
       {/* Tabs */}
       <MeetingTabs
         activeTab={activeTab}
