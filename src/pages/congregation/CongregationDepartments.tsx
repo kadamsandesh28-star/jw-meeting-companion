@@ -19,8 +19,8 @@ import {
 
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import PageHeader from "../../Components/PageHeader";
-import ConfirmDialog from "../../Components/ConfirmDialog";
+import PageHeader from "../../components/PageHeader";
+import ConfirmDialog from "../../components/ConfirmDialog";
 
 import {
   Department,

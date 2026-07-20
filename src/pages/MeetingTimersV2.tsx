@@ -8,7 +8,7 @@ import {
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
 
-import TimerTabs from "../Components/TimerTabs";
+import TimerTabs from "../components/TimerTabs";
 
 export default function MeetingTimersV2() {
   const navigate = useNavigate();

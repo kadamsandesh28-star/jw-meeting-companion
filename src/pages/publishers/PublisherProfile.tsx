@@ -1,11 +1,11 @@
 import React from "react";
 import { Box, Grid, Stack } from "@mui/material";
 
-import ProfileHeader from "../../Components/publisher/ProfileHeader";
-import SectionCard from "../../Components/publisher/SectionCard";
-import InfoCard from "../../Components/publisher/InfoCard";
-import InfoRow from "../../Components/publisher/InfoRow";
-import PrivilegeChip from "../../Components/publisher/PrivilegeChip";
+import ProfileHeader from "../../components/publisher/ProfileHeader";
+import SectionCard from "../../components/publisher/SectionCard";
+import InfoCard from "../../components/publisher/InfoCard";
+import InfoRow from "../../components/publisher/InfoRow";
+import PrivilegeChip from "../../components/publisher/PrivilegeChip";
 
 
 const publisher = {

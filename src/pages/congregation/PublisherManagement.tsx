@@ -17,8 +17,8 @@ import { createEmptyPublisher } from "../../models/createEmptyPublisher";
 
 import { publisherService } from "../../services/publisherService";
 
-import PublisherDialog from "../../Components/publisher/dialog/PublisherDialog";
-import PublisherManagementCard from "../../Components/publisher/cards/PublisherManagementCard";
+import PublisherDialog from "../../components/publisher/dialog/PublisherDialog";
+import PublisherManagementCard from "../../components/publisher/cards/PublisherManagementCard";
 
 export default function PublisherManagement() {
   const navigate = useNavigate();

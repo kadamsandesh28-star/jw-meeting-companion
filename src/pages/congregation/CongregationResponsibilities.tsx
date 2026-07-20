@@ -7,9 +7,9 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
-import PageHeader from "../../Components/PageHeader";
-import DashboardCard from "../../Components/DashboardCard";
-import CongregationDashboardCard from "../../Components/congregation/CongregationDashboardCard";
+import PageHeader from "../../components/PageHeader";
+import DashboardCard from "../../components/DashboardCard";
+import CongregationDashboardCard from "../../components/congregation/CongregationDashboardCard";
 
 export default function CongregationResponsibilities() {
   const navigate = useNavigate();

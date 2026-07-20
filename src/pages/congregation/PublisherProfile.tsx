@@ -21,16 +21,16 @@ import { Publisher } from "../../models/Publisher";
 
 import { publisherService } from "../../services/publisherService";
 
-import PublisherHeader from "../../Components/publisher/PublisherHeader";
-import PublisherDialog from "../../Components/publisher/dialog/PublisherDialog";
+import PublisherHeader from "../../components/publisher/PublisherHeader";
+import PublisherDialog from "../../components/publisher/dialog/PublisherDialog";
 
-import ContactCard from "../../Components/publisher/profile/ContactCard";
-import SpiritualStatusCard from "../../Components/publisher/profile/SpiritualStatusCard";
-import PrivilegesCard from "../../Components/publisher/profile/PrivilegesCard";
-import AssignmentsCard from "../../Components/publisher/profile/AssignmentsCard";
-import FamilyCard from "../../Components/publisher/profile/FamilyCard";
-import TimelineCard from "../../Components/publisher/profile/TimelineCard";
-import NotesCard from "../../Components/publisher/profile/NotesCard";
+import ContactCard from "../../components/publisher/profile/ContactCard";
+import SpiritualStatusCard from "../../components/publisher/profile/SpiritualStatusCard";
+import PrivilegesCard from "../../components/publisher/profile/PrivilegesCard";
+import AssignmentsCard from "../../components/publisher/profile/AssignmentsCard";
+import FamilyCard from "../../components/publisher/profile/FamilyCard";
+import TimelineCard from "../../components/publisher/profile/TimelineCard";
+import NotesCard from "../../components/publisher/profile/NotesCard";
 
 export default function PublisherProfile() {
   const { id } = useParams();

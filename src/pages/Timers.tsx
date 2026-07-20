@@ -8,10 +8,10 @@ import {
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
 
-import TimerTabs from "../Components/TimerTabs";
-import AssignmentRow from "../Components/AssignmentRow";
-import MeetingSectionCard from "../Components/MeetingSectionCard";
-import StopwatchPanel from "../Components/StopwatchPanel";
+import TimerTabs from "../components/TimerTabs";
+import AssignmentRow from "../components/AssignmentRow";
+import MeetingSectionCard from "../components/MeetingSectionCard";
+import StopwatchPanel from "../components/StopwatchPanel";
 
 import {
   midweekSections,
