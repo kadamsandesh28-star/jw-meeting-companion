@@ -1,60 +1,85 @@
 import {
-  CalendarDays,
   BookOpen,
-  Mic,
+  CalendarDays,
   ClipboardList,
+  Mic,
   Zap,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 import Card from "../ui/Card";
 
 const actions = [
   {
     label: "Meeting Schedule",
     icon: CalendarDays,
+    route: "/schedule",
   },
   {
     label: "Workbook",
     icon: BookOpen,
+    route: "/workbook",
   },
   {
     label: "Assignments",
     icon: Mic,
+    route: "/assignments",
   },
   {
     label: "Service Report",
     icon: ClipboardList,
+    route: "/service",
   },
 ];
 
 export default function QuickActionsCard() {
+  const navigate = useNavigate();
+
   return (
     <Card title="Quick Actions" icon={<Zap size={20} />}>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-4">
         {actions.map((action) => {
           const Icon = action.icon;
 
           return (
             <button
               key={action.label}
+              onClick={() => navigate(action.route)}
               className="
+                group
                 flex flex-col items-center justify-center
-                rounded-xl
-                border
-                border-gray-200
-                bg-gray-50
-                p-4
-                transition-all
-                hover:bg-blue-50
-                hover:shadow-md
-                dark:border-gray-700
-                dark:bg-gray-800
-                dark:hover:bg-gray-700
+                rounded-2xl
+                border border-slate-200
+                bg-gradient-to-br from-slate-50 to-white
+                p-6
+                transition-all duration-300
+                hover:-translate-y-1
+                hover:border-indigo-200
+                hover:shadow-lg
+                dark:border-slate-700
+                dark:from-slate-900
+                dark:to-slate-800
               "
-              onClick={() => alert(`${action.label} coming soon!`)}
             >
-              <Icon className="mb-2 text-blue-600" size={26} />
+              <div
+                className="
+                  mb-4
+                  flex h-14 w-14 items-center justify-center
+                  rounded-2xl
+                  bg-indigo-100
+                  text-indigo-600
+                  transition-all duration-300
+                  group-hover:scale-110
+                  group-hover:bg-indigo-600
+                  group-hover:text-white
+                  dark:bg-indigo-950
+                  dark:text-indigo-300
+                "
+              >
+                <Icon size={28} />
+              </div>
 
-              <span className="text-sm font-medium text-center">
+              <span className="text-center text-sm font-semibold text-slate-700 dark:text-slate-200">
                 {action.label}
               </span>
             </button>
