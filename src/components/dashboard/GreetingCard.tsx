@@ -1,15 +1,18 @@
 import { Hand } from "lucide-react";
+import { getOverallProgress } from "../../services/plannerService";
 
 interface Props {
   greeting: string;
 }
 
 export default function GreetingCard({ greeting }: Props) {
-  const today = new Date().toLocaleDateString(undefined, {
+  const today = new Intl.DateTimeFormat(undefined, {
     weekday: "long",
-    day: "numeric",
     month: "long",
-  });
+    day: "numeric",
+  }).format(new Date());
+
+  const { progress } = getOverallProgress();
 
   return (
     <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 via-indigo-500 to-violet-600 p-8 text-white shadow-xl">
@@ -35,17 +38,19 @@ export default function GreetingCard({ greeting }: Props) {
             </div>
           </div>
 
-          <p className="mt-6 max-w-md text-indigo-100 leading-relaxed">
+          <p className="mt-6 max-w-md leading-relaxed text-indigo-100">
             Let's get prepared for this week's spiritual activities and stay
             focused on what matters most.
           </p>
         </div>
 
         <div className="hidden rounded-2xl bg-white/10 px-4 py-3 backdrop-blur md:block">
-          <p className="text-sm text-indigo-100">Preparation</p>
+          <p className="text-sm text-indigo-100">
+            Preparation
+          </p>
 
           <p className="mt-1 text-2xl font-bold">
-            68%
+            {progress}%
           </p>
         </div>
       </div>

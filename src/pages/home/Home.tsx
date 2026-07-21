@@ -40,16 +40,15 @@ export default function Home() {
   ];
 
   const reminders = getOutstandingAssignments().map((item) => ({
+    id: item.id,
     title: item.title,
-    done: false,
+    done: item.status === "Ready",
   }));
 
   return (
     <div className="mx-auto max-w-7xl space-y-8 p-6">
-      {/* Greeting */}
       <GreetingCard greeting={getGreeting()} />
 
-      {/* Today's Focus */}
       <TodaysFocusCard
         title={todaysFocus.title}
         description={todaysFocus.description}
@@ -57,7 +56,6 @@ export default function Home() {
         path={todaysFocus.path}
       />
 
-      {/* Next Meeting + Reminder */}
       <div className="grid gap-6 md:grid-cols-2">
         <NextMeetingCard
           title={nextMeeting.title}
@@ -67,10 +65,8 @@ export default function Home() {
         <ReminderCard reminders={reminders} />
       </div>
 
-      {/* Weekly Progress */}
       <WeeklyProgressCard progress={liveProgress} />
 
-      {/* Quick Actions */}
       <QuickActionsCard />
     </div>
   );

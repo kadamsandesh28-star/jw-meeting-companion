@@ -1,3 +1,5 @@
+import { plannerSeed } from "../data/plannerSeed";
+
 export type PlannerStatus =
   | "Not Started"
   | "In Progress"
@@ -15,11 +17,29 @@ const STORAGE_KEY = "jw-weekly-planner";
 export function loadPlanner(): PlannerAssignment[] {
   const saved = localStorage.getItem(STORAGE_KEY);
 
+  // First run - initialize planner
   if (!saved) {
-    return [];
+    const initialPlanner = plannerSeed.map((item) => ({
+      ...item,
+    }));
+
+    savePlanner(initialPlanner);
+
+    return initialPlanner;
   }
 
-  return JSON.parse(saved);
+  try {
+    return JSON.parse(saved);
+  } catch {
+    // Corrupt storage - reset to defaults
+    const initialPlanner = plannerSeed.map((item) => ({
+      ...item,
+    }));
+
+    savePlanner(initialPlanner);
+
+    return initialPlanner;
+  }
 }
 
 export function savePlanner(
@@ -28,6 +48,14 @@ export function savePlanner(
   localStorage.setItem(
     STORAGE_KEY,
     JSON.stringify(planner)
+  );
+}
+
+export function resetPlanner() {
+  savePlanner(
+    plannerSeed.map((item) => ({
+      ...item,
+    }))
   );
 }
 
@@ -62,7 +90,9 @@ export function getMeetingProgress(
   const total = assignments.length;
 
   const progress =
-    total === 0 ? 0 : Math.round((ready / total) * 100);
+    total === 0
+      ? 0
+      : Math.round((ready / total) * 100);
 
   return {
     ready,
@@ -111,13 +141,13 @@ export function getNextAssignment():
   | null {
   const planner = loadPlanner();
 
-  const next =
+  return (
     planner.find(
       (item) => item.status === "In Progress"
     ) ??
     planner.find(
       (item) => item.status === "Not Started"
-    );
-
-  return next ?? null;
+    ) ??
+    null
+  );
 }
