@@ -1,17 +1,20 @@
 import { CalendarDays, CheckCircle2 } from "lucide-react";
 import { meetingData } from "../../data/mock/meetingData";
+import { usePlanner } from "../../contexts/PlannerContext";
 
 const MeetingHeader = () => {
-  const totalSections =
-    meetingData.midweek.sections.length +
-    meetingData.weekend.sections.length;
+  const { planner } = usePlanner();
 
-  const completedSections =
-    [...meetingData.midweek.sections, ...meetingData.weekend.sections].filter(
-      (section) => section.status === "completed"
-    ).length;
+  const totalSections = planner.length;
 
-  const progress = Math.round((completedSections / totalSections) * 100);
+  const completedSections = planner.filter(
+    (item) => item.status === "Ready"
+  ).length;
+
+  const progress =
+    totalSections === 0
+      ? 0
+      : Math.round((completedSections / totalSections) * 100);
 
   return (
     <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900">
