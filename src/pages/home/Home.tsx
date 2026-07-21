@@ -1,4 +1,5 @@
 import GreetingCard from "../../components/dashboard/GreetingCard";
+import MeetingPreparationCard from "../../components/dashboard/MeetingPreparationCard";
 import NextMeetingCard from "../../components/dashboard/NextMeetingCard";
 import ReminderCard from "../../components/dashboard/ReminderCard";
 import WeeklyProgressCard from "../../components/dashboard/WeeklyProgressCard";
@@ -6,6 +7,7 @@ import QuickActionsCard from "../../components/dashboard/QuickActionsCard";
 import TodaysFocusCard from "../../components/dashboard/TodaysFocusCard";
 
 import { getTodaysFocus } from "../../services/dashboardService";
+import { getMeetingProgress } from "../../services/meetingProgressService";
 
 import { getGreeting } from "../../utils/greeting";
 import { getNextMeeting } from "../../utils/nextMeeting";
@@ -17,6 +19,7 @@ export default function Home() {
 
   const nextMeeting = getNextMeeting();
   const todaysFocus = getTodaysFocus();
+  const meetingProgress = getMeetingProgress(planner);
 
   const midweek = planner.filter(
     (item) => item.meeting === "Midweek"
@@ -59,6 +62,8 @@ export default function Home() {
         button={todaysFocus.button}
         path={todaysFocus.path}
       />
+
+      <MeetingPreparationCard progress={meetingProgress} />
 
       <div className="grid gap-6 md:grid-cols-2">
         <NextMeetingCard
