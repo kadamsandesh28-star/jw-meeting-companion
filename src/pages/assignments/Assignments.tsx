@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from "react";
 import Card from "../../components/ui/Card";
 import {
   type PlannerAssignment,
@@ -5,8 +6,34 @@ import {
 } from "../../services/plannerService";
 import { usePlanner } from "../../contexts/PlannerContext";
 
+const NOTES_KEY = "jwMeetingCompanion.assignmentNotes";
+
 export default function Assignments() {
   const { planner, changeStatus } = usePlanner();
+
+  const [notes, setNotes] = useState<Record<string, string>>({});
+  const [activeAssignmentId, setActiveAssignmentId] =
+  useState<string | null>(null);
+
+const activeAssignment = useMemo(
+  () =>
+    planner.find(
+      (assignment) => assignment.id === activeAssignmentId
+    ) ?? null,
+  [planner, activeAssignmentId]
+);
+
+  useEffect(() => {
+    const saved = localStorage.getItem(NOTES_KEY);
+
+    if (saved) {
+      setNotes(JSON.parse(saved));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+  }, [notes]);
 
   const midweek = planner.filter(
     (item) => item.meeting === "Midweek"
@@ -16,6 +43,28 @@ export default function Assignments() {
     (item) => item.meeting === "Weekend"
   );
 
+  function updateNote(id: string, value: string) {
+    setNotes((previous) => ({
+      ...previous,
+      [id]: value,
+    }));
+  }
+function practiceAssignment(id: string) {
+  setActiveAssignmentId(id);
+}
+
+function getStatusBadgeColor(status: PlannerStatus) {
+  switch (status) {
+    case "Ready":
+      return "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300";
+
+    case "In Progress":
+      return "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300";
+
+    default:
+      return "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300";
+  }
+}
   function renderSection(
     title: string,
     assignments: PlannerAssignment[]
@@ -27,36 +76,79 @@ export default function Assignments() {
             No assignments available.
           </p>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-6">
             {assignments.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between"
+                className="rounded-xl border border-gray-200 p-4 dark:border-gray-700"
               >
-                <span className="font-medium">
-                  {item.title}
-                </span>
+                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+  <div>
+    <div className="flex flex-wrap items-center gap-2">
+      <h3 className="text-lg font-semibold">
+        {item.title}
+      </h3>
 
-                <select
-                  value={item.status}
-                  onChange={(e) =>
-                    changeStatus(
-                      item.id,
-                      e.target.value as PlannerStatus
-                    )
-                  }
-                  className="rounded-lg border border-gray-300 px-3 py-2 dark:border-gray-600 dark:bg-gray-800"
-                >
-                  <option value="Not Started">
-                    Not Started
-                  </option>
-                  <option value="In Progress">
-                    In Progress
-                  </option>
-                  <option value="Ready">
-                    Ready
-                  </option>
-                </select>
+      <span
+        className={`rounded-full px-2 py-1 text-xs font-medium ${getStatusBadgeColor(
+          item.status
+        )}`}
+      >
+        {item.status}
+      </span>
+
+      {item.status === "Ready" && (
+        <span className="rounded-full bg-green-600 px-2 py-1 text-xs font-semibold text-white">
+          ✓ Ready to Present
+        </span>
+      )}
+    </div>
+
+    <p className="text-sm text-gray-500">
+      {item.meeting}
+    </p>
+  </div>
+
+  <div className="flex flex-col gap-2">
+    <select
+      value={item.status}
+      onChange={(e) =>
+        changeStatus(
+          item.id,
+          e.target.value as PlannerStatus
+        )
+      }
+      className="rounded-lg border border-gray-300 px-3 py-2 dark:border-gray-600 dark:bg-gray-800"
+    >
+      <option value="Not Started">Not Started</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Ready">Ready</option>
+    </select>
+
+    <button
+      type="button"
+      onClick={() => practiceAssignment(item.id)}
+      className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
+    >
+      Practice This Assignment
+    </button>
+  </div>
+</div>
+
+                <div className="mt-5">
+                  <label className="mb-2 block text-sm font-medium">
+                    Preparation Notes
+                  </label>
+
+                  <textarea
+                    value={notes[item.id] ?? ""}
+                    onChange={(e) =>
+                      updateNote(item.id, e.target.value)
+                    }
+                    placeholder="Write preparation notes, scriptures, illustrations, timing reminders..."
+                    className="min-h-[160px] w-full rounded-lg border border-gray-300 p-3 dark:border-gray-600 dark:bg-gray-800"
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -71,9 +163,26 @@ export default function Assignments() {
         Weekly Assignments
       </h1>
 
+      <p className="text-gray-500 dark:text-gray-400">
+        Track your assignments, update their progress, and keep preparation
+        notes for each one.
+      </p>
+
       {renderSection("Midweek Meeting", midweek)}
 
-      {renderSection("Weekend Meeting", weekend)}
+{activeAssignment && (
+  <Card title="Currently Practicing">
+    <p className="text-lg font-semibold">
+      {activeAssignment.title}
+    </p>
+
+    <p className="text-gray-500">
+      {activeAssignment.meeting}
+    </p>
+  </Card>
+)}
+
+{renderSection("Weekend Meeting", weekend)}
     </div>
   );
 }
