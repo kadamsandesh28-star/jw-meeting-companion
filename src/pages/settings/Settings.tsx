@@ -2,12 +2,21 @@ import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "jwMeetingCompanion.resources";
 
+type CongregationRole =
+  | "Publisher"
+  | "Auxiliary Pioneer"
+  | "Regular Pioneer"
+  | "Ministerial Servant"
+  | "Elder";
+
 export default function Settings() {
   const [workbookTitle, setWorkbookTitle] = useState("");
   const [workbookUrl, setWorkbookUrl] = useState("");
 
   const [watchtowerTitle, setWatchtowerTitle] = useState("");
   const [watchtowerUrl, setWatchtowerUrl] = useState("");
+
+  const [role, setRole] = useState<CongregationRole>("Publisher");
 
   const [saved, setSaved] = useState(false);
 
@@ -24,6 +33,8 @@ export default function Settings() {
 
       setWatchtowerTitle(settings.watchtowerTitle ?? "");
       setWatchtowerUrl(settings.watchtowerUrl ?? "");
+
+      setRole(settings.role ?? "Publisher");
     } catch {
       console.error("Unable to load settings.");
     }
@@ -37,6 +48,7 @@ export default function Settings() {
         workbookUrl,
         watchtowerTitle,
         watchtowerUrl,
+        role,
       })
     );
 
@@ -45,23 +57,30 @@ export default function Settings() {
     setTimeout(() => setSaved(false), 2500);
   };
 
+  const roles: CongregationRole[] = [
+    "Publisher",
+    "Auxiliary Pioneer",
+    "Regular Pioneer",
+    "Ministerial Servant",
+    "Elder",
+  ];
+
   return (
-    <div className="mx-auto max-w-4xl p-6 space-y-8">
+    <div className="mx-auto max-w-4xl space-y-8 p-6">
       <div>
         <h1 className="text-3xl font-bold">⚙️ Settings</h1>
+
         <p className="mt-2 text-gray-600 dark:text-gray-400">
-          Configure the publications used throughout JW Meeting Companion.
+          Configure JW Meeting Companion to suit your congregation
+          responsibilities.
         </p>
       </div>
 
-      <div className="rounded-xl border p-6 shadow-sm space-y-6">
-
-        <h2 className="text-xl font-semibold">
-          📚 Meeting Resources
-        </h2>
+      <div className="space-y-6 rounded-xl border p-6 shadow-sm">
+        <h2 className="text-xl font-semibold">📚 Meeting Resources</h2>
 
         <div>
-          <label className="font-medium block mb-2">
+          <label className="mb-2 block font-medium">
             Midweek Workbook Title
           </label>
 
@@ -74,7 +93,7 @@ export default function Settings() {
         </div>
 
         <div>
-          <label className="font-medium block mb-2">
+          <label className="mb-2 block font-medium">
             Midweek Workbook URL
           </label>
 
@@ -89,7 +108,7 @@ export default function Settings() {
         <hr />
 
         <div>
-          <label className="font-medium block mb-2">
+          <label className="mb-2 block font-medium">
             Watchtower Study Title
           </label>
 
@@ -102,7 +121,7 @@ export default function Settings() {
         </div>
 
         <div>
-          <label className="font-medium block mb-2">
+          <label className="mb-2 block font-medium">
             Watchtower Study URL
           </label>
 
@@ -114,15 +133,42 @@ export default function Settings() {
           />
         </div>
 
+        <hr />
+
+        <div>
+          <h2 className="mb-4 text-xl font-semibold">
+            👤 Congregation Role
+          </h2>
+
+          <div className="space-y-3">
+            {roles.map((item) => (
+              <label
+                key={item}
+                className="flex cursor-pointer items-center gap-3"
+              >
+                <input
+                  type="radio"
+                  name="role"
+                  value={item}
+                  checked={role === item}
+                  onChange={() => setRole(item)}
+                />
+
+                <span>{item}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
         <button
           onClick={saveSettings}
-          className="rounded-lg bg-blue-600 px-5 py-3 text-white hover:bg-blue-700"
+          className="rounded-lg bg-blue-600 px-5 py-3 text-white transition hover:bg-blue-700"
         >
           Save Settings
         </button>
 
         {saved && (
-          <p className="text-green-600 font-medium">
+          <p className="font-medium text-green-600">
             ✅ Settings saved successfully.
           </p>
         )}
