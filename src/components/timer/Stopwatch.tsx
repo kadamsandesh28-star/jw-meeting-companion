@@ -6,7 +6,7 @@ export default function Stopwatch() {
   const [elapsed, setElapsed] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
 
-  const startTimeRef = useRef<number>(0);
+  const startTimeRef = useRef(0);
   const intervalRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export default function Stopwatch() {
 
       intervalRef.current = window.setInterval(() => {
         setElapsed(Date.now() - startTimeRef.current);
-      }, 100);
+      }, 10);
     } else if (intervalRef.current !== null) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -26,7 +26,7 @@ export default function Stopwatch() {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isRunning, elapsed]);
+  }, [isRunning]);
 
   const handleStart = () => {
     setIsRunning(true);
@@ -42,10 +42,28 @@ export default function Stopwatch() {
   };
 
   return (
-    <div className="rounded-3xl bg-white p-6 shadow-xl">
-      <h2 className="mb-6 text-center text-2xl font-bold">
-        ⏱ Meeting Stopwatch
-      </h2>
+    <div className="rounded-3xl bg-white p-6 shadow-xl dark:bg-slate-900">
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-2xl font-bold">⏱ Meeting Stopwatch</h2>
+
+        <div
+          className={`flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold ${
+            isRunning
+              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"
+              : "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+          }`}
+        >
+          <span
+            className={`h-2.5 w-2.5 rounded-full ${
+              isRunning
+                ? "animate-pulse bg-emerald-500"
+                : "bg-slate-400"
+            }`}
+          />
+
+          {isRunning ? "RUNNING" : "STOPPED"}
+        </div>
+      </div>
 
       <TimerDisplay elapsed={elapsed} />
 
