@@ -1,24 +1,12 @@
-import { useState } from "react";
 import Card from "../../components/ui/Card";
 import {
-  loadPlanner,
-  updatePlannerStatus,
   type PlannerAssignment,
   type PlannerStatus,
 } from "../../services/plannerService";
+import { usePlanner } from "../../contexts/PlannerContext";
 
 export default function Assignments() {
-  const [planner, setPlanner] = useState<PlannerAssignment[]>(
-    loadPlanner()
-  );
-
-  function changeStatus(
-    id: string,
-    status: PlannerStatus
-  ) {
-    updatePlannerStatus(id, status);
-    setPlanner(loadPlanner());
-  }
+  const { planner, changeStatus } = usePlanner();
 
   const midweek = planner.filter(
     (item) => item.meeting === "Midweek"

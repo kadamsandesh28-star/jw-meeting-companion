@@ -5,45 +5,49 @@ import WeeklyProgressCard from "../../components/dashboard/WeeklyProgressCard";
 import QuickActionsCard from "../../components/dashboard/QuickActionsCard";
 import TodaysFocusCard from "../../components/dashboard/TodaysFocusCard";
 
-import {
-  getMeetingProgress,
-  getOutstandingAssignments,
-} from "../../services/plannerService";
-
-import {
-  getTodaysFocus,
-} from "../../services/dashboardService";
+import { getTodaysFocus } from "../../services/dashboardService";
 
 import { getGreeting } from "../../utils/greeting";
 import { getNextMeeting } from "../../utils/nextMeeting";
 
+import { usePlanner } from "../../contexts/PlannerContext";
+
 export default function Home() {
-  const midweek = getMeetingProgress("Midweek");
-  const weekend = getMeetingProgress("Weekend");
+  const { planner } = usePlanner();
 
   const nextMeeting = getNextMeeting();
   const todaysFocus = getTodaysFocus();
+
+  const midweek = planner.filter(
+    (item) => item.meeting === "Midweek"
+  );
+
+  const weekend = planner.filter(
+    (item) => item.meeting === "Weekend"
+  );
 
   const liveProgress = [
     {
       title: "Midweek Meeting",
       completed:
-        midweek.total > 0 &&
-        midweek.ready === midweek.total,
+        midweek.length > 0 &&
+        midweek.every((item) => item.status === "Ready"),
     },
     {
       title: "Weekend Meeting",
       completed:
-        weekend.total > 0 &&
-        weekend.ready === weekend.total,
+        weekend.length > 0 &&
+        weekend.every((item) => item.status === "Ready"),
     },
   ];
 
-  const reminders = getOutstandingAssignments().map((item) => ({
-    id: item.id,
-    title: item.title,
-    done: item.status === "Ready",
-  }));
+  const reminders = planner
+    .filter((item) => item.status !== "Ready")
+    .map((item) => ({
+      id: item.id,
+      title: item.title,
+      done: false,
+    }));
 
   return (
     <div className="mx-auto max-w-7xl space-y-8 p-6">

@@ -1,5 +1,5 @@
 import Card from "../ui/Card";
-import { updatePlannerStatus } from "../../services/plannerService";
+import { usePlanner } from "../../contexts/PlannerContext";
 
 interface Reminder {
   id: string;
@@ -14,14 +14,13 @@ interface Props {
 export default function ReminderCard({
   reminders,
 }: Props) {
+  const { changeStatus } = usePlanner();
+
   function toggleReminder(id: string, done: boolean) {
-    updatePlannerStatus(
+    changeStatus(
       id,
       done ? "In Progress" : "Ready"
     );
-
-    // Temporary refresh until we introduce React state.
-    window.location.reload();
   }
 
   return (
