@@ -1,17 +1,17 @@
 import {
-  CalendarDays,
-  ClipboardList,
   Home,
-  BookOpen,
+  User,
+  Landmark,
+  Briefcase,
   Settings as SettingsIcon,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const items = [
   { to: "/", icon: Home, label: "Home" },
-  { to: "/meetings", icon: CalendarDays, label: "Meetings" },
-  { to: "/workbook", icon: BookOpen, label: "Workbook" },
-  { to: "/service", icon: ClipboardList, label: "Service" },
+  { to: "/personal", icon: User, label: "Personal" },
+  { to: "/meeting", icon: Landmark, label: "Meeting" },
+  { to: "/ministry", icon: Briefcase, label: "Ministry" },
   { to: "/settings", icon: SettingsIcon, label: "Settings" },
 ];
 

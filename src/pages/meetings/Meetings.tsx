@@ -1,41 +1,36 @@
-import { useState } from "react";
-
-import MeetingTabs from "../../components/meetings/MeetingTabs";
-import MidweekMeeting from "../../components/meetings/MidweekMeeting";
-import WeekendMeeting from "../../components/meetings/WeekendMeeting";
-import MeetingHeader from "../../components/meetings/MeetingHeader";
-
-export default function Meetings() {
-  const [activeTab, setActiveTab] = useState<"midweek" | "weekend">(
-    "midweek"
-  );
-
+export default function Meeting() {
   return (
-    <div className="mx-auto max-w-7xl space-y-8 p-6">
-      {/* Page Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-          Meetings
+    <div className="space-y-6">
+      <header>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+          Meeting
         </h1>
-
         <p className="mt-2 text-slate-600 dark:text-slate-400">
-          Prepare for this week's meetings, organize your notes, and keep
-          everything you need in one place.
+          Prepare for your congregation meetings.
         </p>
-      </div>
-<MeetingHeader />
-      {/* Tabs */}
-      <MeetingTabs
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-      />
+      </header>
 
-      {/* Content */}
-      {activeTab === "midweek" ? (
-        <MidweekMeeting />
-      ) : (
-        <WeekendMeeting />
-      )}
+      <div className="grid gap-4">
+        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+            📖 Midweek Meeting
+          </h2>
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+            Workbook, notes, assignments, and Chairman Assistant will be
+            available here.
+          </p>
+        </div>
+
+        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+            🎤 Weekend Meeting
+          </h2>
+          <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+            Public Talk, Watchtower Study, notes, and Chairman Assistant will be
+            available here.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
