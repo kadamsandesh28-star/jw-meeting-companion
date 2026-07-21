@@ -62,11 +62,62 @@ export function getMeetingProgress(
   const total = assignments.length;
 
   const progress =
-    total === 0 ? 0 : (ready / total) * 100;
+    total === 0 ? 0 : Math.round((ready / total) * 100);
 
   return {
     ready,
     total,
     progress,
   };
+}
+
+/* -------------------------------- */
+/* Dashboard Helpers                */
+/* -------------------------------- */
+
+export function getOutstandingAssignments(
+  meeting?: "Midweek" | "Weekend"
+): PlannerAssignment[] {
+  const planner = loadPlanner();
+
+  return planner.filter(
+    (item) =>
+      item.status !== "Ready" &&
+      (!meeting || item.meeting === meeting)
+  );
+}
+
+export function getOverallProgress() {
+  const planner = loadPlanner();
+
+  const ready = planner.filter(
+    (item) => item.status === "Ready"
+  ).length;
+
+  const total = planner.length;
+
+  return {
+    ready,
+    total,
+    progress:
+      total === 0
+        ? 0
+        : Math.round((ready / total) * 100),
+  };
+}
+
+export function getNextAssignment():
+  | PlannerAssignment
+  | null {
+  const planner = loadPlanner();
+
+  const next =
+    planner.find(
+      (item) => item.status === "In Progress"
+    ) ??
+    planner.find(
+      (item) => item.status === "Not Started"
+    );
+
+  return next ?? null;
 }

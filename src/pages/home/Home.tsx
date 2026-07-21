@@ -4,28 +4,55 @@ import ReminderCard from "../../components/dashboard/ReminderCard";
 import WeeklyProgressCard from "../../components/dashboard/WeeklyProgressCard";
 import QuickActionsCard from "../../components/dashboard/QuickActionsCard";
 
-import { dashboardData } from "../../data/mockDashboard";
+import {
+  getMeetingProgress,
+  getOutstandingAssignments,
+} from "../../services/plannerService";
+
+import { getGreeting } from "../../utils/greeting";
+import { getNextMeeting } from "../../utils/nextMeeting";
 
 export default function Home() {
+  const midweek = getMeetingProgress("Midweek");
+  const weekend = getMeetingProgress("Weekend");
+
+  const nextMeeting = getNextMeeting();
+
+  const liveProgress = [
+    {
+      title: "Midweek Meeting",
+      completed:
+        midweek.total > 0 &&
+        midweek.ready === midweek.total,
+    },
+    {
+      title: "Weekend Meeting",
+      completed:
+        weekend.total > 0 &&
+        weekend.ready === weekend.total,
+    },
+  ];
+
+  const reminders = getOutstandingAssignments().map((item) => ({
+    title: item.title,
+    done: false,
+  }));
+
   return (
     <div className="mx-auto max-w-7xl space-y-8 p-6">
-      {/* Greeting */}
-      <GreetingCard greeting={dashboardData.greeting} />
+      <GreetingCard greeting={getGreeting()} />
 
-      {/* Next Meeting + Reminder */}
       <div className="grid gap-6 md:grid-cols-2">
         <NextMeetingCard
-          title={dashboardData.nextMeeting.title}
-          countdown={dashboardData.nextMeeting.countdown}
+          title={nextMeeting.title}
+          countdown={nextMeeting.countdown}
         />
 
-        <ReminderCard reminders={dashboardData.reminders} />
+        <ReminderCard reminders={reminders} />
       </div>
 
-      {/* Weekly Progress */}
-      <WeeklyProgressCard progress={dashboardData.progress} />
+      <WeeklyProgressCard progress={liveProgress} />
 
-      {/* Quick Actions */}
       <QuickActionsCard />
     </div>
   );

@@ -3,7 +3,7 @@ import {
   ClipboardList,
   Home,
   BookOpen,
-  Settings,
+  Settings as SettingsIcon,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -12,12 +12,12 @@ const items = [
   { to: "/meetings", icon: CalendarDays, label: "Meetings" },
   { to: "/workbook", icon: BookOpen, label: "Workbook" },
   { to: "/service", icon: ClipboardList, label: "Service" },
-  { to: "/settings", icon: Settings, label: "Settings" },
+  { to: "/settings", icon: SettingsIcon, label: "Settings" },
 ];
 
 export default function BottomNav() {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 border-t border-slate-200 bg-white/90 backdrop-blur-xl dark:border-slate-700 dark:bg-slate-900/90 md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 border-t border-slate-200 bg-white/90 backdrop-blur-xl dark:border-slate-700 dark:bg-slate-900/90">
       <div className="grid grid-cols-5">
         {items.map((item) => {
           const Icon = item.icon;

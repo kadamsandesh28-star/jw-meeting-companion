@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import { LucideIcon } from "lucide-react";
+import { LucideIcon, BookOpen, FileText } from "lucide-react";
 import StatusBadge from "../common/StatusBadge";
 import { MeetingStatus } from "../../data/mock/meetingData";
 import NotesPanel from "./panels/NotesPanel";
 import CompletionPanel from "./panels/CompletionPanel";
+import {
+  openBible,
+  openPublication,
+} from "../../utils/jwLibrary";
 
 interface MeetingSectionCardProps {
   id: string;
@@ -49,14 +53,72 @@ const MeetingSectionCard: React.FC<MeetingSectionCardProps> = ({
       case "Workbook":
       case "Prepare":
         return (
-          <div>
-            <h4 className="mb-2 text-lg font-semibold text-slate-900 dark:text-white">
-              📖 Study Material
-            </h4>
+          <div className="space-y-5">
+            <div>
+              <h4 className="text-lg font-semibold text-slate-900 dark:text-white">
+                📖 Study Material
+              </h4>
 
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              This feature will be implemented in a future sprint.
-            </p>
+              <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                Everything you need for this meeting section.
+              </p>
+            </div>
+
+            {scripture && (
+              <div className="rounded-xl border border-slate-200 p-4 dark:border-slate-700">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      Bible Reading
+                    </p>
+
+                    <p className="mt-1 font-semibold text-blue-600 dark:text-blue-400">
+                      {scripture}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => openBible(scripture)}
+                    className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+                  >
+                    <BookOpen className="h-4 w-4" />
+                    Open Bible
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {(publication || meetingReference) && (
+              <div className="rounded-xl border border-slate-200 p-4 dark:border-slate-700">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-slate-500">
+                      Publication
+                    </p>
+
+                    <p className="mt-1 font-semibold text-slate-900 dark:text-white">
+                      {publication ?? meetingReference}
+                    </p>
+
+                    {meetingReference && publication && (
+                      <p className="mt-1 text-xs text-slate-500">
+                        {meetingReference}
+                      </p>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() =>
+                      openPublication(publication ?? meetingReference)
+                    }
+                    className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-indigo-700"
+                  >
+                    <FileText className="h-4 w-4" />
+                    Open Publication
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         );
 
