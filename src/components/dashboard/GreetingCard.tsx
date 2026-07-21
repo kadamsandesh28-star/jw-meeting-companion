@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Hand } from "lucide-react";
 import { getOverallProgress } from "../../services/plannerService";
 
@@ -6,11 +7,27 @@ interface Props {
 }
 
 export default function GreetingCard({ greeting }: Props) {
+  const [now, setNow] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setNow(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   const today = new Intl.DateTimeFormat(undefined, {
     weekday: "long",
     month: "long",
     day: "numeric",
-  }).format(new Date());
+  }).format(now);
+
+  const time = new Intl.DateTimeFormat(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+  }).format(now);
 
   const { progress } = getOverallProgress();
 
@@ -34,6 +51,10 @@ export default function GreetingCard({ greeting }: Props) {
 
               <p className="mt-1 text-indigo-100">
                 {today}
+              </p>
+
+              <p className="mt-1 font-mono text-lg font-semibold tracking-wide text-white">
+                {time}
               </p>
             </div>
           </div>
