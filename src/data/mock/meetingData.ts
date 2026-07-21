@@ -6,15 +6,22 @@ export interface MeetingSection {
   description: string;
   status: MeetingStatus;
   actions: string[];
+
+  // Rich meeting data (optional)
+  scripture?: string;
+  publication?: string;
+  meetingReference?: string;
 }
 
 export interface MeetingData {
   weekOf: string;
+
   midweek: {
     meetingDate: string;
     meetingTime: string;
     sections: MeetingSection[];
   };
+
   weekend: {
     meetingDate: string;
     meetingTime: string;
@@ -34,6 +41,9 @@ export const meetingData: MeetingData = {
         id: "treasures",
         title: "Treasures From God's Word",
         description: "Bible Reading and Opening Discussion",
+        scripture: "Acts 18:24-28",
+        publication: "New World Translation",
+        meetingReference: "mwb25 July p.3",
         status: "completed",
         actions: ["Workbook", "Notes", "Mark Complete"],
       },
@@ -41,6 +51,8 @@ export const meetingData: MeetingData = {
         id: "gems",
         title: "Digging for Spiritual Gems",
         description: "Prepare Spiritual Gems",
+        scripture: "Acts 18:24-28",
+        meetingReference: "mwb25 July p.3",
         status: "completed",
         actions: ["Workbook", "Notes", "Mark Complete"],
       },
@@ -48,6 +60,7 @@ export const meetingData: MeetingData = {
         id: "apply",
         title: "Apply Yourself to the Field Ministry",
         description: "Meeting Assignments",
+        meetingReference: "mwb25 July pp.4–5",
         status: "in-progress",
         actions: ["Prepare", "Notes", "Mark Complete"],
       },
@@ -55,6 +68,7 @@ export const meetingData: MeetingData = {
         id: "living",
         title: "Living as Christians",
         description: "Living as Christians Program",
+        meetingReference: "mwb25 July pp.6–7",
         status: "not-started",
         actions: ["Workbook", "Notes", "Mark Complete"],
       },
@@ -70,6 +84,7 @@ export const meetingData: MeetingData = {
         id: "public-talk",
         title: "Public Talk",
         description: "Public Bible Discourse",
+        meetingReference: "Public Talk Schedule",
         status: "not-started",
         actions: ["Notes", "Mark Complete"],
       },
@@ -77,6 +92,8 @@ export const meetingData: MeetingData = {
         id: "watchtower",
         title: "Watchtower Study",
         description: "Study Edition",
+        publication: "Watchtower Study Edition",
+        meetingReference: "w25 July Study Article",
         status: "not-started",
         actions: ["Study", "Notes", "Mark Complete"],
       },

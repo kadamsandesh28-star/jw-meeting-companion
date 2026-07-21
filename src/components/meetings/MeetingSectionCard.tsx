@@ -10,6 +10,9 @@ interface MeetingSectionCardProps {
   icon: LucideIcon;
   title: string;
   description: string;
+  scripture?: string;
+  publication?: string;
+  meetingReference?: string;
   status: MeetingStatus;
   actions: string[];
   onStatusChange: (status: MeetingStatus) => void;
@@ -20,6 +23,9 @@ const MeetingSectionCard: React.FC<MeetingSectionCardProps> = ({
   icon: Icon,
   title,
   description,
+  scripture,
+  publication,
+  meetingReference,
   status,
   actions,
   onStatusChange,
@@ -75,6 +81,24 @@ const MeetingSectionCard: React.FC<MeetingSectionCardProps> = ({
             <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
               {description}
             </p>
+
+            {scripture && (
+              <p className="mt-2 text-sm font-medium text-blue-600 dark:text-blue-400">
+                📖 {scripture}
+              </p>
+            )}
+
+            {publication && (
+              <p className="mt-1 text-sm text-slate-700 dark:text-slate-300">
+                📚 {publication}
+              </p>
+            )}
+
+            {meetingReference && (
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                📄 {meetingReference}
+              </p>
+            )}
           </div>
         </div>
 

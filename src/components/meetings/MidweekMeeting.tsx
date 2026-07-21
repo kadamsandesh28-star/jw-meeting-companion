@@ -82,6 +82,9 @@ export default function MidweekMeeting() {
             icon={Icon}
             title={section.title}
             description={section.description}
+            scripture={section.scripture}
+            publication={section.publication}
+            meetingReference={section.meetingReference}
             status={section.status}
             actions={section.actions}
             onStatusChange={(status) =>
