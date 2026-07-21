@@ -4,12 +4,13 @@ import AppLayout from "./components/layout/AppLayout";
 
 import Home from "./pages/home/Home";
 import Meetings from "./pages/meetings/Meetings";
+import MidweekMeeting from "./pages/meetings/MidweekMeeting";
+import WeekendMeeting from "./pages/meetings/WeekendMeeting";
 import Workbook from "./pages/workbook/Workbook";
 import Assignments from "./pages/assignments/Assignments";
 import Service from "./pages/service/Service";
 import Settings from "./pages/settings/Settings";
 import Tools from "./pages/tools/Tools";
-
 import Personal from "./pages/personal/Personal";
 import Ministry from "./pages/ministry/Ministry";
 
@@ -21,6 +22,8 @@ export default function AppRoutes() {
         <Route path="/" element={<Home />} />
         <Route path="/personal" element={<Personal />} />
         <Route path="/meetings" element={<Meetings />} />
+        <Route path="/meetings/midweek" element={<MidweekMeeting />} />
+        <Route path="/meetings/weekend" element={<WeekendMeeting />} />
         <Route path="/ministry" element={<Ministry />} />
         <Route path="/settings" element={<Settings />} />
 
