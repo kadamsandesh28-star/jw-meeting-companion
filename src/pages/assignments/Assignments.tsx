@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Card from "../../components/ui/Card";
+import Stopwatch from "../../components/chairman/Stopwatch";
 import {
   type PlannerAssignment,
   type PlannerStatus,
@@ -172,13 +173,19 @@ function getStatusBadgeColor(status: PlannerStatus) {
 
 {activeAssignment && (
   <Card title="Currently Practicing">
-    <p className="text-lg font-semibold">
-      {activeAssignment.title}
-    </p>
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-2xl font-bold">
+          {activeAssignment.title}
+        </h2>
 
-    <p className="text-gray-500">
-      {activeAssignment.meeting}
-    </p>
+        <p className="text-gray-500 dark:text-gray-400">
+          {activeAssignment.meeting}
+        </p>
+      </div>
+
+     <Stopwatch title="Assignment Practice Timer" />
+    </div>
   </Card>
 )}
 

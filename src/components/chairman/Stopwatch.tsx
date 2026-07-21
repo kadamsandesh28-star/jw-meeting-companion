@@ -3,7 +3,13 @@ import TimerDisplay from "./TimerDisplay";
 import TimerControls from "./TimerControls";
 import LapList from "./LapList";
 
-export default function Stopwatch() {
+interface StopwatchProps {
+  title?: string;
+}
+
+export default function Stopwatch({
+  title = "Chairman Stopwatch",
+}: StopwatchProps) {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [laps, setLaps] = useState<number[]>([]);
@@ -41,7 +47,7 @@ export default function Stopwatch() {
   return (
     <div className="space-y-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
       <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
-        Chairman Stopwatch
+        {title}
       </h2>
 
       <TimerDisplay elapsedSeconds={elapsedSeconds} />
