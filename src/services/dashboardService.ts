@@ -1,5 +1,5 @@
 import { loadCollections } from "./researchService";
-import { getMeetingProgress } from "./plannerService";
+import { getNextAssignment } from "./plannerService";
 import {
   getTodayReflectionSummary,
 } from "./dailyScriptureService";
@@ -52,28 +52,16 @@ export interface DashboardFocus {
 }
 
 export function getTodaysFocus(): DashboardFocus {
+  const next = getNextAssignment();
 
-  const midweek = getMeetingProgress("Midweek");
+  if (next) {
+    const isMidweek = next.meeting === "Midweek";
 
-  if (midweek.progress < 100) {
     return {
-      title: "Continue Midweek Preparation",
-      description:
-        "Complete your remaining Midweek assignments.",
+      title: `Continue ${isMidweek ? "Midweek" : "Weekend"} Preparation`,
+      description: `Next assignment: ${next.title}`,
       button: "Continue",
-      path: "/midweek",
-    };
-  }
-
-  const weekend = getMeetingProgress("Weekend");
-
-  if (weekend.progress < 100) {
-    return {
-      title: "Continue Weekend Preparation",
-      description:
-        "Complete your Weekend meeting preparation.",
-      button: "Continue",
-      path: "/weekend",
+      path: isMidweek ? "/midweek" : "/weekend",
     };
   }
 
@@ -91,7 +79,6 @@ export function getTodaysFocus(): DashboardFocus {
 /* -------------------------------- */
 
 export function getLatestResearch() {
-
   const collections = loadCollections();
 
   if (collections.length === 0) {
@@ -102,8 +89,7 @@ export function getLatestResearch() {
     };
   }
 
-  const latest =
-    collections[collections.length - 1];
+  const latest = collections[collections.length - 1];
 
   return {
     title: latest.title,
