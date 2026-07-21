@@ -3,10 +3,10 @@ import {
   CheckCircle2,
   ChevronRight,
   NotebookPen,
-  Timer,
   Mic2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import Stopwatch from "../../components/chairman/Stopwatch";
 import { canUseChairmanAssistant } from "../../utils/userRole";
 
 export default function WeekendMeeting() {
@@ -98,24 +98,7 @@ export default function WeekendMeeting() {
           </div>
         </div>
 
-        {showChairmanAssistant && (
-          <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-900">
-            <div className="flex items-center gap-3">
-              <Timer className="text-indigo-600" size={24} />
-
-              <div>
-                <h2 className="font-semibold text-slate-900 dark:text-white">
-                  Chairman Assistant
-                </h2>
-
-                <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Stopwatch and meeting assistant tools for Ministerial
-                  Servants and Elders are coming soon.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
+        {showChairmanAssistant && <Stopwatch />}
       </div>
     </div>
   );
