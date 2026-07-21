@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import TimerDisplay from "./TimerDisplay";
 import TimerControls from "./TimerControls";
+import LapList from "./LapList";
 
 export default function Stopwatch() {
   const [elapsed, setElapsed] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const [laps, setLaps] = useState<number[]>([]);
 
   const startTimeRef = useRef(0);
   const intervalRef = useRef<number | null>(null);
@@ -39,12 +41,21 @@ export default function Stopwatch() {
   const handleReset = () => {
     setIsRunning(false);
     setElapsed(0);
+    setLaps([]);
+  };
+
+  const handleLap = () => {
+    if (!isRunning) return;
+
+    setLaps((previous) => [...previous, elapsed]);
   };
 
   return (
     <div className="rounded-3xl bg-white p-6 shadow-xl dark:bg-slate-900">
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-2xl font-bold">⏱ Meeting Stopwatch</h2>
+        <h2 className="text-2xl font-bold">
+          ⏱ Meeting Stopwatch
+        </h2>
 
         <div
           className={`flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold ${
@@ -72,7 +83,10 @@ export default function Stopwatch() {
         onStart={handleStart}
         onPause={handlePause}
         onReset={handleReset}
+        onLap={handleLap}
       />
+
+      <LapList laps={laps} />
     </div>
   );
 }
