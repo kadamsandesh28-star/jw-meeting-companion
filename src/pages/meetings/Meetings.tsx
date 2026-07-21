@@ -11,6 +11,7 @@ export default function Meetings() {
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
               Meetings
             </h1>
+
             <p className="text-slate-600 dark:text-slate-400">
               Prepare for your congregation meetings.
             </p>
@@ -19,6 +20,29 @@ export default function Meetings() {
       </header>
 
       <div className="space-y-4">
+        <Link
+          to="/meetings/progress"
+          className="block rounded-xl border border-indigo-200 bg-gradient-to-r from-indigo-50 to-blue-50 p-5 shadow-sm transition hover:border-indigo-400 hover:shadow-md dark:border-indigo-700 dark:from-slate-800 dark:to-slate-900"
+        >
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+                📊 Meeting Progress
+              </h2>
+
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+                View your overall meeting preparation and see what needs your
+                attention next.
+              </p>
+            </div>
+
+            <ChevronRight
+              size={22}
+              className="text-slate-400 dark:text-slate-500"
+            />
+          </div>
+        </Link>
+
         <Link
           to="/meetings/midweek"
           className="block rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"

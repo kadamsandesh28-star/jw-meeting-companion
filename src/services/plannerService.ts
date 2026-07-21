@@ -29,9 +29,16 @@ export function loadPlanner(): PlannerAssignment[] {
   }
 
   try {
-    return JSON.parse(saved);
+    const parsed = JSON.parse(saved);
+
+    // Ensure the parsed data is an array
+    if (!Array.isArray(parsed)) {
+      throw new Error("Planner data is not an array.");
+    }
+
+    return parsed as PlannerAssignment[];
   } catch {
-    // Corrupt storage - reset to defaults
+    // Corrupt or invalid storage - reset to defaults
     const initialPlanner = plannerSeed.map((item) => ({
       ...item,
     }));
