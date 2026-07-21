@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import Card from "../../components/ui/Card";
+import ActionCard from "../../components/ui/ActionCard";
 import { usePlanner } from "../../contexts/PlannerContext";
 import { getMeetingProgress } from "../../services/meetingProgressService";
 
@@ -47,14 +48,18 @@ export default function MeetingProgress() {
       </Card>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card title="Workbook">
-          <div className="space-y-3">
+
+        <ActionCard
+          title="📖 Workbook"
+          description="Continue preparing your workbook."
+          to="/workbook"
+        >
+          <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span>Checklist</span>
 
               <span className="font-semibold">
-                {progress.workbook.completed} /{" "}
-                {progress.workbook.total}
+                {progress.workbook.completed} / {progress.workbook.total}
               </span>
             </div>
 
@@ -74,10 +79,14 @@ export default function MeetingProgress() {
               </span>
             </div>
           </div>
-        </Card>
+        </ActionCard>
 
-        <Card title="Assignments">
-          <div className="space-y-3">
+        <ActionCard
+          title="🎤 Assignments"
+          description="Practice and review assignments."
+          to="/assignments"
+        >
+          <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span>Ready</span>
 
@@ -102,7 +111,7 @@ export default function MeetingProgress() {
               </span>
             </div>
 
-            <div className="border-t pt-3 dark:border-slate-700 flex justify-between">
+            <div className="flex justify-between border-t pt-2 dark:border-slate-700">
               <span>Total</span>
 
               <span className="font-semibold">
@@ -110,10 +119,14 @@ export default function MeetingProgress() {
               </span>
             </div>
           </div>
-        </Card>
+        </ActionCard>
 
-        <Card title="Meeting Notes">
-          <div className="flex items-center justify-between">
+        <ActionCard
+          title="📝 Meeting Notes"
+          description="Review or add meeting notes."
+          to="/meetings/notes"
+        >
+          <div className="flex items-center justify-between text-sm">
             <span>Status</span>
 
             <span
@@ -128,13 +141,14 @@ export default function MeetingProgress() {
                 : "No Notes"}
             </span>
           </div>
-        </Card>
+        </ActionCard>
 
-        <Card title="Today's Focus">
+        <Card title="🎯 Today's Focus">
           <p className="leading-relaxed">
             {progress.todaysFocus}
           </p>
         </Card>
+
       </div>
     </div>
   );
