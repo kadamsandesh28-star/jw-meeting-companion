@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BookOpen,
   Gem,
@@ -14,6 +14,8 @@ import {
   MeetingStatus,
 } from "../../data/mock/meetingData";
 
+const STORAGE_KEY = "jwmc.midweek.status";
+
 const iconMap: Record<string, LucideIcon> = {
   treasures: BookOpen,
   gems: Gem,
@@ -22,9 +24,38 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 export default function MidweekMeeting() {
-  const [sections, setSections] = useState<MeetingSection[]>(
-    meetingData.midweek.sections
-  );
+  const [sections, setSections] = useState<MeetingSection[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (!saved) {
+      return meetingData.midweek.sections;
+    }
+
+    try {
+      const statuses = JSON.parse(saved) as Record<
+        string,
+        MeetingStatus
+      >;
+
+      return meetingData.midweek.sections.map((section) => ({
+        ...section,
+        status: statuses[section.id] ?? section.status,
+      }));
+    } catch {
+      return meetingData.midweek.sections;
+    }
+  });
+
+  useEffect(() => {
+    const statuses = Object.fromEntries(
+      sections.map((section) => [section.id, section.status])
+    );
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(statuses)
+    );
+  }, [sections]);
 
   const handleStatusChange = (
     sectionId: string,

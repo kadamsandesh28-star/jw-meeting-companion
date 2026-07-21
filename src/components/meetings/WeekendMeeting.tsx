@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MicVocal,
   BookMarked,
@@ -12,15 +12,46 @@ import {
   MeetingStatus,
 } from "../../data/mock/meetingData";
 
+const STORAGE_KEY = "jwmc.weekend.status";
+
 const iconMap: Record<string, LucideIcon> = {
   "public-talk": MicVocal,
   watchtower: BookMarked,
 };
 
 export default function WeekendMeeting() {
-  const [sections, setSections] = useState<MeetingSection[]>(
-    meetingData.weekend.sections
-  );
+  const [sections, setSections] = useState<MeetingSection[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (!saved) {
+      return meetingData.weekend.sections;
+    }
+
+    try {
+      const statuses = JSON.parse(saved) as Record<
+        string,
+        MeetingStatus
+      >;
+
+      return meetingData.weekend.sections.map((section) => ({
+        ...section,
+        status: statuses[section.id] ?? section.status,
+      }));
+    } catch {
+      return meetingData.weekend.sections;
+    }
+  });
+
+  useEffect(() => {
+    const statuses = Object.fromEntries(
+      sections.map((section) => [section.id, section.status])
+    );
+
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(statuses)
+    );
+  }, [sections]);
 
   const handleStatusChange = (
     sectionId: string,
