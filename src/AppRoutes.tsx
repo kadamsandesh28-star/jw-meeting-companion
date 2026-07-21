@@ -6,6 +6,7 @@ import Home from "./pages/home/Home";
 import Meetings from "./pages/meetings/Meetings";
 import MidweekMeeting from "./pages/meetings/MidweekMeeting";
 import WeekendMeeting from "./pages/meetings/WeekendMeeting";
+import MeetingNotes from "./pages/meetings/MeetingNotes";
 import Workbook from "./pages/workbook/Workbook";
 import Assignments from "./pages/assignments/Assignments";
 import Service from "./pages/service/Service";
@@ -24,10 +25,11 @@ export default function AppRoutes() {
         <Route path="/meetings" element={<Meetings />} />
         <Route path="/meetings/midweek" element={<MidweekMeeting />} />
         <Route path="/meetings/weekend" element={<WeekendMeeting />} />
+        <Route path="/meetings/notes" element={<MeetingNotes />} />
         <Route path="/ministry" element={<Ministry />} />
         <Route path="/settings" element={<Settings />} />
 
-        {/* Existing Pages (Temporary - will be migrated gradually) */}
+        {/* Existing Pages */}
         <Route path="/workbook" element={<Workbook />} />
         <Route path="/assignments" element={<Assignments />} />
         <Route path="/service" element={<Service />} />

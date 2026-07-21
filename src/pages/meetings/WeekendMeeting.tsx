@@ -6,6 +6,7 @@ import {
   Timer,
   Mic2,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { canUseChairmanAssistant } from "../../utils/userRole";
 
 export default function WeekendMeeting() {
@@ -60,7 +61,10 @@ export default function WeekendMeeting() {
           <ChevronRight className="text-slate-400" />
         </div>
 
-        <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+        <Link
+          to="/meetings/notes"
+          className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
+        >
           <div className="flex items-center gap-4">
             <NotebookPen className="text-indigo-600" size={24} />
 
@@ -70,13 +74,13 @@ export default function WeekendMeeting() {
               </h2>
 
               <p className="text-sm text-slate-600 dark:text-slate-400">
-                Keep your meeting notes organized.
+                Capture and review your meeting notes.
               </p>
             </div>
           </div>
 
           <ChevronRight className="text-slate-400" />
-        </div>
+        </Link>
 
         <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800">
           <div className="flex items-center gap-3">
