@@ -3,17 +3,65 @@ export type ScriptureSection =
   | "Greek Scriptures";
 
 export interface ReadingEntry {
+  /**
+   * Unique reading identifier.
+   */
   id: number;
+
+  /**
+   * Hebrew or Greek Scriptures.
+   */
   section: ScriptureSection;
+
+  /**
+   * Bible book.
+   */
   book: string;
+
+  /**
+   * Inclusive chapter range.
+   */
   startChapter: number;
   endChapter: number;
+
+  /**
+   * Optional display title.
+   */
   title?: string;
+
+  /**
+   * Approximate reading time in minutes.
+   */
+  estimatedMinutes?: number;
+
+  /**
+   * Optional deep link to the official jw.org page.
+   */
+  jwOrgUrl?: string;
+
+  /**
+   * Optional JW Library URI.
+   *
+   * This will allow opening the passage directly in
+   * JW Library where supported.
+   */
+  jwLibraryUri?: string;
+
+  /**
+   * Optional keywords used for searching and filtering.
+   */
+  tags?: string[];
 }
 
 export interface ReadingBook {
   book: string;
   readings: ReadingEntry[];
+}
+
+export interface BibleBook {
+  name: string;
+  section: ScriptureSection;
+  chapters: number;
 }
 
 export interface BibleReadingProgress {
@@ -27,16 +75,20 @@ export interface BibleReadingProgress {
   currentReadingIndex: number;
 
   /**
-   * Maps a reading index to the date it was completed.
+   * Maps a reading id to the date it was completed.
    *
    * Example:
    * {
-   *   0: "2026-07-22",
-   *   1: "2026-07-23"
+   *   1: "2026-07-22",
+   *   2: "2026-07-23"
    * }
    */
   completedReadings: Record<number, string>;
 
   streak: number;
+
+  /**
+   * General notes for the reading plan.
+   */
   notes: string;
 }

@@ -1,3 +1,4 @@
+import { bibleBooks } from "../data/bibleBooks";
 import { bibleInOneYear } from "../data/bibleInOneYear";
 
 import type {
@@ -22,28 +23,48 @@ function getTotalReadings(): number {
 }
 
 function getBooks(section?: ScriptureSection): string[] {
-  const readings = section
-    ? bibleInOneYear.filter((r) => r.section === section)
-    : bibleInOneYear;
-
-  return [...new Set(readings.map((r) => r.book))];
+  return bibleBooks
+    .filter((book) =>
+      section ? book.section === section : true
+    )
+    .map((book) => book.name);
 }
 
 function getReadingsForBook(book: string): ReadingEntry[] {
-  return bibleInOneYear.filter((r) => r.book === book);
+  return bibleInOneYear.filter(
+    (reading) => reading.book === book
+  );
 }
 
 function getBooksWithReadings(
   section?: ScriptureSection
 ): ReadingBook[] {
-  return getBooks(section).map((book) => ({
-    book,
-    readings: getReadingsForBook(book),
-  }));
+  return bibleBooks
+    .filter((book) =>
+      section ? book.section === section : true
+    )
+    .map((book) => ({
+      book: book.name,
+      readings: getReadingsForBook(book.name),
+    }));
 }
 
-function getSection(section: ScriptureSection): ReadingEntry[] {
-  return bibleInOneYear.filter((r) => r.section === section);
+function getSection(
+  section: ScriptureSection
+): ReadingEntry[] {
+  return bibleInOneYear.filter(
+    (reading) => reading.section === section
+  );
+}
+
+function getBook(bookName: string) {
+  return bibleBooks.find(
+    (book) => book.name === bookName
+  );
+}
+
+function getBookCount(section?: ScriptureSection) {
+  return getBooks(section).length;
 }
 
 export const readingPlanService = {
@@ -54,4 +75,6 @@ export const readingPlanService = {
   getReadingsForBook,
   getBooksWithReadings,
   getSection,
+  getBook,
+  getBookCount,
 };

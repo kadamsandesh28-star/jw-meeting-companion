@@ -1,6 +1,6 @@
 import { BookOpen, CheckCircle2 } from "lucide-react";
 import InfoCard from "../ui/InfoCard";
-import { ReadingEntry } from "../../data/bibleInOneYear";
+import { ReadingEntry } from "../../types/bible";
 
 interface TodayReadingCardProps {
   reading: ReadingEntry;
