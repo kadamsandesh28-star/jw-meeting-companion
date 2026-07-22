@@ -32,13 +32,33 @@ export interface MeetingProgress {
   todaysFocus: string;
 }
 
+function getChecklist(): boolean[] {
+  try {
+    const raw = localStorage.getItem(
+      WORKBOOK_CHECKLIST_KEY
+    );
+
+    if (!raw) {
+      return [];
+    }
+
+    const parsed = JSON.parse(raw);
+
+    if (Array.isArray(parsed)) {
+      return parsed;
+    }
+
+    // Legacy/corrupted storage
+    return [];
+  } catch {
+    return [];
+  }
+}
+
 export function getMeetingProgress(
   planner: PlannerAssignment[]
 ): MeetingProgress {
-  const checklist =
-    JSON.parse(
-      localStorage.getItem(WORKBOOK_CHECKLIST_KEY) ?? "[]"
-    ) as boolean[];
+  const checklist = getChecklist();
 
   const workbookNotes =
     localStorage.getItem(WORKBOOK_NOTES_KEY) ?? "";
@@ -82,19 +102,23 @@ export function getMeetingProgress(
     score += 10;
   }
 
-  let todaysFocus = "You're ready for this week's meetings.";
+  let todaysFocus =
+    "You're ready for this week's meetings.";
 
   if (!meetingNotes.trim()) {
     todaysFocus = "Add your meeting notes.";
   } else if (notStarted > 0) {
-    todaysFocus = "Start preparing your assignments.";
+    todaysFocus =
+      "Start preparing your assignments.";
   } else if (inProgress > 0) {
-    todaysFocus = "Finish preparing your assignments.";
+    todaysFocus =
+      "Finish preparing your assignments.";
   } else if (
     totalChecklist > 0 &&
     completedChecklist < totalChecklist
   ) {
-    todaysFocus = "Complete your workbook checklist.";
+    todaysFocus =
+      "Complete your workbook checklist.";
   }
 
   return {

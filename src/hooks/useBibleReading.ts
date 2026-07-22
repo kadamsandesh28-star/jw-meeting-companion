@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import {
-  bibleReadingService,
-  BibleReadingProgress,
-} from "../services/bibleReadingService";
+import { bibleReadingService } from "../services/bibleReadingService";
+import { readingPlanService } from "../services/readingPlanService";
+
+import type { BibleReadingProgress } from "../types/bible";
 
 export function useBibleReading() {
   const [progress, setProgress] = useState<BibleReadingProgress>(
@@ -28,6 +28,11 @@ export function useBibleReading() {
     refresh();
   };
 
+  const toggleReading = (id: number) => {
+    bibleReadingService.toggleReading(id);
+    refresh();
+  };
+
   const updateNotes = (notes: string) => {
     bibleReadingService.updateNotes(notes);
     refresh();
@@ -39,21 +44,40 @@ export function useBibleReading() {
   };
 
   const totalReadings =
-    bibleReadingService.getReadingPlan().length;
+    readingPlanService.getTotalReadings();
+
+  const completedReadingIds = useMemo(
+    () => bibleReadingService.getCompletedReadingIds(),
+    [progress]
+  );
+
+  const completedCount = completedReadingIds.length;
 
   const percentComplete = useMemo(() => {
+    if (totalReadings === 0) {
+      return 0;
+    }
+
     return Math.round(
-      (progress.completedReadings / totalReadings) * 100
+      (completedCount / totalReadings) * 100
     );
-  }, [progress.completedReadings, totalReadings]);
+  }, [completedCount, totalReadings]);
 
   return {
     progress,
     reading,
+
+    completedReadingIds,
+    completedCount,
+
     percentComplete,
     totalReadings,
+
     completedToday: bibleReadingService.completedToday(),
+
     completeToday,
+    toggleReading,
+
     updateNotes,
     reset,
   };

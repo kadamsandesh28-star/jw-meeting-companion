@@ -1,92 +1,128 @@
-const STORAGE_KEY = "bible-reading-progress";
+import { readingPlanService } from "./readingPlanService";
+import { STORAGE_KEYS } from "../constants/storageKeys";
 
-export interface BibleReadingProgress {
-  lastCompletedDate: string | null;
-  currentReadingIndex: number;
-  completedReadings: number;
-  streak: number;
-  notes: string;
-}
-
-export interface BibleReading {
-  book: string;
-  chapters: string;
-}
-
-const readingPlan: BibleReading[] = [
-  { book: "Genesis", chapters: "1–3" },
-  { book: "Genesis", chapters: "4–7" },
-  { book: "Genesis", chapters: "8–11" },
-  { book: "Genesis", chapters: "12–15" },
-  { book: "Genesis", chapters: "16–18" },
-  { book: "Genesis", chapters: "19–21" },
-  { book: "Genesis", chapters: "22–24" },
-];
+import type {
+  BibleReadingProgress,
+  ReadingEntry,
+} from "../types/bible";
 
 const defaultProgress: BibleReadingProgress = {
   lastCompletedDate: null,
   currentReadingIndex: 0,
-  completedReadings: 0,
+  completedReadings: {},
   streak: 0,
   notes: "",
 };
 
-function todayString() {
+function todayString(): string {
   return new Date().toISOString().split("T")[0];
 }
 
-function daysBetween(date1: string, date2: string) {
+function daysBetween(date1: string, date2: string): number {
   const first = new Date(date1);
   const second = new Date(date2);
 
-  const millisecondsPerDay = 1000 * 60 * 60 * 24;
-
   return Math.floor(
-    (second.getTime() - first.getTime()) / millisecondsPerDay
+    (second.getTime() - first.getTime()) /
+      (1000 * 60 * 60 * 24)
   );
 }
 
+function migrateProgress(data: any): BibleReadingProgress {
+  if (
+    data.completedReadings &&
+    typeof data.completedReadings === "object" &&
+    !Array.isArray(data.completedReadings)
+  ) {
+    return {
+      ...defaultProgress,
+      ...data,
+    };
+  }
+
+  const completed: Record<number, string> = {};
+
+  const completedCount =
+    typeof data.completedReadings === "number"
+      ? data.completedReadings
+      : 0;
+
+  for (let i = 0; i < completedCount; i++) {
+    completed[i] = data.lastCompletedDate ?? "";
+  }
+
+  return {
+    ...defaultProgress,
+    ...data,
+    completedReadings: completed,
+  };
+}
+
 function getProgress(): BibleReadingProgress {
-  const saved = localStorage.getItem(STORAGE_KEY);
+  const saved = localStorage.getItem(
+    STORAGE_KEYS.bibleReadingProgress
+  );
 
   if (!saved) {
     return defaultProgress;
   }
 
   try {
-    const parsed = JSON.parse(saved) as Partial<BibleReadingProgress>;
-
-    return {
-      ...defaultProgress,
-      ...parsed,
-    };
+    return migrateProgress(JSON.parse(saved));
   } catch {
     return defaultProgress;
   }
 }
 
-function saveProgress(progress: BibleReadingProgress) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-}
-
-function getCurrentReading(): BibleReading {
-  const progress = getProgress();
-
-  return (
-    readingPlan[progress.currentReadingIndex] ??
-    readingPlan[readingPlan.length - 1]
+function saveProgress(progress: BibleReadingProgress): void {
+  localStorage.setItem(
+    STORAGE_KEYS.bibleReadingProgress,
+    JSON.stringify(progress)
   );
 }
 
-function getReadingPlan() {
-  return readingPlan;
+function getCurrentReading(): ReadingEntry {
+  return readingPlanService.getReadingByIndex(
+    getProgress().currentReadingIndex
+  );
 }
 
-function completedToday() {
+function completedToday(): boolean {
   return getProgress().lastCompletedDate === todayString();
 }
 
-function markTodayComplete() {
+function isReadingCompleted(id: number): boolean {
+  return getProgress().completedReadings[id] !== undefined;
+}
+
+function getCompletedReadingIds(): number[] {
+  return Object.keys(getProgress().completedReadings).map(Number);
+}
+
+function toggleReading(id: number): BibleReadingProgress {
+  const progress = getProgress();
+
+  const completedReadings = {
+    ...progress.completedReadings,
+  };
+
+  if (completedReadings[id]) {
+    delete completedReadings[id];
+  } else {
+    completedReadings[id] = todayString();
+  }
+
+  const updated = {
+    ...progress,
+    completedReadings,
+  };
+
+  saveProgress(updated);
+
+  return updated;
+}
+
+function markTodayComplete(): BibleReadingProgress {
   const progress = getProgress();
 
   const today = todayString();
@@ -105,16 +141,21 @@ function markTodayComplete() {
     }
   }
 
+  const completedReadings = {
+    ...progress.completedReadings,
+    [progress.currentReadingIndex]: today,
+  };
+
   const nextIndex = Math.min(
     progress.currentReadingIndex + 1,
-    readingPlan.length - 1
+    readingPlanService.getTotalReadings() - 1
   );
 
-  const updated: BibleReadingProgress = {
+  const updated = {
     ...progress,
     lastCompletedDate: today,
     currentReadingIndex: nextIndex,
-    completedReadings: progress.completedReadings + 1,
+    completedReadings,
     streak,
   };
 
@@ -123,8 +164,8 @@ function markTodayComplete() {
   return updated;
 }
 
-function updateNotes(notes: string) {
-  const updated: BibleReadingProgress = {
+function updateNotes(notes: string): BibleReadingProgress {
+  const updated = {
     ...getProgress(),
     notes,
   };
@@ -134,7 +175,7 @@ function updateNotes(notes: string) {
   return updated;
 }
 
-function resetProgress() {
+function resetProgress(): void {
   saveProgress(defaultProgress);
 }
 
@@ -142,9 +183,12 @@ export const bibleReadingService = {
   getProgress,
   saveProgress,
   getCurrentReading,
-  getReadingPlan,
   completedToday,
   markTodayComplete,
   updateNotes,
   resetProgress,
+
+  isReadingCompleted,
+  getCompletedReadingIds,
+  toggleReading,
 };
