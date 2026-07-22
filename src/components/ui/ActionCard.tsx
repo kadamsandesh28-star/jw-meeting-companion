@@ -1,18 +1,21 @@
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ReactNode } from "react";
 
 interface ActionCardProps {
   title: string;
   description?: string;
   to: string;
-  badge?: React.ReactNode;
-  children?: React.ReactNode;
+  icon?: ReactNode;
+  badge?: ReactNode;
+  children?: ReactNode;
 }
 
 export default function ActionCard({
   title,
   description,
   to,
+  icon,
   badge,
   children,
 }: ActionCardProps) {
@@ -24,7 +27,13 @@ export default function ActionCard({
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1 space-y-3">
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              {icon && (
+                <span className="text-indigo-600 dark:text-indigo-400">
+                  {icon}
+                </span>
+              )}
+
               <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                 {title}
               </h3>
@@ -33,7 +42,7 @@ export default function ActionCard({
             </div>
 
             {description && (
-              <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
                 {description}
               </p>
             )}

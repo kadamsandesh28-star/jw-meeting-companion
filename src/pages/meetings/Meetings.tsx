@@ -1,12 +1,22 @@
-import { CalendarDays, ChevronRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import {
+  CalendarDays,
+  BarChart3,
+  BookOpen,
+  Mic,
+} from "lucide-react";
+
+import ActionCard from "../../components/ui/ActionCard";
 
 export default function Meetings() {
   return (
     <div className="space-y-6">
       <header>
         <div className="flex items-center gap-3">
-          <CalendarDays className="text-indigo-600" size={32} />
+          <CalendarDays
+            className="text-indigo-600"
+            size={32}
+          />
+
           <div>
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
               Meetings
@@ -20,72 +30,26 @@ export default function Meetings() {
       </header>
 
       <div className="space-y-4">
-        <Link
+        <ActionCard
+          icon={<BarChart3 size={22} />}
+          title="Meeting Progress"
+          description="View your overall meeting preparation and see what needs your attention next."
           to="/meetings/progress"
-          className="block rounded-xl border border-indigo-200 bg-gradient-to-r from-indigo-50 to-blue-50 p-5 shadow-sm transition hover:border-indigo-400 hover:shadow-md dark:border-indigo-700 dark:from-slate-800 dark:to-slate-900"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-                📊 Meeting Progress
-              </h2>
+        />
 
-              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                View your overall meeting preparation and see what needs your
-                attention next.
-              </p>
-            </div>
-
-            <ChevronRight
-              size={22}
-              className="text-slate-400 dark:text-slate-500"
-            />
-          </div>
-        </Link>
-
-        <Link
+        <ActionCard
+          icon={<BookOpen size={22} />}
+          title="Midweek Meeting"
+          description="Workbook, notes, assignments, and Chairman Assistant."
           to="/meetings/midweek"
-          className="block rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-                📖 Midweek Meeting
-              </h2>
+        />
 
-              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                Workbook, notes, assignments, and Chairman Assistant.
-              </p>
-            </div>
-
-            <ChevronRight
-              size={22}
-              className="text-slate-400 dark:text-slate-500"
-            />
-          </div>
-        </Link>
-
-        <Link
+        <ActionCard
+          icon={<Mic size={22} />}
+          title="Weekend Meeting"
+          description="Public Talk, Watchtower Study, notes, and Chairman Assistant."
           to="/meetings/weekend"
-          className="block rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-                🎤 Weekend Meeting
-              </h2>
-
-              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                Public Talk, Watchtower Study, notes, and Chairman Assistant.
-              </p>
-            </div>
-
-            <ChevronRight
-              size={22}
-              className="text-slate-400 dark:text-slate-500"
-            />
-          </div>
-        </Link>
+        />
       </div>
     </div>
   );

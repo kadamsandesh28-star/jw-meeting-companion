@@ -1,45 +1,68 @@
-import { CheckSquare } from "lucide-react";
+import {
+  BookOpen,
+  BookMarked,
+  HeartHandshake,
+  Users,
+  CheckSquare,
+  User,
+} from "lucide-react";
 
-export default function PersonalTasks() {
+import ActionCard from "../../components/ui/ActionCard";
+
+export default function Personal() {
   return (
     <div className="space-y-6">
       <header>
         <div className="flex items-center gap-3">
-          <CheckSquare
-            size={32}
-            className="text-indigo-600"
-          />
+          <User className="text-indigo-600" size={32} />
 
           <div>
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-              Personal Tasks
+              Personal
             </h1>
 
             <p className="text-slate-600 dark:text-slate-400">
-              Stay organized with personal reminders, goals, and spiritual
-              tasks.
+              Build and strengthen your daily spiritual routine.
             </p>
           </div>
         </div>
       </header>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-          Coming Soon
-        </h2>
+      <div className="space-y-4">
+        <ActionCard
+          icon={<BookOpen size={22} />}
+          title="Bible Reading"
+          description="Read and track your daily Bible reading."
+          to="/personal/bible-reading"
+        />
 
-        <p className="mt-3 text-slate-600 dark:text-slate-400">
-          This page will help you manage personal tasks, reminders, and goals,
-          keeping everything organized in one place.
-        </p>
+        <ActionCard
+          icon={<BookMarked size={22} />}
+          title="Personal Study"
+          description="Continue your personal study projects."
+          to="/personal/personal-study"
+        />
 
-        <div className="mt-6 space-y-2 text-sm text-slate-600 dark:text-slate-400">
-          <p>✅ Personal to-do list</p>
-          <p>📅 Upcoming reminders</p>
-          <p>🎯 Spiritual goals</p>
-          <p>⭐ Priority tasks</p>
-          <p>📈 Progress tracking</p>
-        </div>
+        <ActionCard
+          icon={<HeartHandshake size={22} />}
+          title="Prayer Journal"
+          description="Record prayers, blessings, and reflections."
+          to="/personal/prayer"
+        />
+
+        <ActionCard
+          icon={<Users size={22} />}
+          title="Family Worship"
+          description="Plan meaningful family worship evenings."
+          to="/personal/family-worship"
+        />
+
+        <ActionCard
+          icon={<CheckSquare size={22} />}
+          title="Personal Tasks"
+          description="Keep track of spiritual and everyday reminders."
+          to="/personal/tasks"
+        />
       </div>
     </div>
   );
