@@ -1,5 +1,5 @@
 import { createReadingPlan } from "../../generators/readingPlanGenerator";
-import { oneYearRanges } from "./index";
+import { oneYearSchedule } from "../../bible/schedule";
 import { BibleReadingPlan } from "../../../types/readingPlan";
 
 export const oneYearPlan: BibleReadingPlan = {
@@ -7,5 +7,5 @@ export const oneYearPlan: BibleReadingPlan = {
   name: "One-Year Bible",
   description: "Read the entire Bible in one year.",
   estimatedDays: 365,
-  readings: createReadingPlan(oneYearRanges),
+  readings: createReadingPlan(oneYearSchedule),
 };

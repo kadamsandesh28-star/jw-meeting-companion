@@ -1,21 +1,35 @@
+import path from "node:path";
+
 import { createReadingPlan } from "../src/data/generators/readingPlanGenerator";
-import { oneYearRanges } from "../src/data/plans/oneYear";
+import { oneYearSchedule } from "../src/data/bible/schedule";
+import { oneYearPlan } from "../src/data/plans/oneYear/metadata";
+import { validateReadingPlan } from "./validateReadingPlan";
+import { writeReadingPlan } from "./writers/writeReadingPlan";
 
-const readings = createReadingPlan(oneYearRanges);
-
-console.log("📖 One-Year Bible Plan");
-console.log("----------------------");
-console.log(`Generated ${readings.length} readings`);
+console.log("");
+console.log("📖 Building Reading Plans");
+console.log("=========================");
 console.log("");
 
-console.table(
-  readings.slice(0, 10).map((reading) => ({
-    id: reading.id,
-    book: reading.book,
-    chapters: `${reading.startChapter}-${reading.endChapter}`,
-    section: reading.section,
-  }))
+validateReadingPlan(oneYearSchedule);
+
+const readings = createReadingPlan(oneYearSchedule);
+
+console.log(`Generating: ${oneYearPlan.name}`);
+console.log(`Readings : ${readings.length}`);
+
+writeReadingPlan(
+  `${oneYearPlan.id}Readings`,
+  readings,
+  path.join(
+    process.cwd(),
+    "src",
+    "data",
+    "plans",
+    "generated",
+    `${oneYearPlan.id}.ts`
+  )
 );
 
 console.log("");
-console.log("✅ Done");
+console.log("✅ Build complete");

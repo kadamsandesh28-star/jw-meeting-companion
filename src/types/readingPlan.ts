@@ -2,8 +2,9 @@ import { ReadingEntry } from "./bible";
 
 export type ReadingPlanId =
   | "oneYear"
+  | "hebrewScriptures"
+  | "greekScriptures"
   | "chronological"
-  | "newTestament"
   | "historical"
   | "psalmsProverbs";
 
@@ -18,4 +19,4 @@ export interface BibleReadingPlan {
   description: string;
   estimatedDays: number;
   readings: ReadingEntry[];
-}   
+}

@@ -1,11 +1,20 @@
 import { bibleBooks } from "../data/bibleBooks";
-import { bibleInOneYear } from "../data/bibleInOneYear";
+import { createReadingPlan } from "../data/generators/readingPlanGenerator";
+import { readingPlanRegistry } from "../data/plans/registry";
 
 import type {
   ReadingBook,
   ReadingEntry,
   ScriptureSection,
 } from "../types/bible";
+
+const defaultPlan = readingPlanRegistry[0];
+
+if (!defaultPlan) {
+  throw new Error("No reading plans are registered.");
+}
+
+const bibleInOneYear = createReadingPlan(defaultPlan.schedule);
 
 function getReadingPlan(): ReadingEntry[] {
   return bibleInOneYear;
