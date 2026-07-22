@@ -1,23 +1,23 @@
-import { CheckSquare } from "lucide-react";
+import { Users } from "lucide-react";
 
-export default function PersonalTasks() {
+export default function FamilyWorship() {
   return (
     <div className="space-y-6">
       <header>
         <div className="flex items-center gap-3">
-          <CheckSquare
+          <Users
             size={32}
             className="text-indigo-600"
           />
 
           <div>
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-              Personal Tasks
+              Family Worship
             </h1>
 
             <p className="text-slate-600 dark:text-slate-400">
-              Stay organized with personal reminders, goals, and spiritual
-              tasks.
+              Plan meaningful family worship evenings and keep track of your
+              study ideas.
             </p>
           </div>
         </div>
@@ -29,16 +29,16 @@ export default function PersonalTasks() {
         </h2>
 
         <p className="mt-3 text-slate-600 dark:text-slate-400">
-          This page will help you manage personal tasks, reminders, and goals,
-          keeping everything organized in one place.
+          This page will help you organize Family Worship with schedules,
+          activities, and study plans that encourage meaningful discussions.
         </p>
 
         <div className="mt-6 space-y-2 text-sm text-slate-600 dark:text-slate-400">
-          <p>✅ Personal to-do list</p>
-          <p>📅 Upcoming reminders</p>
-          <p>🎯 Spiritual goals</p>
-          <p>⭐ Priority tasks</p>
-          <p>📈 Progress tracking</p>
+          <p>👨‍👩‍👧‍👦 Worship plans</p>
+          <p>📖 Study topics</p>
+          <p>🎥 Videos and publications</p>
+          <p>🎲 Interactive activities</p>
+          <p>📅 Worship history</p>
         </div>
       </div>
     </div>

@@ -1,23 +1,22 @@
-import { CheckSquare } from "lucide-react";
+import { HeartHandshake } from "lucide-react";
 
-export default function PersonalTasks() {
+export default function PrayerJournal() {
   return (
     <div className="space-y-6">
       <header>
         <div className="flex items-center gap-3">
-          <CheckSquare
+          <HeartHandshake
             size={32}
             className="text-indigo-600"
           />
 
           <div>
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-              Personal Tasks
+              Prayer Journal
             </h1>
 
             <p className="text-slate-600 dark:text-slate-400">
-              Stay organized with personal reminders, goals, and spiritual
-              tasks.
+              Keep a personal record of your prayers, blessings, and spiritual reflections.
             </p>
           </div>
         </div>
@@ -29,16 +28,16 @@ export default function PersonalTasks() {
         </h2>
 
         <p className="mt-3 text-slate-600 dark:text-slate-400">
-          This page will help you manage personal tasks, reminders, and goals,
-          keeping everything organized in one place.
+          This page will help you keep a private journal of your prayers and
+          reflect on how Jehovah has answered them over time.
         </p>
 
         <div className="mt-6 space-y-2 text-sm text-slate-600 dark:text-slate-400">
-          <p>✅ Personal to-do list</p>
-          <p>📅 Upcoming reminders</p>
-          <p>🎯 Spiritual goals</p>
-          <p>⭐ Priority tasks</p>
-          <p>📈 Progress tracking</p>
+          <p>🙏 Prayer journal entries</p>
+          <p>❤️ Blessings received</p>
+          <p>📝 Spiritual reflections</p>
+          <p>📅 Prayer history</p>
+          <p>⭐ Personal encouragements</p>
         </div>
       </div>
     </div>

@@ -1,23 +1,22 @@
-import { CheckSquare } from "lucide-react";
+import { BookOpen } from "lucide-react";
 
-export default function PersonalTasks() {
+export default function BibleReading() {
   return (
     <div className="space-y-6">
       <header>
         <div className="flex items-center gap-3">
-          <CheckSquare
+          <BookOpen
             size={32}
             className="text-indigo-600"
           />
 
           <div>
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-              Personal Tasks
+              Bible Reading
             </h1>
 
             <p className="text-slate-600 dark:text-slate-400">
-              Stay organized with personal reminders, goals, and spiritual
-              tasks.
+              Read God's Word daily and track your spiritual progress.
             </p>
           </div>
         </div>
@@ -29,16 +28,15 @@ export default function PersonalTasks() {
         </h2>
 
         <p className="mt-3 text-slate-600 dark:text-slate-400">
-          This page will help you manage personal tasks, reminders, and goals,
-          keeping everything organized in one place.
+          This page will become your personal Bible Reading companion.
         </p>
 
         <div className="mt-6 space-y-2 text-sm text-slate-600 dark:text-slate-400">
-          <p>✅ Personal to-do list</p>
-          <p>📅 Upcoming reminders</p>
-          <p>🎯 Spiritual goals</p>
-          <p>⭐ Priority tasks</p>
-          <p>📈 Progress tracking</p>
+          <p>📖 Daily reading schedule</p>
+          <p>✅ Chapter completion tracking</p>
+          <p>📝 Personal notes</p>
+          <p>📊 Reading progress</p>
+          <p>📅 Reading history</p>
         </div>
       </div>
     </div>
