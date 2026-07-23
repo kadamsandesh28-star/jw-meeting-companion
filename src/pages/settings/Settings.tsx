@@ -1,178 +1,341 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 
-const STORAGE_KEY = "jwMeetingCompanion.resources";
+import {
+  loadSettings,
+  updateSettings,
+  ThemeMode,
+} from "../../services/settingsService";
 
-type CongregationRole =
-  | "Publisher"
-  | "Auxiliary Pioneer"
-  | "Regular Pioneer"
-  | "Ministerial Servant"
-  | "Elder";
+import { useAppTheme } from "../../theme/ThemeContext";
+
+import {
+  downloadBackup,
+  restoreBackup,
+  BackupData,
+} from "../../services/backupService";
+
+import {
+  getUserRole,
+  setUserRole,
+  UserRole,
+} from "../../services/userRoleService";
 
 export default function Settings() {
-  const [workbookTitle, setWorkbookTitle] = useState("");
-  const [workbookUrl, setWorkbookUrl] = useState("");
+  const [midweekLink, setMidweekLink] = useState("");
+  const [weekendLink, setWeekendLink] = useState("");
+  const [dailyScriptureLink, setDailyScriptureLink] =
+    useState("");
 
-  const [watchtowerTitle, setWatchtowerTitle] = useState("");
-  const [watchtowerUrl, setWatchtowerUrl] = useState("");
+  const [theme, setTheme] =
+    useState<ThemeMode>("system");
 
-  const [role, setRole] = useState<CongregationRole>("Publisher");
+  const [userRole, setUserRoleState] =
+    useState<UserRole>("publisher");
 
-  const [saved, setSaved] = useState(false);
+  const { setMode } = useAppTheme();
+
+  const fileInputRef =
+    useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const data = localStorage.getItem(STORAGE_KEY);
-
-    if (!data) return;
-
-    try {
-      const settings = JSON.parse(data);
-
-      setWorkbookTitle(settings.workbookTitle ?? "");
-      setWorkbookUrl(settings.workbookUrl ?? "");
-
-      setWatchtowerTitle(settings.watchtowerTitle ?? "");
-      setWatchtowerUrl(settings.watchtowerUrl ?? "");
-
-      setRole(settings.role ?? "Publisher");
-    } catch {
-      console.error("Unable to load settings.");
-    }
-  }, []);
-
-  const saveSettings = () => {
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        workbookTitle,
-        workbookUrl,
-        watchtowerTitle,
-        watchtowerUrl,
-        role,
-      })
+    setMidweekLink(
+      localStorage.getItem("midweek-link") || ""
     );
 
-    setSaved(true);
+    setWeekendLink(
+      localStorage.getItem("weekend-link") || ""
+    );
 
-    setTimeout(() => setSaved(false), 2500);
-  };
+    setDailyScriptureLink(
+      localStorage.getItem("daily-scripture-link") || ""
+    );
 
-  const roles: CongregationRole[] = [
-    "Publisher",
-    "Auxiliary Pioneer",
-    "Regular Pioneer",
-    "Ministerial Servant",
-    "Elder",
-  ];
+    const settings = loadSettings();
+
+    setTheme(settings.theme);
+
+    setUserRoleState(getUserRole());
+  }, []);
+
+  function saveAllSettings() {
+    localStorage.setItem(
+      "midweek-link",
+      midweekLink
+    );
+
+    localStorage.setItem(
+      "weekend-link",
+      weekendLink
+    );
+
+    localStorage.setItem(
+      "daily-scripture-link",
+      dailyScriptureLink
+    );
+
+    updateSettings({
+      theme,
+    });
+
+    setMode(theme);
+
+    setUserRole(userRole);
+
+    alert("✅ Settings saved successfully!");
+  }
+
+  function handleRestore(
+    event: React.ChangeEvent<HTMLInputElement>
+  ) {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      try {
+        const backup =
+          JSON.parse(
+            reader.result as string
+          ) as BackupData;
+
+        const confirmRestore =
+          window.confirm(
+            "Restore this backup? This will overwrite your current local data."
+          );
+
+        if (!confirmRestore) return;
+
+        restoreBackup(backup);
+
+        alert(
+          "✅ Backup restored successfully.\n\nPlease refresh the application."
+        );
+      } catch {
+        alert("❌ Invalid backup file.");
+      }
+    };
+
+    reader.readAsText(file);
+  }
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8 p-6">
-      <div>
-        <h1 className="text-3xl font-bold">⚙️ Settings</h1>
+    <Box
+      sx={{
+        p: 3,
+        bgcolor: "background.default",
+        color: "text.primary",
+        minHeight: "100%",
+      }}
+    >
+      <Typography
+        variant="h4"
+        fontWeight="bold"
+        gutterBottom
+      >
+        ⚙️ Settings
+      </Typography>
 
-        <p className="mt-2 text-gray-600 dark:text-gray-400">
-          Configure JW Meeting Companion to suit your congregation
-          responsibilities.
-        </p>
-      </div>
+      <Card
+        sx={{
+          borderRadius: 4,
+          bgcolor: "background.paper",
+          color: "text.primary",
+        }}
+      >
+        <CardContent>
+          {/* Study Resources */}
 
-      <div className="space-y-6 rounded-xl border p-6 shadow-sm">
-        <h2 className="text-xl font-semibold">📚 Meeting Resources</h2>
+          <Typography
+            variant="h6"
+            gutterBottom
+          >
+            📚 Study Resources
+          </Typography>
 
-        <div>
-          <label className="mb-2 block font-medium">
-            Midweek Workbook Title
-          </label>
+          <TextField
+            fullWidth
+            label="Midweek Workbook URL"
+            margin="normal"
+            value={midweekLink}
+            onChange={(e) =>
+              setMidweekLink(e.target.value)
+            }
+          />
+
+          <TextField
+            fullWidth
+            label="Weekend Study URL"
+            margin="normal"
+            value={weekendLink}
+            onChange={(e) =>
+              setWeekendLink(e.target.value)
+            }
+          />
+
+          <TextField
+            fullWidth
+            label="Daily Scripture URL"
+            margin="normal"
+            value={dailyScriptureLink}
+            onChange={(e) =>
+              setDailyScriptureLink(
+                e.target.value
+              )
+            }
+          />
+
+          <Divider sx={{ my: 4 }} />
+
+          {/* Appearance */}
+
+          <Typography
+            variant="h6"
+            gutterBottom
+          >
+            🎨 Appearance
+          </Typography>
+
+          <FormControl
+            fullWidth
+            margin="normal"
+          >
+            <InputLabel>
+              Theme
+            </InputLabel>
+
+            <Select
+              value={theme}
+              label="Theme"
+              onChange={(e) =>
+                setTheme(
+                  e.target.value as ThemeMode
+                )
+              }
+            >
+              <MenuItem value="system">
+                💻 System
+              </MenuItem>
+
+              <MenuItem value="light">
+                ☀️ Light
+              </MenuItem>
+
+              <MenuItem value="dark">
+                🌙 Dark
+              </MenuItem>
+            </Select>
+          </FormControl>
+
+          <Divider sx={{ my: 4 }} />
+
+          {/* Privileges */}
+
+          <Typography
+            variant="h6"
+            gutterBottom
+          >
+            👤 Privileges & Responsibilities
+          </Typography>
+
+          <FormControl
+            fullWidth
+            margin="normal"
+          >
+            <InputLabel>
+              Role
+            </InputLabel>
+
+            <Select
+              value={userRole}
+              label="Role"
+              onChange={(e) =>
+                setUserRoleState(
+                  e.target.value as UserRole
+                )
+              }
+            >
+              <MenuItem value="publisher">
+                General Publisher
+              </MenuItem>
+
+              <MenuItem value="ministerial-servant">
+                Ministerial Servant
+              </MenuItem>
+
+              <MenuItem value="elder">
+                Elder
+              </MenuItem>
+            </Select>
+          </FormControl>
+
+          <Divider sx={{ my: 4 }} />
+
+          {/* Backup */}
+
+          <Typography
+            variant="h6"
+            gutterBottom
+          >
+            ☁️ Backup & Restore
+          </Typography>
+
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{ mt: 2 }}
+          >
+            <Button
+              variant="contained"
+              onClick={downloadBackup}
+            >
+              ⬇ Export Backup
+            </Button>
+
+            <Button
+              variant="outlined"
+              onClick={() =>
+                fileInputRef.current?.click()
+              }
+            >
+              ⬆ Restore Backup
+            </Button>
+          </Stack>
 
           <input
-            className="w-full rounded-lg border p-3"
-            value={workbookTitle}
-            onChange={(e) => setWorkbookTitle(e.target.value)}
-            placeholder="Our Christian Life and Ministry—July 2025"
+            hidden
+            ref={fileInputRef}
+            type="file"
+            accept=".json"
+            onChange={handleRestore}
           />
-        </div>
 
-        <div>
-          <label className="mb-2 block font-medium">
-            Midweek Workbook URL
-          </label>
+          <Divider sx={{ my: 4 }} />
 
-          <input
-            className="w-full rounded-lg border p-3"
-            value={workbookUrl}
-            onChange={(e) => setWorkbookUrl(e.target.value)}
-            placeholder="https://www.jw.org/finder?..."
-          />
-        </div>
-
-        <hr />
-
-        <div>
-          <label className="mb-2 block font-medium">
-            Watchtower Study Title
-          </label>
-
-          <input
-            className="w-full rounded-lg border p-3"
-            value={watchtowerTitle}
-            onChange={(e) => setWatchtowerTitle(e.target.value)}
-            placeholder="Watchtower Study Edition"
-          />
-        </div>
-
-        <div>
-          <label className="mb-2 block font-medium">
-            Watchtower Study URL
-          </label>
-
-          <input
-            className="w-full rounded-lg border p-3"
-            value={watchtowerUrl}
-            onChange={(e) => setWatchtowerUrl(e.target.value)}
-            placeholder="https://www.jw.org/finder?..."
-          />
-        </div>
-
-        <hr />
-
-        <div>
-          <h2 className="mb-4 text-xl font-semibold">
-            👤 Congregation Role
-          </h2>
-
-          <div className="space-y-3">
-            {roles.map((item) => (
-              <label
-                key={item}
-                className="flex cursor-pointer items-center gap-3"
-              >
-                <input
-                  type="radio"
-                  name="role"
-                  value={item}
-                  checked={role === item}
-                  onChange={() => setRole(item)}
-                />
-
-                <span>{item}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        <button
-          onClick={saveSettings}
-          className="rounded-lg bg-blue-600 px-5 py-3 text-white transition hover:bg-blue-700"
-        >
-          Save Settings
-        </button>
-
-        {saved && (
-          <p className="font-medium text-green-600">
-            ✅ Settings saved successfully.
-          </p>
-        )}
-      </div>
-    </div>
+          <Button
+            variant="contained"
+            size="large"
+            onClick={saveAllSettings}
+          >
+            Save Settings
+          </Button>
+        </CardContent>
+      </Card>
+    </Box>
   );
 }

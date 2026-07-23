@@ -25,7 +25,7 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  mode: "system",
+  mode: "light",
   setMode: () => {},
 });
 
@@ -41,7 +41,7 @@ export function AppThemeProvider({
   children,
 }: Props) {
   const [mode, setModeState] =
-    useState<ThemeMode>("system");
+    useState<ThemeMode>("light");
 
   useEffect(() => {
     const settings = loadSettings();
@@ -56,13 +56,10 @@ export function AppThemeProvider({
     });
   }
 
+  // Force System to use Light for now
   const actualMode =
     mode === "system"
-      ? window.matchMedia(
-          "(prefers-color-scheme: dark)"
-        ).matches
-        ? "dark"
-        : "light"
+      ? "light"
       : mode;
 
   const theme = useMemo(
@@ -70,28 +67,22 @@ export function AppThemeProvider({
       createTheme({
         palette: {
           mode: actualMode,
-
           primary: {
             main: "#1976d2",
           },
-
           secondary: {
             main: "#2e7d32",
           },
         },
-
         shape: {
           borderRadius: 14,
         },
-
         typography: {
           fontFamily:
             "Roboto, Arial, sans-serif",
-
           h4: {
             fontWeight: 700,
           },
-
           h5: {
             fontWeight: 600,
           },
@@ -109,9 +100,7 @@ export function AppThemeProvider({
     >
       <ThemeProvider theme={theme}>
         <CssBaseline />
-
         {children}
-
       </ThemeProvider>
     </ThemeContext.Provider>
   );

@@ -1,61 +1,123 @@
-import { ChevronRight } from "lucide-react";
-import { Link } from "react-router-dom";
 import { ReactNode } from "react";
+import { Link as RouterLink } from "react-router-dom";
+import {
+  Box,
+  Stack,
+  Typography,
+  IconButton,
+} from "@mui/material";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import AppCard from "./AppCard";
 
-interface ActionCardProps {
+export interface ActionCardProps {
+  /** Card title */
   title: string;
+
+  /** Optional description */
   description?: string;
-  to: string;
+
+  /** Optional icon */
   icon?: ReactNode;
-  badge?: ReactNode;
+
+  /** Navigate to route */
+  to?: string;
+
+  /** Click handler */
+  onClick?: () => void;
+
+  /** Optional custom action */
+  action?: ReactNode;
+
+  /** Optional extra content */
   children?: ReactNode;
 }
 
 export default function ActionCard({
   title,
   description,
-  to,
   icon,
-  badge,
+  to,
+  onClick,
+  action,
   children,
 }: ActionCardProps) {
-  return (
-    <Link
-      to={to}
-      className="block rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-200 hover:border-indigo-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
-    >
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex-1 space-y-3">
-          <div>
-            <div className="flex items-center gap-3">
-              {icon && (
-                <span className="text-indigo-600 dark:text-indigo-400">
-                  {icon}
-                </span>
-              )}
+  const content = (
+    <AppCard hover>
+      <Stack
+        direction="row"
+        spacing={2}
+        alignItems="center"
+      >
+        {icon && (
+          <Box
+            sx={{
+              color: "primary.main",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 36,
+            }}
+          >
+            {icon}
+          </Box>
+        )}
 
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                {title}
-              </h3>
+        <Box sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="h6"
+            fontWeight={600}
+          >
+            {title}
+          </Typography>
 
-              {badge}
-            </div>
-
-            {description && (
-              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                {description}
-              </p>
-            )}
-          </div>
+          {description && (
+            <Typography
+              variant="body2"
+              color="text.secondary"
+            >
+              {description}
+            </Typography>
+          )}
 
           {children}
-        </div>
+        </Box>
 
-        <ChevronRight
-          size={20}
-          className="mt-1 shrink-0 text-slate-400"
-        />
-      </div>
-    </Link>
+        {action ?? (
+          <IconButton
+            size="small"
+            disableRipple
+          >
+            <ChevronRightIcon />
+          </IconButton>
+        )}
+      </Stack>
+    </AppCard>
+  );
+
+  if (to) {
+    return (
+      <Box
+        component={RouterLink}
+        to={to}
+        sx={{
+          textDecoration: "none",
+          color: "inherit",
+          display: "block",
+        }}
+      >
+        {content}
+      </Box>
+    );
+  }
+
+  return (
+    <Box
+      onClick={onClick}
+      sx={{
+        cursor: onClick ? "pointer" : "default",
+      }}
+    >
+      {content}
+    </Box>
   );
 }

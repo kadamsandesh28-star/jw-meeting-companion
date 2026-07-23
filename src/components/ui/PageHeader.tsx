@@ -1,45 +1,95 @@
 import { ReactNode } from "react";
+import {
+  Box,
+  Breadcrumbs,
+  Stack,
+  Typography,
+} from "@mui/material";
 
-interface PageHeaderProps {
+export interface PageHeaderProps {
+  /** Main page title */
   title: string;
+
+  /** Optional subtitle */
+  subtitle?: string;
+
+  /** Backward-compatible alias */
   description?: string;
+
+  /** Optional icon */
   icon?: ReactNode;
-  children?: ReactNode;
+
+  /** Optional breadcrumb navigation */
+  breadcrumbs?: ReactNode;
+
+  /** Optional actions (buttons, menus, etc.) */
+  actions?: ReactNode;
 }
 
 export default function PageHeader({
   title,
+  subtitle,
   description,
   icon,
-  children,
+  breadcrumbs,
+  actions,
 }: PageHeaderProps) {
+  const text = subtitle ?? description;
+
   return (
-    <header className="flex items-start justify-between gap-4">
-      <div className="flex items-center gap-3">
-        {icon && (
-          <div className="text-indigo-600 dark:text-indigo-400">
-            {icon}
-          </div>
-        )}
-
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-            {title}
-          </h1>
-
-          {description && (
-            <p className="mt-1 text-slate-600 dark:text-slate-400">
-              {description}
-            </p>
-          )}
-        </div>
-      </div>
-
-      {children && (
-        <div className="shrink-0">
-          {children}
-        </div>
+    <Box sx={{ mb: 4 }}>
+      {breadcrumbs && (
+        <Breadcrumbs sx={{ mb: 2 }}>
+          {breadcrumbs}
+        </Breadcrumbs>
       )}
-    </header>
+
+      <Stack
+        direction={{ xs: "column", md: "row" }}
+        justifyContent="space-between"
+        alignItems={{ xs: "flex-start", md: "center" }}
+        spacing={3}
+      >
+        <Stack
+          direction="row"
+          spacing={2}
+          alignItems="center"
+        >
+          {icon && (
+            <Box
+              sx={{
+                color: "primary.main",
+                display: "flex",
+                alignItems: "center",
+                fontSize: 40,
+              }}
+            >
+              {icon}
+            </Box>
+          )}
+
+          <Box>
+            <Typography
+              variant="h4"
+              fontWeight={700}
+            >
+              {title}
+            </Typography>
+
+            {text && (
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                sx={{ mt: 0.5 }}
+              >
+                {text}
+              </Typography>
+            )}
+          </Box>
+        </Stack>
+
+        {actions && <Box>{actions}</Box>}
+      </Stack>
+    </Box>
   );
 }
