@@ -3,6 +3,7 @@ import {
   MinistrySession,
   MinistryStatistics,
 } from "../types/ministry";
+import { MonthlyReport } from "../types/report";
 
 const STORAGE_KEY = "jw-ministry-sessions";
 
@@ -57,9 +58,7 @@ class MinistryService {
 
     const session: MinistrySession = {
       id: crypto.randomUUID(),
-
       ...data,
-
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -97,11 +96,11 @@ class MinistryService {
   }
 
   deleteSession(id: string): void {
-    const sessions = this.load().filter(
-      (session) => session.id !== id
+    this.save(
+      this.load().filter(
+        (session) => session.id !== id
+      )
     );
-
-    this.save(sessions);
   }
 
   clearSessions(): void {
@@ -109,7 +108,7 @@ class MinistryService {
   }
 
   // ------------------------
-  // Statistics
+  // Helpers
   // ------------------------
 
   private calculateHours(
@@ -130,11 +129,10 @@ class MinistryService {
     return diff > 0 ? diff / 3600000 : 0;
   }
 
-  getStatistics(): MinistryStatistics {
-    const sessions = this.load();
-
+  private calculateStatistics(
+    sessions: MinistrySession[]
+  ): MinistryStatistics {
     let totalHours = 0;
-
     let totalReturnVisits = 0;
     let totalBibleStudies = 0;
     let totalPlacements = 0;
@@ -153,20 +151,117 @@ class MinistryService {
     });
 
     return {
-      totalHours: Number(
-        totalHours.toFixed(2)
-      ),
-
+      totalHours: Number(totalHours.toFixed(2)),
       totalSessions: sessions.length,
-
       totalReturnVisits,
-
       totalBibleStudies,
-
       totalPlacements,
-
       totalVideosShown,
     };
+  }
+
+  // ------------------------
+  // Statistics
+  // ------------------------
+
+  getStatistics(): MinistryStatistics {
+    return this.calculateStatistics(this.load());
+  }
+
+  getMonthlyStatistics(
+    month: number,
+    year: number
+  ): MinistryStatistics {
+    const sessions = this.load().filter((session) => {
+      const date = new Date(session.date);
+
+      return (
+        date.getMonth() === month &&
+        date.getFullYear() === year
+      );
+    });
+
+    return this.calculateStatistics(sessions);
+  }
+
+  getYearlyStatistics(
+    year: number
+  ): MinistryStatistics {
+    const sessions = this.load().filter(
+      (session) =>
+        new Date(session.date).getFullYear() ===
+        year
+    );
+
+    return this.calculateStatistics(sessions);
+  }
+
+  getSessionsByDateRange(
+    startDate: Date,
+    endDate: Date
+  ): MinistrySession[] {
+    return this.getSessions().filter((session) => {
+      const date = new Date(session.date);
+
+      return (
+        date >= startDate &&
+        date <= endDate
+      );
+    });
+  }
+
+  getStatisticsByDateRange(
+    startDate: Date,
+    endDate: Date
+  ): MinistryStatistics {
+    return this.calculateStatistics(
+      this.getSessionsByDateRange(
+        startDate,
+        endDate
+      )
+    );
+  }
+
+  // ------------------------
+  // Reports
+  // ------------------------
+
+  getMonthlyReport(
+    year: number
+  ): MonthlyReport[] {
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    return months.map((month, index) => {
+      const stats =
+        this.getMonthlyStatistics(index, year);
+
+      return {
+        month,
+        hours: stats.totalHours,
+        sessions: stats.totalSessions,
+        returnVisits:
+          stats.totalReturnVisits,
+        bibleStudies:
+          stats.totalBibleStudies,
+        placements:
+          stats.totalPlacements,
+        videosShown:
+          stats.totalVideosShown,
+      };
+    });
   }
 }
 

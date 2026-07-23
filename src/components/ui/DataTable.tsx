@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import {
+  Box,
   Paper,
   Table,
   TableBody,
@@ -40,6 +41,12 @@ export interface DataTableProps<T> {
   /** Message when there are no rows */
   emptyMessage?: string;
 
+  /** Optional toolbar shown above the table */
+  toolbar?: ReactNode;
+
+  /** Optional footer shown below the table */
+  footer?: ReactNode;
+
   /** Called when a row is clicked */
   onRowClick?: (row: T) => void;
 }
@@ -49,78 +56,114 @@ export default function DataTable<T>({
   rows,
   getRowKey,
   emptyMessage = "No data available.",
+  toolbar,
+  footer,
   onRowClick,
 }: DataTableProps<T>) {
   return (
-    <TableContainer
-      component={Paper}
+    <Paper
       elevation={0}
       sx={{
         border: 1,
         borderColor: "divider",
         borderRadius: 2,
+        overflow: "hidden",
       }}
     >
-      <Table>
-        <TableHead>
-          <TableRow>
-            {columns.map((column) => (
-              <TableCell
-                key={column.id.toString()}
-                align={column.align}
-                sx={{
-                  width: column.width,
-                  fontWeight: 700,
-                }}
-              >
-                {column.label}
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
+      {toolbar && (
+        <Box
+          px={2}
+          py={1.5}
+          borderBottom={1}
+          borderColor="divider"
+        >
+          {toolbar}
+        </Box>
+      )}
 
-        <TableBody>
-          {rows.length === 0 ? (
+      <TableContainer>
+        <Table>
+          <TableHead>
             <TableRow>
-              <TableCell
-                colSpan={columns.length}
-                align="center"
-              >
-                <Typography
-                  color="text.secondary"
-                  py={3}
+              {columns.map((column) => (
+                <TableCell
+                  key={column.id.toString()}
+                  align={column.align}
+                  sx={{
+                    width: column.width,
+                    fontWeight: 700,
+                    whiteSpace: "nowrap",
+                  }}
                 >
-                  {emptyMessage}
-                </Typography>
-              </TableCell>
+                  {column.label}
+                </TableCell>
+              ))}
             </TableRow>
-          ) : (
-            rows.map((row) => (
-              <TableRow
-                key={getRowKey(row)}
-                hover={!!onRowClick}
-                onClick={() => onRowClick?.(row)}
-                sx={{
-                  cursor: onRowClick ? "pointer" : "default",
-                }}
-              >
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id.toString()}
-                    align={column.align}
-                  >
-                    {column.render
-                      ? column.render(row)
-                      : String(
-                          row[column.id as keyof T] ?? ""
-                        )}
-                  </TableCell>
-                ))}
+          </TableHead>
+
+          <TableBody>
+            {rows.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  align="center"
+                  sx={{ py: 6 }}
+                >
+                  <Typography color="text.secondary">
+                    {emptyMessage}
+                  </Typography>
+                </TableCell>
               </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+            ) : (
+              rows.map((row) => (
+                <TableRow
+                  key={getRowKey(row)}
+                  hover={!!onRowClick}
+                  onClick={() => onRowClick?.(row)}
+                  sx={{
+                    cursor: onRowClick ? "pointer" : "default",
+                    transition: "background-color 0.2s ease",
+                  }}
+                >
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id.toString()}
+                      align={column.align}
+                    >
+                      {column.render
+                        ? column.render(row)
+                        : (() => {
+                            const value =
+                              row[column.id as keyof T];
+
+                            if (
+                              value === null ||
+                              value === undefined
+                            ) {
+                              return "";
+                            }
+
+                            return value as ReactNode;
+                          })()}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {footer && (
+        <Box
+          px={2}
+          py={1.5}
+          borderTop={1}
+          borderColor="divider"
+        >
+          {footer}
+        </Box>
+      )}
+    </Paper>
   );
 }

@@ -29,6 +29,10 @@ export function useMinistry() {
     refresh();
   }, [refresh]);
 
+  const getSession = (id: string) => {
+    return ministryService.getSession(id);
+  };
+
   const addSession = (data: MinistryFormData) => {
     ministryService.addSession(data);
     refresh();
@@ -58,6 +62,7 @@ export function useMinistry() {
 
     refresh,
 
+    getSession,
     addSession,
     updateSession,
     deleteSession,

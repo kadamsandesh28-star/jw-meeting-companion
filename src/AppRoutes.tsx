@@ -30,6 +30,7 @@ import PersonalTasks from "./pages/personal/PersonalTasks";
 // Ministry
 import MinistryDashboard from "./features/ministry/pages/MinistryDashboard";
 import MinistrySession from "./features/ministry/pages/MinistrySession";
+import MinistryReports from "./features/ministry/pages/MinistryReports";
 import ReturnVisits from "./features/ministry/pages/ReturnVisits";
 import BibleStudies from "./features/ministry/pages/BibleStudies";
 
@@ -108,14 +109,27 @@ export default function AppRoutes() {
           path="/ministry"
           element={<MinistryDashboard />}
         />
+
         <Route
-          path="/ministry/session"
+          path="/ministry/reports"
+          element={<MinistryReports />}
+        />
+
+        <Route
+          path="/ministry/session/new"
           element={<MinistrySession />}
         />
+
+        <Route
+          path="/ministry/session/:id"
+          element={<MinistrySession />}
+        />
+
         <Route
           path="/ministry/return-visits"
           element={<ReturnVisits />}
         />
+
         <Route
           path="/ministry/bible-studies"
           element={<BibleStudies />}
@@ -126,10 +140,12 @@ export default function AppRoutes() {
           path="/congregation"
           element={<Dashboard />}
         />
+
         <Route
           path="/congregation/publishers"
           element={<PublisherList />}
         />
+
         <Route
           path="/congregation/reports"
           element={<Reports />}

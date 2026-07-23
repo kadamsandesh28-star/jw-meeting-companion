@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Grid,
@@ -10,29 +10,38 @@ import {
 import { MinistryFormData } from "../types/ministry";
 
 interface MinistrySessionFormProps {
+  initialValues?: MinistryFormData;
   onSave: (data: MinistryFormData) => void;
 }
 
 const today = new Date();
 
-const currentDate = today.toISOString().split("T")[0];
-const currentTime = today.toTimeString().slice(0, 5);
+const defaultForm: MinistryFormData = {
+  date: today.toISOString().split("T")[0],
+  startTime: today.toTimeString().slice(0, 5),
+  endTime: today.toTimeString().slice(0, 5),
+  companion: "",
+  territory: "",
+  returnVisits: 0,
+  bibleStudies: 0,
+  placements: 0,
+  videosShown: 0,
+  notes: "",
+};
 
 export default function MinistrySessionForm({
+  initialValues,
   onSave,
 }: MinistrySessionFormProps) {
-  const [form, setForm] = useState<MinistryFormData>({
-    date: currentDate,
-    startTime: currentTime,
-    endTime: currentTime,
-    companion: "",
-    territory: "",
-    returnVisits: 0,
-    bibleStudies: 0,
-    placements: 0,
-    videosShown: 0,
-    notes: "",
-  });
+  const [form, setForm] = useState<MinistryFormData>(
+    initialValues ?? defaultForm
+  );
+
+  useEffect(() => {
+    if (initialValues) {
+      setForm(initialValues);
+    }
+  }, [initialValues]);
 
   const handleChange = (
     field: keyof MinistryFormData,
@@ -192,7 +201,7 @@ export default function MinistrySessionForm({
           size="large"
           onClick={handleSubmit}
         >
-          Save Session
+          {initialValues ? "Update Session" : "Save Session"}
         </Button>
       </Stack>
     </Paper>
