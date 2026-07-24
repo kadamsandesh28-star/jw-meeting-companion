@@ -11,15 +11,16 @@ import {
   getReturnVisitStatistics,
   getReturnVisits,
   searchReturnVisits,
-} from "../services/returnVisitService";
+} from "../../features/ministry/services/returnVisitService";
 
-import { ReturnVisit } from "../types/returnVisit";
+import { ReturnVisit } from "../../features/ministry/types/returnVisit";
 
-import AddReturnVisitDialog from "../components/AddReturnVisitDialog";
-import EditReturnVisitDialog from "../components/EditReturnVisitDialog";
+import AddReturnVisitDialog from "../../features/ministry/components/AddReturnVisitDialog";
+import EditReturnVisitDialog from "../../features/ministry/components/EditReturnVisitDialog";
 
-import ReturnVisitCard from "../components/ReturnVisitCard";
-import StatCard from "../../../components/StatCard";
+import ReturnVisitCard from "../../features/ministry/components/ReturnVisitCard";
+import StatCard from "../../components/StatCard";
+
 type Filter =
   | "All"
   | "Pending"
