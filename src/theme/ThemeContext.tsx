@@ -43,9 +43,35 @@ export function AppThemeProvider({
   const [mode, setModeState] =
     useState<ThemeMode>("light");
 
+  const [systemDark, setSystemDark] =
+    useState(false);
+
   useEffect(() => {
     const settings = loadSettings();
     setModeState(settings.theme);
+
+    const mediaQuery = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    );
+
+    setSystemDark(mediaQuery.matches);
+
+    const handler = (
+      event: MediaQueryListEvent
+    ) => {
+      setSystemDark(event.matches);
+    };
+
+    mediaQuery.addEventListener(
+      "change",
+      handler
+    );
+
+    return () =>
+      mediaQuery.removeEventListener(
+        "change",
+        handler
+      );
   }, []);
 
   function setMode(newMode: ThemeMode) {
@@ -56,33 +82,52 @@ export function AppThemeProvider({
     });
   }
 
-  // Force System to use Light for now
   const actualMode =
     mode === "system"
-      ? "light"
+      ? systemDark
+        ? "dark"
+        : "light"
       : mode;
+
+  useEffect(() => {
+    const root =
+      document.documentElement;
+
+    root.classList.remove(
+      "light",
+      "dark"
+    );
+
+    root.classList.add(actualMode);
+  }, [actualMode]);
 
   const theme = useMemo(
     () =>
       createTheme({
         palette: {
           mode: actualMode,
+
           primary: {
             main: "#1976d2",
           },
+
           secondary: {
             main: "#2e7d32",
           },
         },
+
         shape: {
           borderRadius: 14,
         },
+
         typography: {
           fontFamily:
             "Roboto, Arial, sans-serif",
+
           h4: {
             fontWeight: 700,
           },
+
           h5: {
             fontWeight: 600,
           },

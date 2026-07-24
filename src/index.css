@@ -1,11 +1,15 @@
 @import "tailwindcss";
 
-body {
+/* Enable class-based dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
+html,
+body,
+#root {
+  min-height: 100%;
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #f5f5f5;
 }
 
-#root {
-  min-height: 100vh;
+body {
+  font-family: Arial, Helvetica, sans-serif;
 }

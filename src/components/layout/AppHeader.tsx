@@ -7,15 +7,18 @@ export default function AppHeader() {
         {/* Logo */}
         <div className="flex items-center gap-3">
           <button className="rounded-xl p-2 transition hover:bg-slate-100 dark:hover:bg-slate-800">
-            <Menu size={20} />
+            <Menu
+              size={20}
+              className="text-white"
+            />
           </button>
 
           <div>
-            <h1 className="text-lg font-bold tracking-tight text-slate-800 dark:text-white">
+            <h1 className="text-lg font-bold tracking-tight text-white">
               JW Meeting Companion
             </h1>
 
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-white">
               Stay prepared
             </p>
           </div>
@@ -24,15 +27,24 @@ export default function AppHeader() {
         {/* Actions */}
         <div className="flex items-center gap-2">
           <button className="rounded-xl p-2 transition hover:bg-slate-100 dark:hover:bg-slate-800">
-            <Bell size={18} />
+            <Bell
+              size={18}
+              className="text-white"
+            />
           </button>
 
           <button className="rounded-xl p-2 transition hover:bg-slate-100 dark:hover:bg-slate-800">
-            <Moon size={18} />
+            <Moon
+              size={18}
+              className="text-white"
+            />
           </button>
 
           <button className="rounded-xl p-2 transition hover:bg-slate-100 dark:hover:bg-slate-800">
-            <User size={18} />
+            <User
+              size={18}
+              className="text-white"
+            />
           </button>
         </div>
       </div>
