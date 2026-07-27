@@ -59,6 +59,11 @@ import BodyMemberEditor from "./features/congregation/body-of-elders/pages/BodyM
 import Tools from "./pages/tools/Tools";
 import Settings from "./pages/settings/Settings";
 
+// Service Committee
+import ServiceCommitteeList from "./features/congregation/service-committee/pages/ServiceCommitteeList";
+import ServiceCommitteeProfile from "./features/congregation/service-committee/pages/ServiceCommitteeProfile";
+import ServiceCommitteeEditor from "./features/congregation/service-committee/pages/ServiceCommitteeEditor";
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -220,6 +225,27 @@ export default function AppRoutes() {
           element={<BodyMemberEditor />}
         />
 
+        {/* Service Committee */}
+        <Route
+          path="/congregation/service-committee"
+          element={<ServiceCommitteeList />}
+        />
+
+        <Route
+          path="/congregation/service-committee/new"
+          element={<ServiceCommitteeEditor />}
+        />
+
+        <Route
+          path="/congregation/service-committee/:id"
+          element={<ServiceCommitteeProfile />}
+        />
+
+        <Route
+          path="/congregation/service-committee/:id/edit"
+          element={<ServiceCommitteeEditor />}
+        />
+        
         {/* Reports */}
         <Route
           path="/congregation/reports"
