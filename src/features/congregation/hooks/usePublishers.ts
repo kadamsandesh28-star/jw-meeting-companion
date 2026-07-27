@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 
-import { publisherService } from "../services/publisherService";
+import { publisherService } from "../publishers/services/publisherService";
 
 export function usePublishers() {
   const [search, setSearch] = useState("");

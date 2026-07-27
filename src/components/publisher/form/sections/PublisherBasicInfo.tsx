@@ -11,7 +11,7 @@ import {
   Gender,
   MaritalStatus,
   Publisher,
-} from "../../../../models/Publisher";
+} from "../../../../features/congregation/publishers/models/Publisher";
 
 interface PublisherBasicInfoProps {
   publisher: Publisher;

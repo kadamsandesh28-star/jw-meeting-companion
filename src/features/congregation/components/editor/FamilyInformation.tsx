@@ -1,6 +1,6 @@
 import { Grid, TextField, Typography } from "@mui/material";
 
-import { Publisher } from "../../types/publisher";
+import { Publisher } from "../../publishers/types/Publisher";
 
 interface FamilyInformationProps {
   publisher: Publisher;

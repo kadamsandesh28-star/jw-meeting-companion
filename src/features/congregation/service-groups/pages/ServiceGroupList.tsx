@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-import { publisherService } from "../../services/publisherService";
+import { publisherService } from "../../publishers/services/publisherService";
 import { useServiceGroups } from "../hooks/useServiceGroups";
 import { serviceGroupService } from "../services/serviceGroupService";
 

@@ -1,7 +1,7 @@
 import { TextField, Grid, MenuItem } from "@mui/material";
 
-import { Publisher } from "../../types/publisher";
-import { Gender } from "../../types/enums";
+import { Publisher } from "../../publishers/types/Publisher";
+import { Gender } from "../../publishers/types/enums";
 
 interface PersonalInformationProps {
   publisher: Publisher;

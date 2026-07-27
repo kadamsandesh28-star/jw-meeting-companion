@@ -12,7 +12,7 @@ import {
 
 import AddIcon from "@mui/icons-material/Add";
 
-import { Publisher } from "../../models/Publisher";
+import { Publisher } from "../../features/congregation/publishers/models/Publisher";
 
 import { publisherService } from "../../services/publisherService";
 

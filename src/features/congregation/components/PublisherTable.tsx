@@ -21,8 +21,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import { Publisher } from "../types/publisher";
-import { PublisherStatus } from "../types/enums";
+import { Publisher } from "../publishers/types/Publisher";
+import { PublisherStatus } from "../publishers/types/enums";
 
 interface Props {
   publishers: Publisher[];

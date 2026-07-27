@@ -10,6 +10,7 @@ import {
   FileBarChart,
   Layers,
   Map,
+  Shield,
 } from "lucide-react";
 
 export type WorkspaceType = "personal" | "congregation";
@@ -86,6 +87,11 @@ export const navigation: NavigationGroup[] = [
         label: "Territories",
         path: "/congregation/territories",
         icon: Map,
+      },
+      {
+        label: "Body of Elders",
+        path: "/congregation/body-of-elders",
+        icon: Shield,
       },
       {
         label: "Reports",

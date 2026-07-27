@@ -1,4 +1,4 @@
-import { Publisher } from "../types/publisher";
+import { Publisher } from "../types/Publisher";
 import { samplePublishers } from "../data/samplePublishers";
 
 const STORAGE_KEY = "jw-meeting-companion.publishers";

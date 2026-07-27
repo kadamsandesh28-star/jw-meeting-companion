@@ -1,4 +1,4 @@
-import { TimelineEvent, TimelineEventType } from "../models/TimelineEvent";
+import { TimelineEvent, TimelineEventType } from "../features/congregation/publishers/models/TimelineEvent";
 
 let timelineEvents: TimelineEvent[] = [];
 

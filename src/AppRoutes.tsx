@@ -50,6 +50,11 @@ import TerritoryList from "./features/congregation/territories/pages/TerritoryLi
 import TerritoryProfile from "./features/congregation/territories/pages/TerritoryProfile";
 import TerritoryEditor from "./features/congregation/territories/pages/TerritoryEditor";
 
+// Body of Elders
+import BodyMemberList from "./features/congregation/body-of-elders/pages/BodyMemberList";
+import BodyMemberProfile from "./features/congregation/body-of-elders/pages/BodyMemberProfile";
+import BodyMemberEditor from "./features/congregation/body-of-elders/pages/BodyMemberEditor";
+
 // Tools & Settings
 import Tools from "./pages/tools/Tools";
 import Settings from "./pages/settings/Settings";
@@ -81,10 +86,7 @@ export default function AppRoutes() {
         />
 
         {/* Workbook */}
-        <Route
-          path="/workbook"
-          element={<Workbook />}
-        />
+        <Route path="/workbook" element={<Workbook />} />
 
         {/* Assignments */}
         <Route
@@ -93,16 +95,10 @@ export default function AppRoutes() {
         />
 
         {/* Service */}
-        <Route
-          path="/service"
-          element={<Service />}
-        />
+        <Route path="/service" element={<Service />} />
 
         {/* Personal */}
-        <Route
-          path="/personal"
-          element={<Personal />}
-        />
+        <Route path="/personal" element={<Personal />} />
         <Route
           path="/personal/bible-reading"
           element={<BibleReading />}
@@ -129,27 +125,22 @@ export default function AppRoutes() {
           path="/ministry"
           element={<MinistryDashboard />}
         />
-
         <Route
           path="/ministry/reports"
           element={<MinistryReports />}
         />
-
         <Route
           path="/ministry/session/new"
           element={<MinistrySession />}
         />
-
         <Route
           path="/ministry/session/:id"
           element={<MinistrySession />}
         />
-
         <Route
           path="/ministry/return-visits"
           element={<ReturnVisits />}
         />
-
         <Route
           path="/ministry/bible-studies"
           element={<BibleStudies />}
@@ -166,12 +157,10 @@ export default function AppRoutes() {
           path="/congregation/publishers"
           element={<PublisherList />}
         />
-
         <Route
           path="/congregation/publishers/new"
           element={<PublisherEditor />}
         />
-
         <Route
           path="/congregation/publishers/:id"
           element={<PublisherEditor />}
@@ -182,17 +171,14 @@ export default function AppRoutes() {
           path="/congregation/service-groups"
           element={<ServiceGroupList />}
         />
-
         <Route
           path="/congregation/service-groups/new"
           element={<ServiceGroupEditor />}
         />
-
         <Route
           path="/congregation/service-groups/:id"
           element={<ServiceGroupProfile />}
         />
-
         <Route
           path="/congregation/service-groups/:id/edit"
           element={<ServiceGroupEditor />}
@@ -203,20 +189,35 @@ export default function AppRoutes() {
           path="/congregation/territories"
           element={<TerritoryList />}
         />
-
         <Route
           path="/congregation/territories/new"
           element={<TerritoryEditor />}
         />
-
         <Route
           path="/congregation/territories/:id"
           element={<TerritoryProfile />}
         />
-
         <Route
           path="/congregation/territories/:id/edit"
           element={<TerritoryEditor />}
+        />
+
+        {/* Body of Elders */}
+        <Route
+          path="/congregation/body-of-elders"
+          element={<BodyMemberList />}
+        />
+        <Route
+          path="/congregation/body-of-elders/new"
+          element={<BodyMemberEditor />}
+        />
+        <Route
+          path="/congregation/body-of-elders/:id"
+          element={<BodyMemberProfile />}
+        />
+        <Route
+          path="/congregation/body-of-elders/:id/edit"
+          element={<BodyMemberEditor />}
         />
 
         {/* Reports */}
@@ -226,10 +227,7 @@ export default function AppRoutes() {
         />
 
         {/* Tools */}
-        <Route
-          path="/tools"
-          element={<Tools />}
-        />
+        <Route path="/tools" element={<Tools />} />
 
         {/* Settings */}
         <Route

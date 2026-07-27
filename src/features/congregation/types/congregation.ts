@@ -1,4 +1,4 @@
-import { Publisher } from "./publisher";
+import { Publisher } from "../publishers/types/Publisher";
 
 export interface CongregationStatistics {
   totalPublishers: number;

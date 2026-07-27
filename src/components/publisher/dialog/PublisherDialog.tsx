@@ -10,7 +10,7 @@ import {
 
 import { useEffect, useState } from "react";
 
-import { Publisher } from "../../../models/Publisher";
+import { Publisher } from "../../../features/congregation/publishers/models/Publisher";
 import PublisherForm from "../form/PublisherForm";
 
 interface PublisherDialogProps {

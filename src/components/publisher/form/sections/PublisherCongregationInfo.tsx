@@ -12,7 +12,7 @@ import {
 import {
   Publisher,
   PublisherStatus,
-} from "../../../../models/Publisher";
+} from "../../../../features/congregation/publishers/models/Publisher";
 
 interface PublisherCongregationInfoProps {
   publisher: Publisher;

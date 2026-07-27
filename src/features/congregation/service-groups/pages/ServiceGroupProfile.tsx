@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { publisherService } from "../../services/publisherService";
+import { publisherService } from "../../publishers/services/publisherService";
 import { serviceGroupService } from "../services/serviceGroupService";
 
 export default function ServiceGroupProfile() {

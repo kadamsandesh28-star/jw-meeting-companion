@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
-import { Publisher } from "../../models/Publisher";
+import { Publisher } from "../../features/congregation/publishers/models/Publisher";
 
 interface PublisherHeaderProps {
   publisher: Publisher;

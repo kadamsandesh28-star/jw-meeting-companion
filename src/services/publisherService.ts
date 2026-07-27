@@ -1,5 +1,5 @@
-import { Publisher } from "../models/Publisher";
-import { createEmptyPublisher } from "../models/createEmptyPublisher";
+import { Publisher } from "../features/congregation/publishers/models/Publisher";
+import { createEmptyPublisher } from "../features/congregation/publishers/models/createEmptyPublisher";
 
 const STORAGE_KEY = "jw-companion-publishers";
 

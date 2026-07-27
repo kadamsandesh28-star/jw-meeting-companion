@@ -17,7 +17,7 @@ import {
   useParams,
 } from "react-router-dom";
 
-import { Publisher } from "../../models/Publisher";
+import { Publisher } from "../../features/congregation/publishers/models/Publisher";
 
 import { publisherService } from "../../services/publisherService";
 

@@ -1,6 +1,6 @@
 import { Grid, TextField } from "@mui/material";
 
-import { Publisher } from "../../types/publisher";
+import { Publisher } from "../../publishers/types/Publisher";
 
 interface ContactInformationProps {
   publisher: Publisher;

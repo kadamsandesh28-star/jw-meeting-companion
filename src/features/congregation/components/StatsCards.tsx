@@ -1,9 +1,9 @@
 import { Grid, Paper, Typography } from "@mui/material";
-import { Publisher } from "../types/publisher";
+import { Publisher } from "../publishers/types/Publisher";
 import {
   PublisherRole,
   PublisherStatus,
-} from "../types/enums";
+} from "../publishers/types/enums";
 
 interface Props {
   publishers: Publisher[];

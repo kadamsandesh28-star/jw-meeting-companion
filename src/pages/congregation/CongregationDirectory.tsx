@@ -15,8 +15,8 @@ import AddIcon from "@mui/icons-material/Add";
 import PublisherManagementCard from "../../components/publisher/cards/PublisherManagementCard";
 import PublisherDialog from "../../components/publisher/dialog/PublisherDialog";
 
-import { Publisher } from "../../models/Publisher";
-import { createEmptyPublisher } from "../../models/createEmptyPublisher";
+import { Publisher } from "../../features/congregation/publishers/models/Publisher";
+import { createEmptyPublisher } from "../../features/congregation/publishers/models/createEmptyPublisher";
 
 import { publisherService } from "../../services/publisherService";
 

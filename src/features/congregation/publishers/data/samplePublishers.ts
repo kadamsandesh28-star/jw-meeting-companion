@@ -1,4 +1,4 @@
-import { Publisher } from "../types/publisher";
+import { Publisher } from "../types/Publisher";
 import {
   Gender,
   PublisherRole,

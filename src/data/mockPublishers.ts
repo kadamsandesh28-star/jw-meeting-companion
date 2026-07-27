@@ -1,8 +1,8 @@
-import { Assignment, AssignmentStatus, AssignmentType } from "../models/Assignment";
-import { FamilyMember, FamilyRelationship } from "../models/FamilyMember";
-import { Privilege, PrivilegeType } from "../models/Privilege";
-import { Publisher } from "../models/Publisher";
-import { TimelineEvent, TimelineEventType } from "../models/TimelineEvent";
+import { Assignment, AssignmentStatus, AssignmentType } from "../features/congregation/publishers/models/Assignment";
+import { FamilyMember, FamilyRelationship } from "../features/congregation/publishers/models/FamilyMember";
+import { Privilege, PrivilegeType } from "../features/congregation/publishers/models/Privilege";
+import { Publisher } from "../features/congregation/publishers/models/Publisher";
+import { TimelineEvent, TimelineEventType } from "../features/congregation/publishers/models/TimelineEvent";
 
 const now = new Date().toISOString();
 

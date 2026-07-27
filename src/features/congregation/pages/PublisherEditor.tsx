@@ -7,8 +7,8 @@ import PageContainer from "../../../components/layout/PageContainer";
 import PageHeader from "../../../components/layout/PageHeader";
 
 import PublisherForm from "../components/editor/PublisherForm";
-import { publisherService } from "../services/publisherService";
-import { Publisher } from "../types/publisher";
+import { publisherService } from "../publishers/services/publisherService";
+import { Publisher } from "../publishers/types/Publisher";
 import { createEmptyPublisher } from "../utils/createEmptyPublisher";
 
 export default function PublisherEditor() {

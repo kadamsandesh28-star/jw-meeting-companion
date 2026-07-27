@@ -1,7 +1,7 @@
 import { Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 
-import { Publisher } from "../../../models/Publisher";
+import { Publisher } from "../../../features/congregation/publishers/models/Publisher";
 
 import PublisherBasicInfo from "./sections/PublisherBasicInfo";
 import PublisherContactInfo from "./sections/PublisherContactInfo";

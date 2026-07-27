@@ -5,7 +5,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { Publisher } from "../../../models/Publisher";
+import { Publisher } from "../../../features/congregation/publishers/models/Publisher";
 
 interface PublisherCardHeaderProps {
   publisher: Publisher;

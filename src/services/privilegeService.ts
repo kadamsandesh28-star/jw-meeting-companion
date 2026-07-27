@@ -1,4 +1,4 @@
-import { Privilege, PrivilegeType } from "../models/Privilege";
+import { Privilege, PrivilegeType } from "../features/congregation/publishers/models/Privilege";
 
 let privileges: Privilege[] = [];
 

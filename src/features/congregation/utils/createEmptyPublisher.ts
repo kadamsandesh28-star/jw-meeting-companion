@@ -1,10 +1,10 @@
-import { Publisher } from "../types/publisher";
+import { Publisher } from "../publishers/types/Publisher";
 import {
   Gender,
   PublisherRole,
   PublisherStatus,
   PublisherType,
-} from "../types/enums";
+} from "../publishers/types/enums";
 
 export function createEmptyPublisher(): Publisher {
   const now = new Date().toISOString();

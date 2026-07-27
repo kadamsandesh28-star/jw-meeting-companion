@@ -1,4 +1,4 @@
-import { Assignment, AssignmentStatus, AssignmentType } from "../models/Assignment";
+import { Assignment, AssignmentStatus, AssignmentType } from "../features/congregation/publishers/models/Assignment";
 
 let assignments: Assignment[] = [];
 

@@ -10,7 +10,7 @@ import {
 
 
 
-import { Publisher } from "../../../models/Publisher";
+import { Publisher } from "../../../features/congregation/publishers/models/Publisher";
 
 import ProfileSection from "./ProfileSection";
 

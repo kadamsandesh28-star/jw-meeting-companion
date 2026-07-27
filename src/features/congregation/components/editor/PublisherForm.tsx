@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
 
-import { Publisher } from "../../types/publisher";
+import { Publisher } from "../../publishers/types/Publisher";
 
 import PersonalInformation from "./PersonalInformation";
 import ContactInformation from "./ContactInformation";

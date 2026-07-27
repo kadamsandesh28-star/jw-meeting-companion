@@ -5,8 +5,8 @@ import {
   Typography,
 } from "@mui/material";
 
-import { Publisher } from "../../../models/Publisher";
-import { AssignmentStatus } from "../../../models/Assignment";
+import { Publisher } from "../../../features/congregation/publishers/models/Publisher";
+import { AssignmentStatus } from "../../../features/congregation/publishers/models/Assignment";
 import ProfileSection from "./ProfileSection";
 
 interface AssignmentsCardProps {
