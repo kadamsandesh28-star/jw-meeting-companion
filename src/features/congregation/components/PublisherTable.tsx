@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   Avatar,
   Chip,
@@ -26,9 +28,14 @@ interface Props {
   publishers: Publisher[];
 }
 
-export default function PublisherTable({ publishers }: Props) {
+export default function PublisherTable({
+  publishers,
+}: Props) {
+  const navigate = useNavigate();
+
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] =
+    useState(10);
 
   const handlePageChange = (
     _event: unknown,
@@ -40,7 +47,9 @@ export default function PublisherTable({ publishers }: Props) {
   const handleRowsPerPageChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    setRowsPerPage(
+      parseInt(event.target.value, 10)
+    );
     setPage(0);
   };
 
@@ -48,6 +57,22 @@ export default function PublisherTable({ publishers }: Props) {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
+
+  const handleEdit = (publisher: Publisher) => {
+    navigate(
+      `/congregation/publishers/${publisher.id}`
+    );
+  };
+
+  const handleView = (publisher: Publisher) => {
+    navigate(
+      `/congregation/publishers/${publisher.id}`
+    );
+  };
+
+  const handleDelete = (publisher: Publisher) => {
+    console.log("Delete", publisher.id);
+  };
 
   return (
     <Paper sx={{ mt: 2 }}>
@@ -60,84 +85,133 @@ export default function PublisherTable({ publishers }: Props) {
               <TableCell>Publisher Type</TableCell>
               <TableCell>Service Group</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell align="right">
+                Actions
+              </TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
-            {paginatedPublishers.map((publisher) => (
-              <TableRow
-                key={publisher.id}
-                hover
-              >
-                <TableCell>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    alignItems="center"
-                  >
-                    <Avatar>
-                      {publisher.firstName.charAt(0)}
-                      {publisher.lastName.charAt(0)}
-                    </Avatar>
+            {paginatedPublishers.map(
+              (publisher) => (
+                <TableRow
+                  key={publisher.id}
+                  hover
+                >
+                  <TableCell>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      alignItems="center"
+                    >
+                      <Avatar>
+                        {publisher.firstName.charAt(
+                          0
+                        )}
+                        {publisher.lastName.charAt(
+                          0
+                        )}
+                      </Avatar>
 
-                    <Stack>
-                      <Typography fontWeight={600}>
-                        {publisher.firstName} {publisher.lastName}
-                      </Typography>
+                      <Stack>
+                        <Typography fontWeight={600}>
+                          {publisher.firstName}{" "}
+                          {publisher.lastName}
+                        </Typography>
 
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                      >
-                        {publisher.contact.email}
-                      </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                        >
+                          {
+                            publisher.contact
+                              .email
+                          }
+                        </Typography>
+                      </Stack>
                     </Stack>
-                  </Stack>
-                </TableCell>
+                  </TableCell>
 
-                <TableCell>
-                  {publisher.congregation.role}
-                </TableCell>
-
-                <TableCell>
-                  {publisher.congregation.publisherType}
-                </TableCell>
-
-                <TableCell>
-                  {publisher.congregation.fieldServiceGroup}
-                </TableCell>
-
-                <TableCell>
-                  <Chip
-                    label={publisher.congregation.status}
-                    color={
-                      publisher.congregation.status ===
-                      PublisherStatus.Active
-                        ? "success"
-                        : "default"
+                  <TableCell>
+                    {
+                      publisher.congregation
+                        .role
                     }
-                    size="small"
-                  />
-                </TableCell>
+                  </TableCell>
 
-                <TableCell align="right">
-                  <IconButton color="primary">
-                    <VisibilityIcon />
-                  </IconButton>
+                  <TableCell>
+                    {
+                      publisher.congregation
+                        .publisherType
+                    }
+                  </TableCell>
 
-                  <IconButton color="warning">
-                    <EditIcon />
-                  </IconButton>
+                  <TableCell>
+                    {
+                      publisher.congregation
+                        .fieldServiceGroup
+                    }
+                  </TableCell>
 
-                  <IconButton color="error">
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+                  <TableCell>
+                    <Chip
+                      label={
+                        publisher
+                          .congregation
+                          .status
+                      }
+                      color={
+                        publisher
+                          .congregation
+                          .status ===
+                        PublisherStatus.Active
+                          ? "success"
+                          : "default"
+                      }
+                      size="small"
+                    />
+                  </TableCell>
 
-            {paginatedPublishers.length === 0 && (
+                  <TableCell align="right">
+                    <IconButton
+                      color="primary"
+                      onClick={() =>
+                        handleView(
+                          publisher
+                        )
+                      }
+                    >
+                      <VisibilityIcon />
+                    </IconButton>
+
+                    <IconButton
+                      color="warning"
+                      onClick={() =>
+                        handleEdit(
+                          publisher
+                        )
+                      }
+                    >
+                      <EditIcon />
+                    </IconButton>
+
+                    <IconButton
+                      color="error"
+                      onClick={() =>
+                        handleDelete(
+                          publisher
+                        )
+                      }
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              )
+            )}
+
+            {paginatedPublishers.length ===
+              0 && (
               <TableRow>
                 <TableCell
                   colSpan={6}
@@ -157,8 +231,12 @@ export default function PublisherTable({ publishers }: Props) {
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={handlePageChange}
-        onRowsPerPageChange={handleRowsPerPageChange}
-        rowsPerPageOptions={[5, 10, 25, 50]}
+        onRowsPerPageChange={
+          handleRowsPerPageChange
+        }
+        rowsPerPageOptions={[
+          5, 10, 25, 50,
+        ]}
       />
     </Paper>
   );

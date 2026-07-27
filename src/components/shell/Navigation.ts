@@ -8,6 +8,8 @@ import {
   LayoutDashboard,
   Users,
   FileBarChart,
+  Layers,
+  Map,
 } from "lucide-react";
 
 export type WorkspaceType = "personal" | "congregation";
@@ -74,6 +76,16 @@ export const navigation: NavigationGroup[] = [
         label: "Publishers",
         path: "/congregation/publishers",
         icon: Users,
+      },
+      {
+        label: "Service Groups",
+        path: "/congregation/service-groups",
+        icon: Layers,
+      },
+      {
+        label: "Territories",
+        path: "/congregation/territories",
+        icon: Map,
       },
       {
         label: "Reports",

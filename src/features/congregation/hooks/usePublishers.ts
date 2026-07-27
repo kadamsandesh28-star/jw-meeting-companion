@@ -1,9 +1,11 @@
 import { useMemo, useState } from "react";
+
 import { publisherService } from "../services/publisherService";
 
 export function usePublishers() {
-  const [publishers] = useState(publisherService.getAll());
   const [search, setSearch] = useState("");
+
+  const publishers = publisherService.getAll();
 
   const filteredPublishers = useMemo(() => {
     return publishers.filter((publisher) => {

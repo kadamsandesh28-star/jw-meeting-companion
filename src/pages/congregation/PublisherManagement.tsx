@@ -13,11 +13,9 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 
 import { Publisher } from "../../models/Publisher";
-import { createEmptyPublisher } from "../../models/createEmptyPublisher";
 
 import { publisherService } from "../../services/publisherService";
 
-import PublisherDialog from "../../components/publisher/dialog/PublisherDialog";
 import PublisherManagementCard from "../../components/publisher/cards/PublisherManagementCard";
 
 export default function PublisherManagement() {
@@ -29,12 +27,6 @@ export default function PublisherManagement() {
 
   const [searchText, setSearchText] =
     useState("");
-
-  const [dialogOpen, setDialogOpen] =
-    useState(false);
-
-  const [selectedPublisher, setSelectedPublisher] =
-    useState<Publisher>(createEmptyPublisher());
 
   const filteredPublishers = useMemo(() => {
     if (!searchText.trim()) {
@@ -50,49 +42,20 @@ export default function PublisherManagement() {
     );
   };
 
-  const handleAddPublisher = () => {
-    setSelectedPublisher(
-      createEmptyPublisher()
-    );
-
-    setDialogOpen(true);
-  };
+ const handleAddPublisher = () => {
+  console.log("Add Publisher clicked");
+  navigate("/congregation/publishers/new");
+};
 
   const handleEditPublisher = (
     publisher: Publisher
   ) => {
-    setSelectedPublisher({
-      ...publisher,
-    });
-
-    setDialogOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setDialogOpen(false);
-  };
-
-  const handleSavePublisher = (
-    publisher: Publisher
-  ) => {
-    const exists =
-      publisherService.getById(
-        publisher.id
-      );
-
-    if (exists) {
-      publisherService.update(
-        publisher
-      );
-    } else {
-      publisherService.create(
-        publisher
-      );
-    }
-
-    refreshPublishers();
-
-    setDialogOpen(false);
+    // We'll migrate Edit to the new page
+    // in the next step.
+    console.log(
+      "Edit Publisher:",
+      publisher.id
+    );
   };
 
   const handleArchivePublisher = (
@@ -103,8 +66,6 @@ export default function PublisherManagement() {
     );
 
     refreshPublishers();
-
-    setDialogOpen(false);
   };
 
   const handleViewProfile = (
@@ -161,16 +122,16 @@ export default function PublisherManagement() {
         container
         spacing={3}
       >
-                {filteredPublishers.map(
+        {filteredPublishers.map(
           (publisher) => (
             <Grid
-  size={{
-    xs: 12,
-    sm: 6,
-    lg: 4,
-  }}
-  key={publisher.id}
->
+              size={{
+                xs: 12,
+                sm: 6,
+                lg: 4,
+              }}
+              key={publisher.id}
+            >
               <PublisherManagementCard
                 publisher={publisher}
                 onViewProfile={
@@ -187,27 +148,6 @@ export default function PublisherManagement() {
           )
         )}
       </Grid>
-
-      <PublisherDialog
-        open={dialogOpen}
-        publisher={selectedPublisher}
-        title={
-          publisherService.getById(
-            selectedPublisher.id
-          )
-            ? "Edit Publisher"
-            : "Add Publisher"
-        }
-        onClose={
-          handleCloseDialog
-        }
-        onSave={
-          handleSavePublisher
-        }
-        onArchive={
-          handleArchivePublisher
-        }
-      />
     </Box>
   );
-}    
+}

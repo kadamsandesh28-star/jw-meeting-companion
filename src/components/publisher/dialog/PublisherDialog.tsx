@@ -4,6 +4,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
@@ -11,18 +13,12 @@ import { useEffect, useState } from "react";
 import { Publisher } from "../../../models/Publisher";
 import PublisherForm from "../form/PublisherForm";
 
-
 interface PublisherDialogProps {
   open: boolean;
-
   publisher: Publisher;
-
   title: string;
-
   onClose: () => void;
-
   onSave: (publisher: Publisher) => void;
-
   onArchive?: (publisher: Publisher) => void;
 }
 
@@ -34,6 +30,12 @@ export default function PublisherDialog({
   onSave,
   onArchive,
 }: PublisherDialogProps) {
+  const theme = useTheme();
+
+  const fullScreen = useMediaQuery(
+    theme.breakpoints.down("sm")
+  );
+
   const [currentPublisher, setCurrentPublisher] =
     useState<Publisher>(publisher);
 
@@ -48,13 +50,32 @@ export default function PublisherDialog({
     <Dialog
       open={open}
       onClose={onClose}
+      fullScreen={fullScreen}
       fullWidth
-      maxWidth="lg"
+      maxWidth="md"
       scroll="paper"
+      PaperProps={{
+        sx: {
+          borderRadius: {
+            xs: 0,
+            sm: 3,
+          },
+          maxHeight: "95vh",
+        },
+      }}
     >
       <DialogTitle>{title}</DialogTitle>
 
-      <DialogContent dividers>
+      <DialogContent
+        dividers
+        sx={{
+          p: {
+            xs: 2,
+            sm: 3,
+          },
+          overflowY: "auto",
+        }}
+      >
         <PublisherForm
           value={currentPublisher}
           onChange={setCurrentPublisher}
@@ -63,8 +84,10 @@ export default function PublisherDialog({
 
       <DialogActions
         sx={{
-          px: 3,
-          py: 2,
+          p: 2,
+          gap: 1,
+          flexWrap: "wrap",
+          justifyContent: "space-between",
         }}
       >
         {existingPublisher && onArchive && (
@@ -93,4 +116,4 @@ export default function PublisherDialog({
       </DialogActions>
     </Dialog>
   );
-}    
+}

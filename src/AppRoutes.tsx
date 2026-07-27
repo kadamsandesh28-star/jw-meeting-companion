@@ -37,7 +37,18 @@ import BibleStudies from "./features/ministry/pages/BibleStudies";
 // Congregation
 import Dashboard from "./features/congregation/pages/Dashboard";
 import PublisherList from "./features/congregation/pages/PublisherList";
+import PublisherEditor from "./features/congregation/pages/PublisherEditor";
 import Reports from "./features/congregation/pages/Reports";
+
+// Service Groups
+import ServiceGroupList from "./features/congregation/service-groups/pages/ServiceGroupList";
+import ServiceGroupProfile from "./features/congregation/service-groups/pages/ServiceGroupProfile";
+import ServiceGroupEditor from "./features/congregation/service-groups/pages/ServiceGroupEditor";
+
+// Territories
+import TerritoryList from "./features/congregation/territories/pages/TerritoryList";
+import TerritoryProfile from "./features/congregation/territories/pages/TerritoryProfile";
+import TerritoryEditor from "./features/congregation/territories/pages/TerritoryEditor";
 
 // Tools & Settings
 import Tools from "./pages/tools/Tools";
@@ -70,7 +81,10 @@ export default function AppRoutes() {
         />
 
         {/* Workbook */}
-        <Route path="/workbook" element={<Workbook />} />
+        <Route
+          path="/workbook"
+          element={<Workbook />}
+        />
 
         {/* Assignments */}
         <Route
@@ -79,10 +93,16 @@ export default function AppRoutes() {
         />
 
         {/* Service */}
-        <Route path="/service" element={<Service />} />
+        <Route
+          path="/service"
+          element={<Service />}
+        />
 
         {/* Personal */}
-        <Route path="/personal" element={<Personal />} />
+        <Route
+          path="/personal"
+          element={<Personal />}
+        />
         <Route
           path="/personal/bible-reading"
           element={<BibleReading />}
@@ -141,18 +161,75 @@ export default function AppRoutes() {
           element={<Dashboard />}
         />
 
+        {/* Publishers */}
         <Route
           path="/congregation/publishers"
           element={<PublisherList />}
         />
 
         <Route
+          path="/congregation/publishers/new"
+          element={<PublisherEditor />}
+        />
+
+        <Route
+          path="/congregation/publishers/:id"
+          element={<PublisherEditor />}
+        />
+
+        {/* Service Groups */}
+        <Route
+          path="/congregation/service-groups"
+          element={<ServiceGroupList />}
+        />
+
+        <Route
+          path="/congregation/service-groups/new"
+          element={<ServiceGroupEditor />}
+        />
+
+        <Route
+          path="/congregation/service-groups/:id"
+          element={<ServiceGroupProfile />}
+        />
+
+        <Route
+          path="/congregation/service-groups/:id/edit"
+          element={<ServiceGroupEditor />}
+        />
+
+        {/* Territories */}
+        <Route
+          path="/congregation/territories"
+          element={<TerritoryList />}
+        />
+
+        <Route
+          path="/congregation/territories/new"
+          element={<TerritoryEditor />}
+        />
+
+        <Route
+          path="/congregation/territories/:id"
+          element={<TerritoryProfile />}
+        />
+
+        <Route
+          path="/congregation/territories/:id/edit"
+          element={<TerritoryEditor />}
+        />
+
+        {/* Reports */}
+        <Route
           path="/congregation/reports"
           element={<Reports />}
         />
 
         {/* Tools */}
-        <Route path="/tools" element={<Tools />} />
+        <Route
+          path="/tools"
+          element={<Tools />}
+        />
 
         {/* Settings */}
         <Route
