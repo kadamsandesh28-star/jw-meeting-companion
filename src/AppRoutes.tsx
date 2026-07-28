@@ -35,7 +35,7 @@ import ReturnVisits from "./features/ministry/pages/ReturnVisits";
 import BibleStudies from "./features/ministry/pages/BibleStudies";
 
 // Congregation
-import Dashboard from "./features/congregation/pages/Dashboard";
+import Dashboard from "./features/congregation/dashboard/pages/Dashboard";
 import PublisherList from "./features/congregation/pages/PublisherList";
 import PublisherEditor from "./features/congregation/pages/PublisherEditor";
 import Reports from "./features/congregation/pages/Reports";
