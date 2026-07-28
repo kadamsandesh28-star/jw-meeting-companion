@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
-import { BookOpen, CheckCircle2, ExternalLink } from "lucide-react";
+import {
+  BookOpen,
+  CheckCircle2,
+  ExternalLink,
+} from "lucide-react";
 
-const RESOURCE_KEY = "jwMeetingCompanion.resources";
-const NOTES_KEY = "jwMeetingCompanion.workbookNotes";
-const CHECKLIST_KEY = "jwMeetingCompanion.workbookChecklist";
+import { loadSettings } from "../../services/settingsService";
 
-type Resources = {
-  workbookTitle?: string;
-  workbookUrl?: string;
-};
+const NOTES_KEY =
+  "jwMeetingCompanion.workbookNotes";
+
+const CHECKLIST_KEY =
+  "jwMeetingCompanion.workbookChecklist";
 
 type Checklist = {
   readMaterial: boolean;
@@ -23,33 +26,50 @@ const defaultChecklist: Checklist = {
 };
 
 export default function Workbook() {
-  const [resources, setResources] = useState<Resources>({});
+  const [workbookTitle, setWorkbookTitle] =
+    useState("Meeting Workbook");
+
+  const [workbookUrl, setWorkbookUrl] =
+    useState("");
+
   const [notes, setNotes] = useState("");
+
   const [checklist, setChecklist] =
     useState<Checklist>(defaultChecklist);
 
   useEffect(() => {
-    const savedResources = localStorage.getItem(RESOURCE_KEY);
+    const settings = loadSettings();
 
-    if (savedResources) {
-      setResources(JSON.parse(savedResources));
-    }
+    setWorkbookTitle(
+      settings.resources.workbookTitle
+    );
 
-    const savedNotes = localStorage.getItem(NOTES_KEY);
+    setWorkbookUrl(
+      settings.resources.workbookUrl
+    );
+
+    const savedNotes =
+      localStorage.getItem(NOTES_KEY);
 
     if (savedNotes) {
       setNotes(savedNotes);
     }
 
-    const savedChecklist = localStorage.getItem(CHECKLIST_KEY);
+    const savedChecklist =
+      localStorage.getItem(CHECKLIST_KEY);
 
     if (savedChecklist) {
-      setChecklist(JSON.parse(savedChecklist));
+      setChecklist(
+        JSON.parse(savedChecklist)
+      );
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(NOTES_KEY, notes);
+    localStorage.setItem(
+      NOTES_KEY,
+      notes
+    );
   }, [notes]);
 
   useEffect(() => {
@@ -59,12 +79,14 @@ export default function Workbook() {
     );
   }, [checklist]);
 
-  const toggleChecklist = (key: keyof Checklist) => {
+  function toggleChecklist(
+    key: keyof Checklist
+  ) {
     setChecklist((previous) => ({
       ...previous,
       [key]: !previous[key],
     }));
-  };
+  }
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">
@@ -74,29 +96,33 @@ export default function Workbook() {
         </h1>
 
         <p className="mt-2 text-slate-600 dark:text-slate-400">
-          Prepare for your midweek meeting with study notes and a preparation
+          Prepare for your midweek meeting with
+          study notes and a preparation
           checklist.
         </p>
       </header>
 
       <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
         <div className="flex items-center gap-3">
-          <BookOpen className="text-indigo-600" size={24} />
+          <BookOpen
+            className="text-indigo-600"
+            size={24}
+          />
 
           <div>
             <h2 className="font-semibold text-slate-900 dark:text-white">
-              {resources.workbookTitle || "Meeting Workbook"}
+              {workbookTitle}
             </h2>
 
             <p className="text-sm text-slate-500 dark:text-slate-400">
-              Open the latest workbook publication.
+              Open the latest meeting workbook.
             </p>
           </div>
         </div>
 
-        {resources.workbookUrl ? (
+        {workbookUrl ? (
           <a
-            href={resources.workbookUrl}
+            href={workbookUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-5 inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-white transition hover:bg-indigo-700"
@@ -106,7 +132,8 @@ export default function Workbook() {
           </a>
         ) : (
           <p className="mt-5 text-sm text-red-600 dark:text-red-400">
-            No workbook link has been configured in Settings.
+            No workbook link has been
+            configured in Settings.
           </p>
         )}
       </div>
@@ -118,7 +145,9 @@ export default function Workbook() {
 
         <textarea
           value={notes}
-          onChange={(e) => setNotes(e.target.value)}
+          onChange={(e) =>
+            setNotes(e.target.value)
+          }
           placeholder="Write your preparation notes here..."
           className="min-h-[300px] w-full rounded-lg border border-slate-300 p-4 outline-none focus:border-indigo-500 dark:border-slate-600 dark:bg-slate-900 dark:text-white"
         />
@@ -131,9 +160,18 @@ export default function Workbook() {
 
         <div className="space-y-3">
           {[
-            ["readMaterial", "Read the workbook material"],
-            ["watchVideos", "Watch assigned videos"],
-            ["prepareAssignments", "Prepare meeting assignments"],
+            [
+              "readMaterial",
+              "Read the workbook material",
+            ],
+            [
+              "watchVideos",
+              "Watch assigned videos",
+            ],
+            [
+              "prepareAssignments",
+              "Prepare meeting assignments",
+            ],
           ].map(([key, label]) => (
             <label
               key={key}
@@ -141,9 +179,15 @@ export default function Workbook() {
             >
               <input
                 type="checkbox"
-                checked={checklist[key as keyof Checklist]}
+                checked={
+                  checklist[
+                    key as keyof Checklist
+                  ]
+                }
                 onChange={() =>
-                  toggleChecklist(key as keyof Checklist)
+                  toggleChecklist(
+                    key as keyof Checklist
+                  )
                 }
               />
 

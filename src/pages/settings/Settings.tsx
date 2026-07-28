@@ -17,6 +17,7 @@ import {
 import {
   loadSettings,
   updateSettings,
+  updateStudyResources,
   ThemeMode,
 } from "../../services/settingsService";
 
@@ -35,6 +36,7 @@ import {
 } from "../../services/userRoleService";
 
 export default function Settings() {
+  console.log("✅ SETTINGS COMPONENT RENDERED");
   const [midweekLink, setMidweekLink] = useState("");
   const [weekendLink, setWeekendLink] = useState("");
   const [dailyScriptureLink, setDailyScriptureLink] =
@@ -50,53 +52,39 @@ export default function Settings() {
 
   const fileInputRef =
     useRef<HTMLInputElement>(null);
+useEffect(() => {
+  const settings = loadSettings();
 
-  useEffect(() => {
-    setMidweekLink(
-      localStorage.getItem("midweek-link") || ""
-    );
+  setMidweekLink(settings.resources.workbookUrl);
 
-    setWeekendLink(
-      localStorage.getItem("weekend-link") || ""
-    );
+  setWeekendLink(settings.resources.watchtowerUrl);
 
-    setDailyScriptureLink(
-      localStorage.getItem("daily-scripture-link") || ""
-    );
+  setDailyScriptureLink(
+    settings.resources.dailyScriptureUrl
+  );
 
-    const settings = loadSettings();
+  setTheme(settings.theme);
 
-    setTheme(settings.theme);
-
-    setUserRoleState(getUserRole());
-  }, []);
+  setUserRoleState(getUserRole());
+}, []);
 
   function saveAllSettings() {
-    localStorage.setItem(
-      "midweek-link",
-      midweekLink
-    );
+  updateStudyResources({
+  workbookUrl: midweekLink,
+  watchtowerUrl: weekendLink,
+  dailyScriptureUrl: dailyScriptureLink,
+});
 
-    localStorage.setItem(
-      "weekend-link",
-      weekendLink
-    );
+  updateSettings({
+    theme,
+  });
 
-    localStorage.setItem(
-      "daily-scripture-link",
-      dailyScriptureLink
-    );
+  setMode(theme);
 
-    updateSettings({
-      theme,
-    });
+  setUserRole(userRole);
 
-    setMode(theme);
-
-    setUserRole(userRole);
-
-    alert("✅ Settings saved successfully!");
-  }
+  alert("✅ Settings saved successfully!");
+}
 
   function handleRestore(
     event: React.ChangeEvent<HTMLInputElement>
@@ -135,14 +123,7 @@ export default function Settings() {
   }
 
   return (
-    <Box
-      sx={{
-        p: 3,
-        bgcolor: "background.default",
-        color: "text.primary",
-        minHeight: "100%",
-      }}
-    >
+    <Box sx={{ p: 3 }}>
       <Typography
         variant="h4"
         fontWeight="bold"
@@ -151,14 +132,9 @@ export default function Settings() {
         ⚙️ Settings
       </Typography>
 
-      <Card
-        sx={{
-          borderRadius: 4,
-          bgcolor: "background.paper",
-          color: "text.primary",
-        }}
-      >
+      <Card sx={{ borderRadius: 4 }}>
         <CardContent>
+
           {/* Study Resources */}
 
           <Typography
@@ -211,10 +187,7 @@ export default function Settings() {
             🎨 Appearance
           </Typography>
 
-          <FormControl
-            fullWidth
-            margin="normal"
-          >
+          <FormControl fullWidth>
             <InputLabel>
               Theme
             </InputLabel>
@@ -244,7 +217,7 @@ export default function Settings() {
 
           <Divider sx={{ my: 4 }} />
 
-          {/* Privileges */}
+          {/* Privileges & Responsibilities */}
 
           <Typography
             variant="h6"
@@ -253,10 +226,7 @@ export default function Settings() {
             👤 Privileges & Responsibilities
           </Typography>
 
-          <FormControl
-            fullWidth
-            margin="normal"
-          >
+          <FormControl fullWidth>
             <InputLabel>
               Role
             </InputLabel>
@@ -286,7 +256,7 @@ export default function Settings() {
 
           <Divider sx={{ my: 4 }} />
 
-          {/* Backup */}
+          {/* Backup & Restore */}
 
           <Typography
             variant="h6"
@@ -334,6 +304,7 @@ export default function Settings() {
           >
             Save Settings
           </Button>
+
         </CardContent>
       </Card>
     </Box>

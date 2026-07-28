@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   BookOpen,
   CheckCircle2,
@@ -6,11 +7,32 @@ import {
   Mic2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+
 import Stopwatch from "../../components/chairman/Stopwatch";
 import { canUseChairmanAssistant } from "../../utils/userRole";
+import { loadSettings } from "../../services/settingsService";
 
 export default function WeekendMeeting() {
   const showChairmanAssistant = canUseChairmanAssistant();
+
+  const [watchtowerTitle, setWatchtowerTitle] =
+    useState("Watchtower Study");
+
+  const [watchtowerUrl, setWatchtowerUrl] =
+    useState("");
+
+  useEffect(() => {
+    const settings = loadSettings();
+
+    setWatchtowerTitle(
+      settings.resources.watchtowerTitle
+    );
+
+    setWatchtowerUrl(
+  
+        settings.resources.watchtowerUrl
+    );
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -25,9 +47,17 @@ export default function WeekendMeeting() {
       </header>
 
       <div className="space-y-4">
-        <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+        {/* Public Talk */}
+
+        <Link
+          to="/meetings/notes"
+          className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
+        >
           <div className="flex items-center gap-4">
-            <Mic2 className="text-indigo-600" size={24} />
+            <Mic2
+              className="text-indigo-600"
+              size={24}
+            />
 
             <div>
               <h2 className="font-semibold text-slate-900 dark:text-white">
@@ -41,32 +71,71 @@ export default function WeekendMeeting() {
           </div>
 
           <ChevronRight className="text-slate-400" />
-        </div>
+        </Link>
 
-        <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800">
-          <div className="flex items-center gap-4">
-            <BookOpen className="text-indigo-600" size={24} />
+        {/* Watchtower Study */}
 
-            <div>
-              <h2 className="font-semibold text-slate-900 dark:text-white">
-                Watchtower Study
-              </h2>
+        {watchtowerUrl ? (
+          <a
+            href={watchtowerUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
+          >
+            <div className="flex items-center gap-4">
+              <BookOpen
+                className="text-indigo-600"
+                size={24}
+              />
 
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                Review this week's Watchtower Study.
-              </p>
+              <div>
+                <h2 className="font-semibold text-slate-900 dark:text-white">
+                  {watchtowerTitle}
+                </h2>
+
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  Open this week's Watchtower Study.
+                </p>
+              </div>
             </div>
-          </div>
 
-          <ChevronRight className="text-slate-400" />
-        </div>
+            <ChevronRight className="text-slate-400" />
+          </a>
+        ) : (
+          <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+            <div className="flex items-center gap-4">
+              <BookOpen
+                className="text-indigo-600"
+                size={24}
+              />
+
+              <div>
+                <h2 className="font-semibold text-slate-900 dark:text-white">
+                  {watchtowerTitle}
+                </h2>
+
+                <p className="text-sm text-red-600 dark:text-red-400">
+                  No Watchtower link has been configured in
+                  Settings.
+                </p>
+              </div>
+            </div>
+
+            <ChevronRight className="text-slate-400" />
+          </div>
+        )}
+
+        {/* Weekend Notes */}
 
         <Link
           to="/meetings/notes"
           className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
         >
           <div className="flex items-center gap-4">
-            <NotebookPen className="text-indigo-600" size={24} />
+            <NotebookPen
+              className="text-indigo-600"
+              size={24}
+            />
 
             <div>
               <h2 className="font-semibold text-slate-900 dark:text-white">
@@ -82,9 +151,17 @@ export default function WeekendMeeting() {
           <ChevronRight className="text-slate-400" />
         </Link>
 
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-700 dark:bg-slate-800">
-          <div className="flex items-center gap-3">
-            <CheckCircle2 className="text-green-600" size={24} />
+        {/* Progress */}
+
+        <Link
+          to="/meetings/progress"
+          className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-indigo-300 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
+        >
+          <div className="flex items-center gap-4">
+            <CheckCircle2
+              className="text-green-600"
+              size={24}
+            />
 
             <div>
               <h2 className="font-semibold text-slate-900 dark:text-white">
@@ -92,11 +169,13 @@ export default function WeekendMeeting() {
               </h2>
 
               <p className="text-sm text-slate-600 dark:text-slate-400">
-                Progress tracking will be available soon.
+                View your meeting preparation progress.
               </p>
             </div>
           </div>
-        </div>
+
+          <ChevronRight className="text-slate-400" />
+        </Link>
 
         {showChairmanAssistant && <Stopwatch />}
       </div>
