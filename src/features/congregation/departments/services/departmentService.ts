@@ -1,69 +1,124 @@
-import { sampleDepartments } from "../data/sampleDepartments";
 import { Department } from "../types/Department";
 
-const STORAGE_KEY = "jwmc-departments";
+const STORAGE_KEY = "jwmc_departments";
 
-function load(): Department[] {
-  const stored = localStorage.getItem(STORAGE_KEY);
+const now = new Date().toISOString();
 
-  if (!stored) {
-    save(sampleDepartments);
-    return [...sampleDepartments];
-  }
+const defaultDepartments: Department[] = [
+  {
+    id: crypto.randomUUID(),
+    name: "Literature",
+    description: "Manage congregation literature and inventory.",
+    icon: "📚",
+    overseerId: "",
+    assistantId: "",
+    memberIds: [],
+    keyMemberPublisherIds: [],
+    active: true,
+    createdAt: now,
+    updatedAt: now,
+  },
+  {
+    id: crypto.randomUUID(),
+    name: "Audio / Video",
+    description: "Coordinate audio, video and streaming equipment.",
+    icon: "🎤",
+    overseerId: "",
+    assistantId: "",
+    memberIds: [],
+    keyMemberPublisherIds: [],
+    active: true,
+    createdAt: now,
+    updatedAt: now,
+  },
+  {
+    id: crypto.randomUUID(),
+    name: "Attendants",
+    description: "Manage attendants and meeting assignments.",
+    icon: "🚪",
+    overseerId: "",
+    assistantId: "",
+    memberIds: [],
+    keyMemberPublisherIds: [],
+    active: true,
+    createdAt: now,
+    updatedAt: now,
+  },
+  {
+    id: crypto.randomUUID(),
+    name: "Cleaning",
+    description: "Coordinate Kingdom Hall cleaning schedules.",
+    icon: "🧹",
+    overseerId: "",
+    assistantId: "",
+    memberIds: [],
+    keyMemberPublisherIds: [],
+    active: true,
+    createdAt: now,
+    updatedAt: now,
+  },
+  {
+    id: crypto.randomUUID(),
+    name: "Accounts",
+    description: "Maintain congregation accounts and records.",
+    icon: "🏦",
+    overseerId: "",
+    assistantId: "",
+    memberIds: [],
+    keyMemberPublisherIds: [],
+    active: true,
+    createdAt: now,
+    updatedAt: now,
+  },
+];
 
-  try {
-    const departments = JSON.parse(stored) as Department[];
+class DepartmentService {
+  private load(): Department[] {
+    const stored = localStorage.getItem(STORAGE_KEY);
 
-    if (departments.length === 0) {
-      save(sampleDepartments);
-      return [...sampleDepartments];
+    if (!stored) {
+      this.save(defaultDepartments);
+      return defaultDepartments;
     }
 
-    return departments;
-  } catch {
-    save(sampleDepartments);
-    return [...sampleDepartments];
+    return JSON.parse(stored) as Department[];
   }
-}
 
-function save(departments: Department[]) {
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(departments)
-  );
-}
+  private save(items: Department[]): void {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  }
 
-let departments = load();
-
-export const departmentService = {
   getAll(): Department[] {
-    return [...departments];
-  },
+    return this.load();
+  }
 
   getById(id: string): Department | undefined {
-    return departments.find(
-      (department) => department.id === id
-    );
-  },
+    return this.load().find((department) => department.id === id);
+  }
 
-  add(department: Department): void {
+  create(department: Department): void {
+    const departments = this.load();
     departments.push(department);
-    save(departments);
-  },
+    this.save(departments);
+  }
 
-  update(department: Department): void {
-    departments = departments.map((item) =>
-      item.id === department.id ? department : item
+  update(updatedDepartment: Department): void {
+    const departments = this.load().map((department) =>
+      department.id === updatedDepartment.id
+        ? updatedDepartment
+        : department
     );
 
-    save(departments);
-  },
+    this.save(departments);
+  }
 
   delete(id: string): void {
-    departments = departments.filter(
+    const departments = this.load().filter(
       (department) => department.id !== id
     );
 
-    save(departments);
-  },
-};
+    this.save(departments);
+  }
+}
+
+export const departmentService = new DepartmentService();

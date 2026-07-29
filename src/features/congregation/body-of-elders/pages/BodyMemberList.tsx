@@ -2,13 +2,15 @@ import { Link } from "react-router-dom";
 import {
   Box,
   Button,
-  Card,
-  CardContent,
   Chip,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
+
+import WorkspaceHero from "../../../../components/workspace/WorkspaceHero";
+import WorkspaceSearch from "../../../../components/workspace/WorkspaceSearch";
+import WorkspaceCard from "../../../../components/workspace/WorkspaceCard";
+import EmptyState from "../../../../components/workspace/EmptyState";
 
 import { useBodyMembers } from "../hooks/useBodyMembers";
 import { publisherService } from "../../publishers/services/publisherService";
@@ -26,109 +28,99 @@ export default function BodyMemberList() {
   return (
     <Box sx={{ p: 3 }}>
       <Stack spacing={3}>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Typography
-            variant="h4"
-            fontWeight="bold"
-          >
-            Body of Elders
-          </Typography>
-
-          <Button
-            variant="contained"
-            component={Link}
-            to="/congregation/body-of-elders/new"
-          >
-            Add Member
-          </Button>
-        </Stack>
-
-        <TextField
-          label="Search by role"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          fullWidth
+        <WorkspaceHero
+          title="Body of Elders"
+          subtitle="Manage congregation elders, appointments and responsibilities."
+          actionLabel="Add Elder"
+          actionTo="/congregation/body-of-elders/new"
         />
 
-        {bodyMembers.map((member) => {
-          const publisher = publishers.find(
-            (p) => p.id === member.publisherId
-          );
+        <WorkspaceSearch
+          title="Search"
+          value={search}
+          onChange={setSearch}
+          placeholder="Search by role..."
+        />
 
-          return (
-            <Card key={member.id}>
-              <CardContent>
-                <Stack spacing={2}>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="flex-start"
-                  >
-                    <Box>
-                      <Typography
-                        variant="h6"
-                        fontWeight="bold"
-                      >
-                        {getPublisherDisplayName(publisher)}
-                      </Typography>
+        {bodyMembers.length === 0 ? (
+          <EmptyState
+            title="No elders found"
+            description="Add your first elder to begin managing the body of elders."
+            buttonLabel="Add Elder"
+            buttonTo="/congregation/body-of-elders/new"
+          />
+        ) : (
+          <Stack spacing={2}>
+            {bodyMembers.map((member) => {
+              const publisher = publishers.find(
+                (p) => p.id === member.publisherId
+              );
 
-                      <Typography
-                        variant="body1"
-                        color="text.secondary"
-                      >
-                        {member.role}
-                      </Typography>
-                    </Box>
-
-                    <Chip
-                      label={
-                        member.active
-                          ? "Active"
-                          : "Inactive"
-                      }
-                      color={
-                        member.active
-                          ? "success"
-                          : "default"
-                      }
-                    />
-                  </Stack>
-
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                  >
-                    Appointment Date:{" "}
-                    {member.appointmentDate || "-"}
-                  </Typography>
-
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                  >
-                    <Button
-                      component={Link}
-                      to={`/congregation/body-of-elders/${member.id}`}
+              return (
+                <WorkspaceCard key={member.id}>
+                  <Stack spacing={2}>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="flex-start"
                     >
-                      View
-                    </Button>
+                      <Box>
+                        <Typography
+                          variant="h6"
+                          fontWeight={700}
+                        >
+                          {getPublisherDisplayName(publisher)}
+                        </Typography>
 
-                    <Button
-                      component={Link}
-                      to={`/congregation/body-of-elders/${member.id}/edit`}
+                        <Typography color="text.secondary">
+                          {member.role}
+                        </Typography>
+                      </Box>
+
+                      <Chip
+                        label={
+                          member.active
+                            ? "Active"
+                            : "Inactive"
+                        }
+                        color={
+                          member.active
+                            ? "success"
+                            : "default"
+                        }
+                      />
+                    </Stack>
+
+                    <Typography color="text.secondary">
+                      Appointment Date:{" "}
+                      {member.appointmentDate || "-"}
+                    </Typography>
+
+                    <Stack
+                      direction="row"
+                      spacing={2}
                     >
-                      Edit
-                    </Button>
+                      <Button
+                        component={Link}
+                        to={`/congregation/body-of-elders/${member.id}`}
+                      >
+                        View
+                      </Button>
+
+                      <Button
+                        component={Link}
+                        variant="contained"
+                        to={`/congregation/body-of-elders/${member.id}/edit`}
+                      >
+                        Edit
+                      </Button>
+                    </Stack>
                   </Stack>
-                </Stack>
-              </CardContent>
-            </Card>
-          );
-        })}
+                </WorkspaceCard>
+              );
+            })}
+          </Stack>
+        )}
       </Stack>
     </Box>
   );

@@ -64,6 +64,10 @@ import ServiceCommitteeList from "./features/congregation/service-committee/page
 import ServiceCommitteeProfile from "./features/congregation/service-committee/pages/ServiceCommitteeProfile";
 import ServiceCommitteeEditor from "./features/congregation/service-committee/pages/ServiceCommitteeEditor";
 
+// Departments
+import DepartmentsPage from "./features/congregation/departments/pages/DepartmentsPage";
+import DepartmentDetailsPage from "./features/congregation/departments/pages/DepartmentDetailsPage";
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -246,6 +250,17 @@ export default function AppRoutes() {
           element={<ServiceCommitteeEditor />}
         />
         
+                {/* Departments */}
+        <Route
+          path="/congregation/departments"
+          element={<DepartmentsPage />}
+        />
+
+        <Route
+          path="/congregation/departments/:id"
+          element={<DepartmentDetailsPage />}
+        />
+
         {/* Reports */}
         <Route
           path="/congregation/reports"

@@ -14,7 +14,7 @@ export function useDepartments() {
   };
 
   const addDepartment = (department: Department) => {
-    departmentService.add(department);
+    departmentService.create(department);
     refresh();
   };
 
