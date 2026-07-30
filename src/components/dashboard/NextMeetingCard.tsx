@@ -1,6 +1,8 @@
-import Card from "../ui/Card";
+import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
+import EventRoundedIcon from "@mui/icons-material/EventRounded";
+import { Card, CardContent, Chip, Stack, Typography } from "@mui/material";
 
-interface Props {
+interface NextMeetingCardProps {
   title: string;
   countdown: string;
 }
@@ -8,14 +10,83 @@ interface Props {
 export default function NextMeetingCard({
   title,
   countdown,
-}: Props) {
+}: NextMeetingCardProps) {
   return (
-    <Card title="⏳ Next Meeting">
-      <h2 className="text-xl font-semibold">{title}</h2>
+    <Card
+      elevation={0}
+      sx={{
+        borderRadius: 4,
+        border: "1px solid",
+        borderColor: "divider",
+      }}
+    >
+      <CardContent>
 
-      <p className="mt-2 text-gray-500">
-        Starts in {countdown}
-      </p>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={2}
+        >
+          <Typography
+            variant="h6"
+            fontWeight={700}
+          >
+            ⏳ Next Meeting
+          </Typography>
+
+          <Chip
+            size="small"
+            color="primary"
+            label={countdown}
+          />
+        </Stack>
+
+        <Typography
+          variant="h5"
+          fontWeight={700}
+          gutterBottom
+        >
+          {title}
+        </Typography>
+
+        <Stack
+          direction="row"
+          spacing={3}
+          mt={2}
+        >
+          <Stack
+            direction="row"
+            spacing={1}
+            alignItems="center"
+          >
+            <EventRoundedIcon
+              fontSize="small"
+              color="primary"
+            />
+
+            <Typography color="text.secondary">
+              See Meeting Schedule
+            </Typography>
+          </Stack>
+
+          <Stack
+            direction="row"
+            spacing={1}
+            alignItems="center"
+          >
+            <AccessTimeRoundedIcon
+              fontSize="small"
+              color="primary"
+            />
+
+            <Typography color="text.secondary">
+              {countdown}
+            </Typography>
+          </Stack>
+        </Stack>
+
+      </CardContent>
     </Card>
   );
 }

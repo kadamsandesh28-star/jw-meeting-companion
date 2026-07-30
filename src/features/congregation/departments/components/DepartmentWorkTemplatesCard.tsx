@@ -1,5 +1,11 @@
-import { useMemo, useState } from "react";
-import { Button, Stack } from "@mui/material";
+import { useState } from "react";
+import {
+  Alert,
+  Button,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 import { DepartmentWorkTemplate } from "../models/DepartmentWorkTemplate";
@@ -9,27 +15,19 @@ import WorkTemplateTable from "./WorkTemplateTable";
 
 interface DepartmentWorkTemplatesCardProps {
   departmentId: string;
+  templates: DepartmentWorkTemplate[];
+  onChanged: () => void;
 }
 
 export default function DepartmentWorkTemplatesCard({
   departmentId,
+  templates,
+  onChanged,
 }: DepartmentWorkTemplatesCardProps) {
-  const [refreshKey, setRefreshKey] = useState(0);
-
-  const templates = useMemo(
-    () =>
-      departmentWorkTemplateService.getByDepartment(
-        departmentId
-      ),
-    [departmentId, refreshKey]
-  );
-
   const [dialogOpen, setDialogOpen] = useState(false);
+
   const [selectedTemplate, setSelectedTemplate] =
     useState<DepartmentWorkTemplate>();
-
-  const refresh = () =>
-    setRefreshKey((value) => value + 1);
 
   const handleAdd = () => {
     setSelectedTemplate(undefined);
@@ -58,7 +56,7 @@ export default function DepartmentWorkTemplatesCard({
       template.id
     );
 
-    refresh();
+    onChanged();
   };
 
   const handleToggleActive = (
@@ -71,7 +69,7 @@ export default function DepartmentWorkTemplatesCard({
       updatedAt: new Date().toISOString(),
     });
 
-    refresh();
+    onChanged();
   };
 
   const handleSave = (data: {
@@ -98,42 +96,84 @@ export default function DepartmentWorkTemplatesCard({
       });
     }
 
-    refresh();
+    onChanged();
   };
 
   return (
-    <Stack spacing={2}>
-      <Stack
-        direction="row"
-        justifyContent="flex-end"
-      >
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleAdd}
+    <Paper sx={{ p: 3, borderRadius: 3 }}>
+      <Stack spacing={3}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
         >
-          Add Work Template
-        </Button>
+          <Typography variant="h6">
+            Work Templates
+          </Typography>
+
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={handleAdd}
+          >
+            Add Work Template
+          </Button>
+        </Stack>
+
+        <Typography color="text.secondary">
+          Work templates define the regular
+          assignments performed by this
+          department. Once created, they can be
+          scheduled and assigned to publishers.
+        </Typography>
+
+        {templates.length === 0 && (
+          <Alert severity="info">
+            <Typography
+              variant="subtitle2"
+              gutterBottom
+            >
+              No work templates have been
+              created yet.
+            </Typography>
+
+            <Typography variant="body2">
+              Examples include:
+            </Typography>
+
+            <ul style={{ marginTop: 8 }}>
+              <li>Audio Mixer</li>
+              <li>Platform Microphone</li>
+              <li>Camera Operator</li>
+              <li>Main Entrance Attendant</li>
+            </ul>
+
+            <Typography variant="body2">
+              Click <strong>Add Work Template</strong>{" "}
+              to create your first template.
+            </Typography>
+          </Alert>
+        )}
+
+        <WorkTemplateTable
+          templates={templates}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onToggleActive={handleToggleActive}
+        />
+
+        <WorkTemplateDialog
+          open={dialogOpen}
+          title={
+            selectedTemplate
+              ? "Edit Work Template"
+              : "Add Work Template"
+          }
+          template={selectedTemplate}
+          onClose={() => setDialogOpen(false)}
+          onSave={handleSave}
+        />
       </Stack>
-
-      <WorkTemplateTable
-        templates={templates}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        onToggleActive={handleToggleActive}
-      />
-
-      <WorkTemplateDialog
-        open={dialogOpen}
-        title={
-          selectedTemplate
-            ? "Edit Work Template"
-            : "Add Work Template"
-        }
-        template={selectedTemplate}
-        onClose={() => setDialogOpen(false)}
-        onSave={handleSave}
-      />
-    </Stack>
+    </Paper>
   );
 }

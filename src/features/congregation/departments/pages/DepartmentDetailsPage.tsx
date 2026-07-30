@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   Alert,
@@ -11,12 +11,15 @@ import {
 } from "@mui/material";
 
 import WorkspaceHero from "../../../../components/workspace/WorkspaceHero";
-import DepartmentAssignmentsCard from "../components/DepartmentAssignmentsCard";
 import DepartmentMembersCard from "../components/DepartmentMembersCard";
 import DepartmentOverviewCard from "../components/DepartmentOverviewCard";
+import DepartmentOverseerCard from "../components/DepartmentOverseerCard";
 import DepartmentScheduleCard from "../components/DepartmentScheduleCard";
 import DepartmentWorkTemplatesCard from "../components/DepartmentWorkTemplatesCard";
+
+import { DepartmentWorkTemplate } from "../models/DepartmentWorkTemplate";
 import { departmentService } from "../services/departmentService";
+import { departmentWorkTemplateService } from "../services/departmentWorkTemplateService";
 
 export default function DepartmentDetailsPage() {
   const { id } = useParams<{ id: string }>();
@@ -28,6 +31,22 @@ export default function DepartmentDetailsPage() {
     if (!id) return undefined;
     return departmentService.getById(id);
   }, [id, refreshKey]);
+
+  const [templates, setTemplates] = useState<
+    DepartmentWorkTemplate[]
+  >([]);
+
+  const refreshTemplates = useCallback(() => {
+    if (!id) return;
+
+    setTemplates(
+      departmentWorkTemplateService.getByDepartment(id)
+    );
+  }, [id]);
+
+  useEffect(() => {
+    refreshTemplates();
+  }, [refreshTemplates]);
 
   const [overseerId, setOverseerId] = useState(
     department?.overseerId ?? ""
@@ -56,7 +75,6 @@ export default function DepartmentDetailsPage() {
   const handleMembersChange = (members: string[]) => {
     setMemberIds(members);
 
-    // Remove any key members that are no longer department members
     setKeyMemberIds((current) =>
       current.filter((id) => members.includes(id))
     );
@@ -110,7 +128,7 @@ export default function DepartmentDetailsPage() {
 
           {/* Right Column */}
           <Stack spacing={3}>
-            <DepartmentAssignmentsCard
+            <DepartmentOverseerCard
               overseerId={overseerId}
               assistantId={assistantId}
               memberIds={memberIds}
@@ -121,9 +139,16 @@ export default function DepartmentDetailsPage() {
               onKeyMembersChange={setKeyMemberIds}
             />
 
+            <DepartmentWorkTemplatesCard
+              departmentId={department.id}
+              templates={templates}
+              onChanged={refreshTemplates}
+            />
+
             <DepartmentScheduleCard
               departmentId={department.id}
               memberIds={memberIds}
+              templates={templates}
             />
 
             <Paper sx={{ p: 3, borderRadius: 3 }}>
@@ -146,10 +171,6 @@ export default function DepartmentDetailsPage() {
                 Save Department
               </Button>
             </Paper>
-
-            <DepartmentWorkTemplatesCard
-              departmentId={department.id}
-            />
           </Stack>
         </Box>
       </Stack>

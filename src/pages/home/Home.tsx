@@ -1,16 +1,14 @@
-import GreetingCard from "../../components/dashboard/GreetingCard";
-import MeetingPreparationCard from "../../components/dashboard/MeetingPreparationCard";
+import DashboardHero from "../../components/dashboard/DashboardHero";
 import NextMeetingCard from "../../components/dashboard/NextMeetingCard";
-import ReminderCard from "../../components/dashboard/ReminderCard";
 import WeeklyProgressCard from "../../components/dashboard/WeeklyProgressCard";
 import QuickActionsCard from "../../components/dashboard/QuickActionsCard";
-import TodaysFocusCard from "../../components/dashboard/TodaysFocusCard";
 
-import { getTodaysFocus } from "../../services/dashboardService";
-import { getMeetingProgress } from "../../services/meetingProgressService";
+import TodoCard from "../../features/dashboard/components/TodoCard";
+import CalendarCard from "../../features/dashboard/components/CalendarCard";
+import QuickNotesCard from "../../features/dashboard/components/QuickNotesCard";
 
-import { getGreeting } from "../../utils/greeting";
 import { getNextMeeting } from "../../utils/nextMeeting";
+import { getGreeting } from "../../utils/greeting";
 
 import { usePlanner } from "../../contexts/PlannerContext";
 
@@ -18,8 +16,6 @@ export default function Home() {
   const { planner } = usePlanner();
 
   const nextMeeting = getNextMeeting();
-  const todaysFocus = getTodaysFocus();
-  const meetingProgress = getMeetingProgress(planner);
 
   const midweek = planner.filter(
     (item) => item.meeting === "Midweek"
@@ -44,35 +40,21 @@ export default function Home() {
     },
   ];
 
-  const reminders = planner
-    .filter((item) => item.status !== "Ready")
-    .map((item) => ({
-      id: item.id,
-      title: item.title,
-      done: false,
-    }));
-
   return (
     <div className="mx-auto max-w-7xl space-y-8 p-6">
-      <GreetingCard greeting={getGreeting()} />
+      <DashboardHero greeting={getGreeting()} />
 
-      <TodaysFocusCard
-        title={todaysFocus.title}
-        description={todaysFocus.description}
-        button={todaysFocus.button}
-        path={todaysFocus.path}
-      />
-
-      <MeetingPreparationCard progress={meetingProgress} />
-
-      <div className="grid gap-6 md:grid-cols-2">
-        <NextMeetingCard
-          title={nextMeeting.title}
-          countdown={nextMeeting.countdown}
-        />
-
-        <ReminderCard reminders={reminders} />
+      <div className="grid gap-6 lg:grid-cols-2">
+        <TodoCard />
+        <CalendarCard />
       </div>
+
+      <QuickNotesCard />
+
+      <NextMeetingCard
+        title={nextMeeting.title}
+        countdown={nextMeeting.countdown}
+      />
 
       <WeeklyProgressCard progress={liveProgress} />
 

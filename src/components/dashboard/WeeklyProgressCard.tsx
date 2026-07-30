@@ -1,5 +1,10 @@
-import Card from "../ui/Card";
-import { BarChart3 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  LinearProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
 
 interface ProgressItem {
   title: string;
@@ -13,67 +18,75 @@ interface WeeklyProgressCardProps {
 export default function WeeklyProgressCard({
   progress,
 }: WeeklyProgressCardProps) {
-  const completed = progress.filter((item) => item.completed).length;
-  const percentage = Math.round(
-    (completed / progress.length) * 100
-  );
+  const completed = progress.filter((p) => p.completed).length;
+  const percentage =
+    progress.length === 0
+      ? 0
+      : (completed / progress.length) * 100;
 
   return (
     <Card
-      title="Weekly Preparation"
-      icon={<BarChart3 className="h-6 w-6 text-blue-600" />}
+      elevation={0}
+      sx={{
+        borderRadius: 4,
+        border: "1px solid",
+        borderColor: "divider",
+      }}
     >
-      {/* Percentage Header */}
-      <div className="mb-4 flex items-center justify-between">
-        <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-          Overall Progress
-        </span>
+      <CardContent>
 
-        <span className="text-lg font-bold text-blue-600">
-          {percentage}%
-        </span>
-      </div>
+        <Typography
+          variant="h6"
+          fontWeight={700}
+          gutterBottom
+        >
+          📈 Weekly Progress
+        </Typography>
 
-      {/* Progress Bar */}
-      <div className="mb-6 h-3 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
-        <div
-          className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-700"
-          style={{
-            width: `${percentage}%`,
+        <LinearProgress
+          variant="determinate"
+          value={percentage}
+          sx={{
+            height: 10,
+            borderRadius: 5,
+            mb: 3,
           }}
         />
-      </div>
 
-      {/* Checklist */}
-      <div className="space-y-3">
-        {progress.map((item) => (
-          <div
-            key={item.title}
-            className="flex items-center justify-between"
-          >
-            <span
-              className={
-                item.completed
-                  ? "text-gray-500 line-through"
-                  : "text-gray-800 dark:text-gray-200"
-              }
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          mb={2}
+        >
+          {completed} of {progress.length} meeting goals completed
+        </Typography>
+
+        <Stack spacing={1}>
+          {progress.map((item) => (
+            <Stack
+              key={item.title}
+              direction="row"
+              justifyContent="space-between"
             >
-              {item.title}
-            </span>
+              <Typography>
+                {item.title}
+              </Typography>
 
-            <span className="text-lg">
-              {item.completed ? "✅" : "⬜"}
-            </span>
-          </div>
-        ))}
-      </div>
+              <Typography
+                fontWeight={700}
+                color={
+                  item.completed
+                    ? "success.main"
+                    : "text.secondary"
+                }
+              >
+                {item.completed ? "✓" : "○"}
+              </Typography>
+            </Stack>
+          ))}
+        </Stack>
 
-      {/* Footer */}
-      <div className="mt-6 border-t pt-4 text-center">
-        <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-          {completed} of {progress.length} completed
-        </span>
-      </div>
+      </CardContent>
     </Card>
   );
 }

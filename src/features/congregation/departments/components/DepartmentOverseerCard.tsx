@@ -14,7 +14,7 @@ import {
 
 import { publisherService } from "../../publishers/services/publisherService";
 
-interface DepartmentAssignmentsCardProps {
+interface DepartmentOverseerCardProps {
   overseerId?: string;
   assistantId?: string;
   memberIds?: string[];
@@ -26,7 +26,7 @@ interface DepartmentAssignmentsCardProps {
   onKeyMembersChange?: (memberIds: string[]) => void;
 }
 
-export default function DepartmentAssignmentsCard({
+export default function DepartmentOverseerCard({
   overseerId = "",
   assistantId = "",
   memberIds = [],
@@ -36,7 +36,7 @@ export default function DepartmentAssignmentsCard({
   onAssistantChange,
   onMembersChange,
   onKeyMembersChange,
-}: DepartmentAssignmentsCardProps) {
+}: DepartmentOverseerCardProps) {
   const publishers = publisherService.getAll();
 
   const departmentMembers = publishers.filter((publisher) =>
@@ -47,15 +47,15 @@ export default function DepartmentAssignmentsCard({
     <Paper sx={{ p: 3, borderRadius: 3 }}>
       <Stack spacing={3}>
         <Typography variant="h6">
-          Leadership & Members
+          Overseer & Members
         </Typography>
 
         <FormControl fullWidth>
-          <InputLabel>Overseer</InputLabel>
+          <InputLabel>Department Overseer</InputLabel>
 
           <Select
             value={overseerId}
-            label="Overseer"
+            label="Department Overseer"
             onChange={(e) =>
               onOverseerChange?.(e.target.value as string)
             }
@@ -63,7 +63,10 @@ export default function DepartmentAssignmentsCard({
             <MenuItem value="">None</MenuItem>
 
             {publishers.map((publisher) => (
-              <MenuItem key={publisher.id} value={publisher.id}>
+              <MenuItem
+                key={publisher.id}
+                value={publisher.id}
+              >
                 {publisher.firstName} {publisher.lastName}
               </MenuItem>
             ))}
@@ -83,7 +86,10 @@ export default function DepartmentAssignmentsCard({
             <MenuItem value="">None</MenuItem>
 
             {publishers.map((publisher) => (
-              <MenuItem key={publisher.id} value={publisher.id}>
+              <MenuItem
+                key={publisher.id}
+                value={publisher.id}
+              >
                 {publisher.firstName} {publisher.lastName}
               </MenuItem>
             ))}
@@ -96,12 +102,20 @@ export default function DepartmentAssignmentsCard({
           <Select
             multiple
             value={memberIds}
-            input={<OutlinedInput label="Department Members" />}
+            input={
+              <OutlinedInput label="Department Members" />
+            }
             onChange={(e) =>
-              onMembersChange?.(e.target.value as string[])
+              onMembersChange?.(
+                e.target.value as string[]
+              )
             }
             renderValue={(selected) => (
-              <Stack direction="row" spacing={1} flexWrap="wrap">
+              <Stack
+                direction="row"
+                spacing={1}
+                flexWrap="wrap"
+              >
                 {(selected as string[]).map((id) => {
                   const publisher = publishers.find(
                     (p) => p.id === id
@@ -123,9 +137,14 @@ export default function DepartmentAssignmentsCard({
             )}
           >
             {publishers.map((publisher) => (
-              <MenuItem key={publisher.id} value={publisher.id}>
+              <MenuItem
+                key={publisher.id}
+                value={publisher.id}
+              >
                 <Checkbox
-                  checked={memberIds.includes(publisher.id)}
+                  checked={memberIds.includes(
+                    publisher.id
+                  )}
                 />
 
                 <ListItemText
@@ -136,18 +155,29 @@ export default function DepartmentAssignmentsCard({
           </Select>
         </FormControl>
 
-        <FormControl fullWidth disabled={memberIds.length === 0}>
-          <InputLabel>⭐ Key Members</InputLabel>
+        <FormControl
+          fullWidth
+          disabled={memberIds.length === 0}
+        >
+          <InputLabel>Key Members</InputLabel>
 
           <Select
             multiple
             value={keyMemberIds}
-            input={<OutlinedInput label="⭐ Key Members" />}
+            input={
+              <OutlinedInput label="Key Members" />
+            }
             onChange={(e) =>
-              onKeyMembersChange?.(e.target.value as string[])
+              onKeyMembersChange?.(
+                e.target.value as string[]
+              )
             }
             renderValue={(selected) => (
-              <Stack direction="row" spacing={1} flexWrap="wrap">
+              <Stack
+                direction="row"
+                spacing={1}
+                flexWrap="wrap"
+              >
                 {(selected as string[]).map((id) => {
                   const publisher = publishers.find(
                     (p) => p.id === id
@@ -170,7 +200,10 @@ export default function DepartmentAssignmentsCard({
             )}
           >
             {departmentMembers.map((publisher) => (
-              <MenuItem key={publisher.id} value={publisher.id}>
+              <MenuItem
+                key={publisher.id}
+                value={publisher.id}
+              >
                 <Checkbox
                   checked={keyMemberIds.includes(
                     publisher.id

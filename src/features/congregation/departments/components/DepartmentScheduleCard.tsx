@@ -1,11 +1,17 @@
 import { useMemo, useState } from "react";
-import { Button, Stack } from "@mui/material";
+import {
+  Alert,
+  Button,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 import { publisherService } from "../../publishers/services/publisherService";
 import { DepartmentAssignment } from "../models/DepartmentAssignment";
+import { DepartmentWorkTemplate } from "../models/DepartmentWorkTemplate";
 import { departmentAssignmentService } from "../services/departmentAssignmentService";
-import { departmentWorkTemplateService } from "../services/departmentWorkTemplateService";
 
 import AssignmentDialog from "./AssignmentDialog";
 import DepartmentAssignmentsTable from "./DepartmentAssignmentsTable";
@@ -13,11 +19,13 @@ import DepartmentAssignmentsTable from "./DepartmentAssignmentsTable";
 interface DepartmentScheduleCardProps {
   departmentId: string;
   memberIds: string[];
+  templates: DepartmentWorkTemplate[];
 }
 
 export default function DepartmentScheduleCard({
   departmentId,
   memberIds,
+  templates,
 }: DepartmentScheduleCardProps) {
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -29,23 +37,26 @@ export default function DepartmentScheduleCard({
     [departmentId, refreshKey]
   );
 
-  const templates = useMemo(
-    () =>
-      departmentWorkTemplateService.getByDepartment(
-        departmentId
-      ),
-    [departmentId, refreshKey]
-  );
-
   const publishers = useMemo(
     () =>
       publisherService
         .getAll()
-        .filter((p) => memberIds.includes(p.id)),
+        .filter((publisher) =>
+          memberIds.includes(publisher.id)
+        ),
     [memberIds]
   );
 
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const activeTemplates = useMemo(
+    () =>
+      templates.filter(
+        (template) => template.active
+      ),
+    [templates]
+  );
+
+  const [dialogOpen, setDialogOpen] =
+    useState(false);
 
   const [selectedAssignment, setSelectedAssignment] =
     useState<DepartmentAssignment>();
@@ -108,39 +119,69 @@ export default function DepartmentScheduleCard({
   };
 
   return (
-    <Stack spacing={2}>
-      <Stack
-        direction="row"
-        justifyContent="flex-end"
-      >
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleAdd}
+    <Paper sx={{ p: 3, borderRadius: 3 }}>
+      <Stack spacing={3}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
         >
-          Add Assignment
-        </Button>
+          <Typography variant="h6">
+            Department Schedule
+          </Typography>
+
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={handleAdd}
+            disabled={
+              activeTemplates.length === 0
+            }
+          >
+            Add Assignment
+          </Button>
+        </Stack>
+
+        {activeTemplates.length === 0 && (
+          <Alert severity="info">
+            Create one or more active work
+            templates before scheduling
+            assignments.
+          </Alert>
+        )}
+
+        {activeTemplates.length > 0 &&
+          assignments.length === 0 && (
+            <Alert severity="info">
+              No assignments have been
+              scheduled yet. Click{" "}
+              <strong>Add Assignment</strong>{" "}
+              to create the first one.
+            </Alert>
+          )}
+
+        <DepartmentAssignmentsTable
+          assignments={assignments}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+
+        <AssignmentDialog
+          open={dialogOpen}
+          title={
+            selectedAssignment
+              ? "Edit Assignment"
+              : "Add Assignment"
+          }
+          assignment={selectedAssignment}
+          templates={activeTemplates}
+          publishers={publishers}
+          onClose={() =>
+            setDialogOpen(false)
+          }
+          onSave={handleSave}
+        />
       </Stack>
-
-      <DepartmentAssignmentsTable
-        assignments={assignments}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
-
-      <AssignmentDialog
-        open={dialogOpen}
-        title={
-          selectedAssignment
-            ? "Edit Assignment"
-            : "Add Assignment"
-        }
-        assignment={selectedAssignment}
-        templates={templates}
-        publishers={publishers}
-        onClose={() => setDialogOpen(false)}
-        onSave={handleSave}
-      />
-    </Stack>
+    </Paper>
   );
 }
