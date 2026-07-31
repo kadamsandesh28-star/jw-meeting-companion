@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 
 import AppShell from "./components/shell/AppShell";
-
 // Home
 import Home from "./pages/home/Home";
 
@@ -22,10 +21,11 @@ import Service from "./pages/service/Service";
 // Personal
 import Personal from "./pages/personal/Personal";
 import BibleReading from "./pages/personal/BibleReading";
-import PersonalStudy from "./pages/personal/PersonalStudy";
 import PrayerJournal from "./pages/personal/PrayerJournal";
 import FamilyWorship from "./pages/personal/FamilyWorship";
 import PersonalTasks from "./pages/personal/PersonalTasks";
+import PersonalStudyPage from "./features/personal-study/pages/PersonalStudyPage";
+import StudyNotebookPage from "./features/personal-study/pages/StudyNotebookPage";
 
 // Ministry
 import MinistryDashboard from "./features/ministry/pages/MinistryDashboard";
@@ -112,10 +112,15 @@ export default function AppRoutes() {
           path="/personal/bible-reading"
           element={<BibleReading />}
         />
-        <Route
-          path="/personal/personal-study"
-          element={<PersonalStudy />}
-        />
+<Route
+  path="/personal/personal-study"
+  element={<PersonalStudyPage />}
+/>
+
+<Route
+  path="/personal/personal-study/:id"
+  element={<StudyNotebookPage />}
+/>
         <Route
           path="/personal/prayer"
           element={<PrayerJournal />}

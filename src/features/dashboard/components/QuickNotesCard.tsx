@@ -12,7 +12,6 @@ export default function QuickNotesCard() {
   const [content, setContent] = useState("");
   const [updatedAt, setUpdatedAt] = useState("");
 
-  // ✅ Fixed: initialize the ref
   const timer = useRef<number | null>(null);
 
   useEffect(() => {
@@ -22,7 +21,6 @@ export default function QuickNotesCard() {
   }, []);
 
   useEffect(() => {
-    // ✅ Fixed: explicit null check
     if (timer.current !== null) {
       window.clearTimeout(timer.current);
     }
@@ -69,6 +67,9 @@ export default function QuickNotesCard() {
           variant="h6"
           fontWeight={700}
           gutterBottom
+          sx={{
+            color: "#2D3748",
+          }}
         >
           📝 Quick Notes
         </Typography>
@@ -88,15 +89,8 @@ export default function QuickNotesCard() {
                 rgba(0,0,0,.08) 32px
               )
             `,
-          }}
-        >
-          <textarea
-            placeholder="💡 Capture a thought before you forget..."
-            value={content}
-            onChange={(e) =>
-              setContent(e.target.value)
-            }
-            style={{
+
+            "& textarea": {
               width: "100%",
               minHeight: "220px",
               border: "none",
@@ -108,16 +102,29 @@ export default function QuickNotesCard() {
               fontFamily:
                 '"Patrick Hand","Segoe UI",sans-serif',
               color: "#333",
-            }}
+            },
+
+            "& textarea::placeholder": {
+              color: "#8B7355",
+              opacity: 1,
+            },
+          }}
+        >
+          <textarea
+            placeholder="💡 Capture a thought before you forget..."
+            value={content}
+            onChange={(e) =>
+              setContent(e.target.value)
+            }
           />
         </Box>
 
         <Typography
           variant="caption"
-          color="text.secondary"
           sx={{
             display: "block",
             mt: 2,
+            color: "#6B7280",
           }}
         >
           ✓ Saved{" "}

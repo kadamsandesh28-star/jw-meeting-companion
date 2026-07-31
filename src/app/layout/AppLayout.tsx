@@ -41,6 +41,17 @@ export default function AppLayout() {
           width: {
             md: `calc(100% - ${drawerWidth}px)`,
           },
+
+          /* Workspace background */
+          minHeight: "100vh",
+
+          background: `
+            linear-gradient(
+              180deg,
+              #F8FAFC 0%,
+              #EEF4FF 100%
+            )
+          `,
         }}
       >
         <Toolbar />

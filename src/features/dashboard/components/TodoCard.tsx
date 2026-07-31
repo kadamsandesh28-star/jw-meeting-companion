@@ -8,7 +8,6 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemText,
   Stack,
   TextField,
   Typography,
@@ -54,7 +53,6 @@ export default function TodoCard() {
       }}
     >
       <CardContent>
-
         <Typography
           variant="h6"
           fontWeight={700}
@@ -91,7 +89,6 @@ export default function TodoCard() {
         </Stack>
 
         <List disablePadding>
-
           {todos.length === 0 && (
             <Typography
               color="text.secondary"
@@ -106,33 +103,50 @@ export default function TodoCard() {
             <ListItem
               key={todo.id}
               disablePadding
-              secondaryAction={
-                <IconButton
-                  color="error"
-                  onClick={() => deleteTask(todo.id)}
-                >
-                  <DeleteOutlineRoundedIcon />
-                </IconButton>
-              }
+              sx={{
+                py: 0.5,
+              }}
             >
-              <Checkbox
-                checked={todo.completed}
-                onChange={() => toggleTask(todo.id)}
-              />
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                sx={{
+                  width: "100%",
+                }}
+              >
+                <Checkbox
+                  checked={todo.completed}
+                  onChange={() => toggleTask(todo.id)}
+                />
 
-              <ListItemText
-                primary={todo.title}
-                primaryTypographyProps={{
-                  sx: {
+                <Typography
+                  sx={{
+                    flexGrow: 1,
+                    wordBreak: "break-word",
+                    overflowWrap: "anywhere",
                     textDecoration: todo.completed
                       ? "line-through"
                       : "none",
                     color: todo.completed
                       ? "text.secondary"
                       : "text.primary",
-                  },
-                }}
-              />
+                  }}
+                >
+                  {todo.title}
+                </Typography>
+
+                <IconButton
+                  color="error"
+                  onClick={() => deleteTask(todo.id)}
+                  sx={{
+                    flexShrink: 0,
+                    alignSelf: "center",
+                  }}
+                >
+                  <DeleteOutlineRoundedIcon />
+                </IconButton>
+              </Stack>
             </ListItem>
           ))}
         </List>
@@ -145,7 +159,6 @@ export default function TodoCard() {
             {todos.filter((t) => !t.completed).length} task(s) remaining
           </Typography>
         </Box>
-
       </CardContent>
     </Card>
   );

@@ -12,6 +12,10 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
 
+      workbox: {
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+      },
+
       manifest: {
         name: "My JW Companion",
         short_name: "JW Companion",
