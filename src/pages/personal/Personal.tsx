@@ -1,10 +1,11 @@
 import {
-  BookOpen,
   BookMarked,
+  BookOpen,
   HeartHandshake,
-  Users,
+  NotebookPen,
   CheckSquare,
   User,
+  Users,
 } from "lucide-react";
 
 import ActionCard from "../../components/ui/ActionCard";
@@ -14,7 +15,10 @@ export default function Personal() {
     <div className="space-y-6">
       <header>
         <div className="flex items-center gap-3">
-          <User className="text-indigo-600" size={32} />
+          <User
+            className="text-indigo-600"
+            size={32}
+          />
 
           <div>
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
@@ -41,6 +45,13 @@ export default function Personal() {
           title="Personal Study"
           description="Continue your personal study projects."
           to="/personal/personal-study"
+        />
+
+        <ActionCard
+          icon={<NotebookPen size={22} />}
+          title="Notebook"
+          description="Personal notes, talk outlines, assemblies, conventions and more."
+          to="/personal/notebooks"
         />
 
         <ActionCard

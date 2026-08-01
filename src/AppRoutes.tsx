@@ -26,6 +26,8 @@ import FamilyWorship from "./pages/personal/FamilyWorship";
 import PersonalTasks from "./pages/personal/PersonalTasks";
 import PersonalStudyPage from "./features/personal-study/pages/PersonalStudyPage";
 import StudyNotebookPage from "./features/personal-study/pages/StudyNotebookPage";
+import NotebookPage from "./features/notebooks/pages/NotebookPage";
+import NotebookWorkspace from "./features/notebooks/pages/NotebookWorkspace";
 
 // Ministry
 import MinistryDashboard from "./features/ministry/pages/MinistryDashboard";
@@ -72,6 +74,15 @@ export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<AppShell />}>
+      <Route
+  path="/personal/notebooks"
+  element={<NotebookPage />}
+/>
+
+<Route
+  path="/personal/notebooks/:id"
+  element={<NotebookWorkspace />}
+/>
         {/* Home */}
         <Route path="/" element={<Home />} />
 
