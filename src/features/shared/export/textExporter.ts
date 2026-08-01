@@ -1,62 +1,24 @@
-export interface TextStudyExport {
-  title: string;
-  type: string;
-  createdAt: string;
-  updatedAt: string;
+import { ExportDocument } from "./exportTypes";
 
-  objective: string;
-  questions: string;
-  research: string;
-  application: string;
-  prayer: string;
-  notes: string;
-}
-
-export function exportStudyToText(
-  study: TextStudyExport
+export function exportToText(
+  exportDoc: ExportDocument
 ): void {
-  const text = `${study.title}
+  let text = `${exportDoc.title}\n`;
 
-Type: ${study.type}
-Created: ${study.createdAt}
-Updated: ${study.updatedAt}
+  if (exportDoc.subtitle) {
+    text += `${exportDoc.subtitle}\n`;
+  }
 
-==================================
+  text += `\nCreated: ${exportDoc.createdAt}\n`;
+  text += `Updated: ${exportDoc.updatedAt}\n\n`;
 
-OBJECTIVE
+  text += "--------------------------------\n\n";
 
-${study.objective}
-
-==================================
-
-QUESTIONS
-
-${study.questions}
-
-==================================
-
-RESEARCH
-
-${study.research}
-
-==================================
-
-APPLICATION
-
-${study.application}
-
-==================================
-
-PRAYER
-
-${study.prayer}
-
-==================================
-
-NOTES
-
-${study.notes}
-`;
+  for (const section of exportDoc.sections) {
+    text += `${section.title}\n`;
+    text += "--------------------------------\n";
+    text += `${section.content || "-"}\n\n`;
+  }
 
   const blob = new Blob([text], {
     type: "text/plain;charset=utf-8",
@@ -65,8 +27,10 @@ ${study.notes}
   const url = URL.createObjectURL(blob);
 
   const link = document.createElement("a");
+
   link.href = url;
-  link.download = `${study.title}.txt`;
+  link.download = `${exportDoc.title}.txt`;
+
   link.click();
 
   URL.revokeObjectURL(url);

@@ -1,62 +1,42 @@
-export interface MarkdownStudyExport {
-  title: string;
-  type: string;
-  createdAt: string;
-  updatedAt: string;
+import { ExportDocument } from "./exportTypes";
 
-  objective: string;
-  questions: string;
-  research: string;
-  application: string;
-  prayer: string;
-  notes: string;
-}
-
-export function exportStudyToMarkdown(
-  study: MarkdownStudyExport
+export function exportToMarkdown(
+  exportDoc: ExportDocument
 ): void {
-  const markdown = `# ${study.title}
+  let markdown = `# ${exportDoc.title}
 
-**Type:** ${study.type}
-**Created:** ${study.createdAt}
-**Updated:** ${study.updatedAt}
-
----
-
-## 🎯 Objective
-
-${study.objective}
-
----
-
-## ❓ Questions
-
-${study.questions}
-
----
-
-## 📚 Research
-
-${study.research}
-
----
-
-## 💡 Application
-
-${study.application}
-
----
-
-## 🙏 Prayer
-
-${study.prayer}
-
----
-
-## 📝 Notes
-
-${study.notes}
 `;
+
+  if (exportDoc.subtitle) {
+    markdown += `**${exportDoc.subtitle}**
+
+`;
+  }
+
+  markdown += `**Created:** ${exportDoc.createdAt}
+
+`;
+  markdown += `**Updated:** ${exportDoc.updatedAt}
+
+`;
+
+  markdown += `---
+
+`;
+
+  for (const section of exportDoc.sections) {
+    markdown += `## ${section.title}
+
+`;
+
+    markdown += `${section.content || "-"}
+
+`;
+
+    markdown += `---
+
+`;
+  }
 
   const blob = new Blob([markdown], {
     type: "text/markdown;charset=utf-8",
@@ -65,8 +45,10 @@ ${study.notes}
   const url = URL.createObjectURL(blob);
 
   const link = document.createElement("a");
+
   link.href = url;
-  link.download = `${study.title}.md`;
+  link.download = `${exportDoc.title}.md`;
+
   link.click();
 
   URL.revokeObjectURL(url);

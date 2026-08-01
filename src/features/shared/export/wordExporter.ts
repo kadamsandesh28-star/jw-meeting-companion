@@ -1,119 +1,51 @@
-import {
-  Document,
-  HeadingLevel,
-  Packer,
-  Paragraph,
-  TextRun,
-} from "docx";
+import { ExportDocument } from "./exportTypes";
 
-import { saveAs } from "file-saver";
+export function exportToWord(
+  exportDoc: ExportDocument
+): void {
+  let html = `
+  <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>${exportDoc.title}</title>
+  </head>
+  <body>
+  `;
 
-export interface WordStudyExport {
-  title: string;
-  type: string;
-  createdAt: string;
-  updatedAt: string;
+  html += `<h1>${exportDoc.title}</h1>`;
 
-  objective: string;
-  questions: string;
-  research: string;
-  application: string;
-  prayer: string;
-  notes: string;
-}
+  if (exportDoc.subtitle) {
+    html += `<h3>${exportDoc.subtitle}</h3>`;
+  }
 
-export async function exportStudyToWord(
-  study: WordStudyExport
-) {
-  const document = new Document({
-    sections: [
-      {
-        children: [
-          new Paragraph({
-            heading: HeadingLevel.TITLE,
-            children: [
-              new TextRun("JW Meeting Companion"),
-            ],
-          }),
+  html += `<p><strong>Created:</strong> ${exportDoc.createdAt}</p>`;
+  html += `<p><strong>Updated:</strong> ${exportDoc.updatedAt}</p>`;
 
-          new Paragraph({
-            heading: HeadingLevel.HEADING_1,
-            children: [new TextRun(study.title)],
-          }),
+  for (const section of exportDoc.sections) {
+    html += `<h2>${section.title}</h2>`;
+    html += `<p>${(section.content || "-").replace(
+      /\n/g,
+      "<br/>"
+    )}</p>`;
+  }
 
-          new Paragraph({
-            children: [
-              new TextRun(`Type: ${study.type}`),
-            ],
-          }),
+  html += `
+  </body>
+  </html>
+  `;
 
-          new Paragraph({
-            children: [
-              new TextRun(`Created: ${study.createdAt}`),
-            ],
-          }),
-
-          new Paragraph({
-            children: [
-              new TextRun(`Updated: ${study.updatedAt}`),
-            ],
-          }),
-
-          createSection(
-            "Objective",
-            study.objective
-          ),
-
-          createSection(
-            "Questions",
-            study.questions
-          ),
-
-          createSection(
-            "Research",
-            study.research
-          ),
-
-          createSection(
-            "Application",
-            study.application
-          ),
-
-          createSection(
-            "Prayer",
-            study.prayer
-          ),
-
-          createSection(
-            "Notes",
-            study.notes
-          ),
-        ],
-      },
-    ],
+  const blob = new Blob([html], {
+    type: "application/msword",
   });
 
-  const blob = await Packer.toBlob(document);
+  const url = URL.createObjectURL(blob);
 
-  saveAs(blob, `${study.title}.docx`);
-}
+  const link = document.createElement("a");
 
-function createSection(
-  heading: string,
-  content: string
-) {
-  return new Paragraph({
-    children: [
-      new TextRun({
-        text: `${heading}\n`,
-        bold: true,
-      }),
+  link.href = url;
+  link.download = `${exportDoc.title}.doc`;
 
-      new TextRun(content || "-"),
-    ],
-    spacing: {
-      before: 300,
-      after: 300,
-    },
-  });
+  link.click();
+
+  URL.revokeObjectURL(url);
 }

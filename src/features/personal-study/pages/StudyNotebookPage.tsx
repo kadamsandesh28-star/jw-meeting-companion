@@ -18,12 +18,11 @@ import {
 } from "../services/notebookService";
 import { studyService } from "../services/studyService";
 
-import { exportStudyToMarkdown } from "../../shared/export/markdownExporter";
-import { exportStudyToPdf } from "../../shared/export/pdfExporter";
+import { exportToMarkdown } from "../../shared/export/markdownExporter";
+import { exportToPdf } from "../../shared/export/pdfExporter";
 import { sharePdf } from "../../shared/export/shareService";
-import { exportStudyToText } from "../../shared/export/textExporter";
-import { exportStudyToWord } from "../../shared/export/wordExporter";
-
+import { exportToText } from "../../shared/export/textExporter";
+import { exportToWord } from "../../shared/export/wordExporter";
 export default function StudyNotebookPage() {
   const { id } = useParams<{ id: string }>();
 
@@ -58,24 +57,50 @@ export default function StudyNotebookPage() {
     setNotebook(updated);
     saveNotebook(updated);
   };
+function createExportDocument() {
+  if (!study || !notebook) {
+    throw new Error("Study or notebook not loaded");
+  }
+
+  return {
+    title: study.title,
+    subtitle: study.type,
+    createdAt: notebook.createdAt,
+    updatedAt: notebook.updatedAt,
+    sections: [
+      {
+        title: "Objective",
+        content: notebook.objective,
+      },
+      {
+        title: "Questions",
+        content: notebook.questions,
+      },
+      {
+        title: "Research",
+        content: notebook.research,
+      },
+      {
+        title: "Application",
+        content: notebook.application,
+      },
+      {
+        title: "Prayer",
+        content: notebook.prayer,
+      },
+      {
+        title: "Notes",
+        content: notebook.notes,
+      },
+    ],
+  };
+}
 
   async function createPdf() {
-    if (!study || !notebook) return null;
-
-    return exportStudyToPdf({
-      title: study.title,
-      type: study.type,
-      createdAt: notebook.createdAt,
-      updatedAt: notebook.updatedAt,
-
-      objective: notebook.objective,
-      questions: notebook.questions,
-      research: notebook.research,
-      application: notebook.application,
-      prayer: notebook.prayer,
-      notes: notebook.notes,
-    });
-  }
+  return exportToPdf(
+    createExportDocument()
+  );
+}
 
   async function handleExportPdf() {
     const pdf = await createPdf();
@@ -89,59 +114,23 @@ export default function StudyNotebookPage() {
     await handleExportPdf();
   }
 
-  async function handleExportWord() {
-    if (!study || !notebook) return;
-
-    await exportStudyToWord({
-      title: study.title,
-      type: study.type,
-      createdAt: notebook.createdAt,
-      updatedAt: notebook.updatedAt,
-
-      objective: notebook.objective,
-      questions: notebook.questions,
-      research: notebook.research,
-      application: notebook.application,
-      prayer: notebook.prayer,
-      notes: notebook.notes,
-    });
-  }
+ async function handleExportWord() {
+  exportToWord(
+    createExportDocument()
+  );
+}
 
   function handleMarkdown() {
-    if (!study || !notebook) return;
-
-    exportStudyToMarkdown({
-      title: study.title,
-      type: study.type,
-      createdAt: notebook.createdAt,
-      updatedAt: notebook.updatedAt,
-
-      objective: notebook.objective,
-      questions: notebook.questions,
-      research: notebook.research,
-      application: notebook.application,
-      prayer: notebook.prayer,
-      notes: notebook.notes,
-    });
-  }
+  exportToMarkdown(
+    createExportDocument()
+  );
+}
 
   function handleExportText() {
-    if (!study || !notebook) return;
-
-    exportStudyToText({
-      title: study.title,
-      type: study.type,
-      createdAt: notebook.createdAt,
-      updatedAt: notebook.updatedAt,
-
-      objective: notebook.objective,
-      questions: notebook.questions,
-      research: notebook.research,
-      application: notebook.application,
-      prayer: notebook.prayer,
-      notes: notebook.notes,
-    });
-  }
+  exportToText(
+    createExportDocument()
+  );
+}
 
   function handlePrint() {
     window.print();
