@@ -28,6 +28,7 @@ import PersonalStudyPage from "./features/personal-study/pages/PersonalStudyPage
 import StudyNotebookPage from "./features/personal-study/pages/StudyNotebookPage";
 import NotebookPage from "./features/notebooks/pages/NotebookPage";
 import NotebookWorkspace from "./features/notebooks/pages/NotebookWorkspace";
+import { LifeSchedulePage } from "./features/life-schedule";
 
 // Ministry
 import MinistryDashboard from "./features/ministry/pages/MinistryDashboard";
@@ -144,6 +145,11 @@ export default function AppRoutes() {
           path="/personal/tasks"
           element={<PersonalTasks />}
         />
+
+        <Route
+  path="/personal/life-schedule"
+  element={<LifeSchedulePage />}
+/>
 
         {/* Ministry */}
         <Route

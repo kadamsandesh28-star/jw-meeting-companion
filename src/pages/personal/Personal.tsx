@@ -1,6 +1,7 @@
 import {
   BookMarked,
   BookOpen,
+  CalendarClock,
   HeartHandshake,
   NotebookPen,
   CheckSquare,
@@ -52,6 +53,13 @@ export default function Personal() {
           title="Notebook"
           description="Personal notes, talk outlines, assemblies, conventions and more."
           to="/personal/notebooks"
+        />
+
+        <ActionCard
+          icon={<CalendarClock size={22} />}
+          title="Life Schedule"
+          description="Plan your daily personal and spiritual routine."
+          to="/personal/life-schedule"
         />
 
         <ActionCard
