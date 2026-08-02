@@ -1,4 +1,4 @@
- import PauseCircleRoundedIcon from "@mui/icons-material/PauseCircleRounded";
+import PauseCircleRoundedIcon from "@mui/icons-material/PauseCircleRounded";
 import PlayCircleRoundedIcon from "@mui/icons-material/PlayCircleRounded";
 import StopCircleRoundedIcon from "@mui/icons-material/StopCircleRounded";
 import { Chip } from "@mui/material";
@@ -18,6 +18,17 @@ export default function StatusChip({
         color="success"
         icon={<PlayCircleRoundedIcon />}
         label="Running"
+        size="medium"
+        sx={{
+          px: 1,
+          height: 36,
+          fontWeight: 700,
+          borderRadius: 3,
+          alignSelf: {
+            xs: "center",
+            sm: "flex-end",
+          },
+        }}
       />
     );
   }
@@ -28,6 +39,17 @@ export default function StatusChip({
         color="warning"
         icon={<PauseCircleRoundedIcon />}
         label="Paused"
+        size="medium"
+        sx={{
+          px: 1,
+          height: 36,
+          fontWeight: 700,
+          borderRadius: 3,
+          alignSelf: {
+            xs: "center",
+            sm: "flex-end",
+          },
+        }}
       />
     );
   }
@@ -37,6 +59,17 @@ export default function StatusChip({
       color="default"
       icon={<StopCircleRoundedIcon />}
       label="Stopped"
+      size="medium"
+      sx={{
+        px: 1,
+        height: 36,
+        fontWeight: 700,
+        borderRadius: 3,
+        alignSelf: {
+          xs: "center",
+          sm: "flex-end",
+        },
+      }}
     />
   );
-}   
+}

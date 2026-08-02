@@ -1,5 +1,6 @@
 import FlagRoundedIcon from "@mui/icons-material/FlagRounded";
 import {
+  Box,
   List,
   ListItem,
   ListItemIcon,
@@ -23,15 +24,41 @@ export default function LapList({
       <Paper
         elevation={0}
         sx={{
-          p: 3,
+          p: 4,
           border: 1,
           borderColor: "divider",
           borderRadius: 4,
           textAlign: "center",
         }}
       >
-        <Typography color="text.secondary">
-          No laps recorded yet.
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            mb: 2,
+          }}
+        >
+          <FlagRoundedIcon
+            color="disabled"
+            sx={{ fontSize: 40 }}
+          />
+        </Box>
+
+        <Typography
+          variant="subtitle1"
+          fontWeight={600}
+          gutterBottom
+        >
+          No laps recorded
+        </Typography>
+
+        <Typography
+          variant="body2"
+          color="text.secondary"
+        >
+          Start the timer and tap{" "}
+          <strong>Record Lap</strong> to
+          keep track of important moments.
         </Typography>
       </Paper>
     );
@@ -60,6 +87,9 @@ export default function LapList({
             <ListItemText
               primary={`Lap ${index + 1}`}
               secondary={formatTime(lap.time)}
+              primaryTypographyProps={{
+                fontWeight: 600,
+              }}
             />
           </ListItem>
         ))}

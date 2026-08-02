@@ -1,7 +1,7 @@
+import FlagRoundedIcon from "@mui/icons-material/FlagRounded";
 import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
-import FlagRoundedIcon from "@mui/icons-material/FlagRounded";
 
 import {
   Button,
@@ -29,6 +29,13 @@ export default function StopwatchControls({
 }: Props) {
   const hasStarted = elapsed > 0;
 
+  const buttonSx = {
+    flex: 1,
+    minHeight: 52,
+    borderRadius: 3,
+    fontWeight: 700,
+  };
+
   return (
     <Stack
       direction={{
@@ -37,15 +44,18 @@ export default function StopwatchControls({
       }}
       spacing={2}
       justifyContent="center"
+      alignItems="stretch"
     >
       {!hasStarted ? (
         <Button
           variant="contained"
           size="large"
+          fullWidth
           startIcon={<PlayArrowRoundedIcon />}
           onClick={onStart}
+          sx={buttonSx}
         >
-          Start
+          Start Meeting Timer
         </Button>
       ) : running ? (
         <>
@@ -55,6 +65,7 @@ export default function StopwatchControls({
             size="large"
             startIcon={<PauseRoundedIcon />}
             onClick={onPause}
+            sx={buttonSx}
           >
             Pause
           </Button>
@@ -64,8 +75,9 @@ export default function StopwatchControls({
             size="large"
             startIcon={<FlagRoundedIcon />}
             onClick={onLap}
+            sx={buttonSx}
           >
-            Lap
+            Record Lap
           </Button>
 
           <Button
@@ -74,6 +86,7 @@ export default function StopwatchControls({
             size="large"
             startIcon={<RefreshRoundedIcon />}
             onClick={onReset}
+            sx={buttonSx}
           >
             Reset
           </Button>
@@ -85,6 +98,7 @@ export default function StopwatchControls({
             size="large"
             startIcon={<PlayArrowRoundedIcon />}
             onClick={onResume}
+            sx={buttonSx}
           >
             Resume
           </Button>
@@ -95,6 +109,7 @@ export default function StopwatchControls({
             size="large"
             startIcon={<RefreshRoundedIcon />}
             onClick={onReset}
+            sx={buttonSx}
           >
             Reset
           </Button>
