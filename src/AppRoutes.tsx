@@ -22,13 +22,13 @@ import Service from "./pages/service/Service";
 import Personal from "./pages/personal/Personal";
 import BibleReading from "./pages/personal/BibleReading";
 import PrayerJournal from "./pages/personal/PrayerJournal";
-import FamilyWorship from "./pages/personal/FamilyWorship";
-import PersonalTasks from "./pages/personal/PersonalTasks";
+
 import PersonalStudyPage from "./features/personal-study/pages/PersonalStudyPage";
 import StudyNotebookPage from "./features/personal-study/pages/StudyNotebookPage";
 import NotebookPage from "./features/notebooks/pages/NotebookPage";
 import NotebookWorkspace from "./features/notebooks/pages/NotebookWorkspace";
 import { LifeSchedulePage } from "./features/life-schedule";
+import { FamilyWorshipPage } from "./features/family-worship";
 
 // Ministry
 import MinistryDashboard from "./features/ministry/pages/MinistryDashboard";
@@ -137,14 +137,11 @@ export default function AppRoutes() {
           path="/personal/prayer"
           element={<PrayerJournal />}
         />
+        
         <Route
-          path="/personal/family-worship"
-          element={<FamilyWorship />}
-        />
-        <Route
-          path="/personal/tasks"
-          element={<PersonalTasks />}
-        />
+  path="/personal/family-worship"
+  element={<FamilyWorshipPage />}
+/>
 
         <Route
   path="/personal/life-schedule"
