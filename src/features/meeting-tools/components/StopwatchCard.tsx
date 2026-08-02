@@ -25,15 +25,12 @@ export default function StopwatchCard() {
   return (
     <Paper
       elevation={0}
-      sx={{
-        p: {
-          xs: 2.5,
-          sm: 3,
-        },
-        borderRadius: 5,
-        border: 1,
-        borderColor: "divider",
-      }}
+    sx={{
+  fontSize: {
+    xs: "2rem",
+    sm: "2.5rem",
+  },
+}}
     >
       <Stack spacing={4}>
         <Stack
@@ -42,7 +39,7 @@ export default function StopwatchCard() {
           textAlign="center"
         >
           <Typography
-            variant="h4"
+            variant="h5"
             fontWeight={700}
           >
             Meeting Stopwatch
