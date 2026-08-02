@@ -14,8 +14,8 @@ export default function StopwatchDisplay({
       elevation={0}
       sx={{
         py: {
-          xs: 4,
-          sm: 5,
+          xs: 3.5,
+          sm: 4.5,
         },
         px: 2,
         borderRadius: 5,
@@ -30,7 +30,7 @@ export default function StopwatchDisplay({
         variant="overline"
         sx={{
           display: "block",
-          mb: 1.5,
+          mb: 2,
           color: "text.secondary",
           fontWeight: 700,
           letterSpacing: 4,
@@ -45,13 +45,13 @@ export default function StopwatchDisplay({
           fontWeight: 700,
           lineHeight: 1,
           letterSpacing: {
-            xs: 1,
-            sm: 2,
+            xs: 0.5,
+            sm: 1.5,
           },
           fontSize: {
-            xs: "2.6rem",
-            sm: "3.6rem",
-            md: "4.5rem",
+            xs: "3rem",
+            sm: "4rem",
+            md: "5rem",
           },
           whiteSpace: "nowrap",
           overflow: "hidden",

@@ -26,30 +26,34 @@ export default function StopwatchCard() {
     <Paper
       elevation={0}
       sx={{
-        p: 3,
-        borderRadius: 4,
+        p: {
+          xs: 2.5,
+          sm: 3,
+        },
+        borderRadius: 5,
         border: 1,
         borderColor: "divider",
       }}
     >
-      <Stack spacing={3}>
+      <Stack spacing={4}>
         <Stack
-          direction={{
-            xs: "column",
-            sm: "row",
-          }}
           spacing={2}
-          justifyContent="space-between"
-          alignItems={{
-            xs: "flex-start",
-            sm: "center",
-          }}
+          alignItems="center"
+          textAlign="center"
         >
           <Typography
-            variant="h5"
+            variant="h4"
             fontWeight={700}
           >
             Meeting Stopwatch
+          </Typography>
+
+          <Typography
+            variant="body2"
+            color="text.secondary"
+          >
+            Perfect for meetings, talks and
+            assignments.
           </Typography>
 
           <StatusChip
