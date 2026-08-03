@@ -18,27 +18,43 @@ export default function NewSessionCard({
     <Paper
       elevation={0}
       sx={{
-        p: 3,
+        p: 4,
         mb: 3,
-        border: 1,
-        borderColor: "divider",
-        borderRadius: 4,
+        borderRadius: 6,
+        border: "1px solid",
+        borderColor: "#D8F0DF",
+        background:
+          "linear-gradient(135deg,#F6FFF8 0%,#ECFDF3 100%)",
+        boxShadow:
+          "0 10px 30px rgba(46,125,50,.08)",
+        transition: "all .25s ease",
+
+        "&:hover": {
+          transform: "translateY(-3px)",
+          boxShadow:
+            "0 18px 36px rgba(46,125,50,.16)",
+        },
       }}
     >
-      <Stack spacing={2}>
+      <Stack spacing={2.5}>
         <Typography
-          variant="h6"
+          variant="h5"
           fontWeight={700}
+          color="#2E7D32"
         >
-          Start New Family Worship
+          🌱 Start New Family Worship
         </Typography>
 
         <Typography
-          color="text.secondary"
+          sx={{
+            color: "#64748B",
+            lineHeight: 1.7,
+          }}
         >
-          Create a new worship session with
-          scriptures, discussion questions,
-          media, notes, goals and more.
+          Create a new family worship
+          session with scriptures,
+          discussion questions, media,
+          notes, goals, and more.
         </Typography>
 
         <Button
@@ -47,11 +63,23 @@ export default function NewSessionCard({
           startIcon={<AddRoundedIcon />}
           onClick={onCreate}
           sx={{
+            mt: 1,
             alignSelf: {
               xs: "stretch",
               sm: "flex-start",
             },
-            borderRadius: 3,
+            borderRadius: 999,
+            py: 1.4,
+            px: 3,
+            fontWeight: 700,
+            textTransform: "none",
+            background:
+              "linear-gradient(90deg,#2E7D32,#43A047)",
+
+            "&:hover": {
+              background:
+                "linear-gradient(90deg,#1B5E20,#2E7D32)",
+            },
           }}
         >
           New Worship Session
