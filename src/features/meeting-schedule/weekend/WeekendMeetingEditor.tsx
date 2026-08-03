@@ -1,11 +1,15 @@
 import { useState } from "react";
 
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
+import PictureAsPdfRoundedIcon from "@mui/icons-material/PictureAsPdfRounded";
+import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
+import PrintRoundedIcon from "@mui/icons-material/PrintRounded";
 
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Button,
   Grid,
   Paper,
   Stack,
@@ -20,14 +24,18 @@ import {
 
 import { createEmptyWeekendSchedule } from "./services/createEmptyWeekendSchedule";
 
+import {
+  saveSchedule,
+} from "./storage/weekendMeetingStorage";
+
+import { exportWeekendPdf } from "./export/exportWeekendPdf";
+
 import WeekendMeetingInformationSection from "./WeekendMeetingInformationSection";
 
 export default function WeekendMeetingEditor() {
   const [schedule, setSchedule] =
     useState<WeekendMeetingSchedule>(() =>
-      createEmptyWeekendSchedule(
-        "September 2026"
-      )
+      createEmptyWeekendSchedule("September 2026")
     );
 
   function updateWeek(
@@ -44,6 +52,20 @@ export default function WeekendMeetingEditor() {
           : week
       ),
     }));
+  }
+
+  function handleSave() {
+    saveSchedule(schedule);
+
+    alert("Weekend schedule saved successfully.");
+  }
+
+  function handleExportPdf() {
+    exportWeekendPdf(schedule);
+  }
+
+  function handlePrint() {
+    window.print();
   }
 
   return (
@@ -103,9 +125,42 @@ export default function WeekendMeetingEditor() {
           </Grid>
         </Grid>
 
+        <Stack
+          direction="row"
+          spacing={2}
+          flexWrap="wrap"
+        >
+          <Button
+            variant="contained"
+            color="success"
+            startIcon={<SaveRoundedIcon />}
+            onClick={handleSave}
+          >
+            Save Schedule
+          </Button>
+
+          <Button
+            variant="outlined"
+            color="success"
+            startIcon={<PictureAsPdfRoundedIcon />}
+            onClick={handleExportPdf}
+          >
+            Export PDF
+          </Button>
+
+          <Button
+            variant="outlined"
+            color="success"
+            startIcon={<PrintRoundedIcon />}
+            onClick={handlePrint}
+          >
+            Print
+          </Button>
+        </Stack>
+
         <Typography color="text.secondary">
           Prepare the monthly Weekend Meeting
-          schedule.
+          schedule, save it and export it as a PDF.
         </Typography>
 
         {schedule.weeks.map((week) => (

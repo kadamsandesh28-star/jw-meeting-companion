@@ -1,18 +1,13 @@
 import { useState } from "react";
 
 import ExpandMoreRoundedIcon from "@mui/icons-material/ExpandMoreRounded";
-import PictureAsPdfRoundedIcon from "@mui/icons-material/PictureAsPdfRounded";
-import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Button,
-  Grid,
   Paper,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 
@@ -24,6 +19,9 @@ import {
 import { createEmptyMidweekSchedule } from "../services/createEmptyMidweekSchedule";
 import { saveSchedule } from "../storage/meetingScheduleStorage";
 import { exportMidweekPdf } from "../export/exportMidweekPdf";
+
+import ScheduleHeader from "../shared/ScheduleHeader";
+import ScheduleToolbar from "../shared/ScheduleToolbar";
 
 import MeetingInformationSection from "./MeetingInformationSection";
 import TreasuresSection from "./TreasuresSection";
@@ -63,6 +61,10 @@ export default function MidweekMeetingEditor() {
     exportMidweekPdf(schedule);
   }
 
+  function handlePrint() {
+    window.print();
+  }
+
   return (
     <Paper
       elevation={0}
@@ -75,82 +77,18 @@ export default function MidweekMeetingEditor() {
       }}
     >
       <Stack spacing={4}>
-        <Typography
-          variant="h4"
-          fontWeight={700}
-          color="success.main"
-        >
-          Midweek Meeting Schedule
-        </Typography>
+        <ScheduleHeader
+          title="Midweek Meeting Schedule"
+          month={schedule.month}
+          count={schedule.weeks.length}
+          description="Prepare the monthly Midweek Meeting schedule, save it and export it as a PDF."
+        />
 
-        <Grid
-          container
-          spacing={2}
-        >
-          <Grid
-            size={{
-              xs: 12,
-              md: 8,
-            }}
-          >
-            <TextField
-              fullWidth
-              label="Month"
-              value={schedule.month}
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-          </Grid>
-
-          <Grid
-            size={{
-              xs: 12,
-              md: 4,
-            }}
-          >
-            <TextField
-              fullWidth
-              label="Weeks"
-              value={schedule.weeks.length}
-              InputProps={{
-                readOnly: true,
-              }}
-            />
-          </Grid>
-        </Grid>
-
-        <Stack
-          direction="row"
-          spacing={2}
-          flexWrap="wrap"
-        >
-          <Button
-            variant="contained"
-            color="success"
-            startIcon={<SaveRoundedIcon />}
-            onClick={handleSave}
-          >
-            Save Schedule
-          </Button>
-
-          <Button
-            variant="outlined"
-            color="success"
-            startIcon={
-              <PictureAsPdfRoundedIcon />
-            }
-            onClick={handleExportPdf}
-          >
-            Export PDF
-          </Button>
-        </Stack>
-
-        <Typography color="text.secondary">
-          Prepare the monthly Midweek
-          Meeting schedule, save it and
-          export it as a PDF.
-        </Typography>
+        <ScheduleToolbar
+          onSave={handleSave}
+          onExport={handleExportPdf}
+          onPrint={handlePrint}
+        />
 
         {schedule.weeks.map((week) => (
           <Accordion
