@@ -5,6 +5,8 @@ import CongregationOverviewCard from "../components/CongregationOverviewCard";
 import OverseersCard from "../components/OverseersCard";
 import CongregationDepartmentsCard from "../components/CongregationDepartmentsCard";
 import QuickActionsCard from "../components/QuickActionsCard";
+import MeetingSchedulesCard from "../components/MeetingSchedulesCard";
+
 import RecentActivityCard, {
   Activity,
 } from "../components/RecentActivityCard";
@@ -85,14 +87,17 @@ export default function Dashboard() {
           </Grid>
         </Grid>
 
-        {/* Departments + Quick Actions */}
+        {/* Departments + Meeting Schedules */}
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, lg: 7 }}>
             <CongregationDepartmentsCard />
           </Grid>
 
           <Grid size={{ xs: 12, lg: 5 }}>
-            <QuickActionsCard />
+            <Stack spacing={3}>
+              <MeetingSchedulesCard />
+              <QuickActionsCard />
+            </Stack>
           </Grid>
         </Grid>
 
