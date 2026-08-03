@@ -12,16 +12,11 @@ function initializePdfMake() {
     return;
   }
 
-  const fonts = pdfFonts as any;
+  const fonts =
+    (pdfFonts as any).default ??
+    pdfFonts;
 
-  if (fonts.vfs) {
-    (pdfMake as any).vfs = fonts.vfs;
-  } else if (fonts.pdfMake?.vfs) {
-    (pdfMake as any).vfs = fonts.pdfMake.vfs;
-  } else {
-    console.error("Unable to initialize pdfMake VFS.", fonts);
-    throw new Error("pdfMake fonts could not be initialized.");
-  }
+  (pdfMake as any).vfs = fonts;
 
   initialized = true;
 }
