@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+
 import {
   Box,
   Button,
@@ -13,6 +14,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+
+import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 
 import {
   loadSettings,
@@ -35,12 +38,25 @@ import {
   UserRole,
 } from "../../services/userRoleService";
 
+import {
+  loadCongregationProfile,
+  saveCongregationProfile,
+} from "../../features/settings/storage/congregationProfileStorage";
+
+
 export default function Settings() {
   console.log("✅ SETTINGS COMPONENT RENDERED");
-  const [midweekLink, setMidweekLink] = useState("");
-  const [weekendLink, setWeekendLink] = useState("");
-  const [dailyScriptureLink, setDailyScriptureLink] =
+
+  const [midweekLink, setMidweekLink] =
     useState("");
+
+  const [weekendLink, setWeekendLink] =
+    useState("");
+
+  const [
+    dailyScriptureLink,
+    setDailyScriptureLink,
+  ] = useState("");
 
   const [theme, setTheme] =
     useState<ThemeMode>("system");
@@ -48,52 +64,80 @@ export default function Settings() {
   const [userRole, setUserRoleState] =
     useState<UserRole>("publisher");
 
+  const [
+    congregationName,
+    setCongregationName,
+  ] = useState("");
+
   const { setMode } = useAppTheme();
 
   const fileInputRef =
     useRef<HTMLInputElement>(null);
-useEffect(() => {
-  const settings = loadSettings();
 
-  setMidweekLink(settings.resources.workbookUrl);
+  useEffect(() => {
+    const settings = loadSettings();
 
-  setWeekendLink(settings.resources.watchtowerUrl);
+    setMidweekLink(
+      settings.resources.workbookUrl
+    );
 
-  setDailyScriptureLink(
-    settings.resources.dailyScriptureUrl
-  );
+    setWeekendLink(
+      settings.resources.watchtowerUrl
+    );
 
-  setTheme(settings.theme);
+    setDailyScriptureLink(
+      settings.resources.dailyScriptureUrl
+    );
 
-  setUserRoleState(getUserRole());
-}, []);
+    setTheme(settings.theme);
+
+    setUserRoleState(
+      getUserRole()
+    );
+
+    const profile =
+      loadCongregationProfile();
+
+    setCongregationName(
+      profile.congregationName
+    );
+  }, []);
 
   function saveAllSettings() {
-  updateStudyResources({
-  workbookUrl: midweekLink,
-  watchtowerUrl: weekendLink,
-  dailyScriptureUrl: dailyScriptureLink,
-});
+    updateStudyResources({
+      workbookUrl: midweekLink,
+      watchtowerUrl: weekendLink,
+      dailyScriptureUrl:
+        dailyScriptureLink,
+    });
 
-  updateSettings({
-    theme,
-  });
+    updateSettings({
+      theme,
+    });
 
-  setMode(theme);
+    setMode(theme);
 
-  setUserRole(userRole);
+    setUserRole(userRole);
 
-  alert("✅ Settings saved successfully!");
-}
+    saveCongregationProfile({
+      congregationName,
+    });
+
+    alert(
+      "✅ Settings saved successfully!"
+    );
+  }
 
   function handleRestore(
     event: React.ChangeEvent<HTMLInputElement>
   ) {
-    const file = event.target.files?.[0];
+    const file =
+      event.target.files?.[0];
 
     if (!file) return;
 
-    const reader = new FileReader();
+    const reader =
+      new FileReader();
 
     reader.onload = () => {
       try {
@@ -107,22 +151,26 @@ useEffect(() => {
             "Restore this backup? This will overwrite your current local data."
           );
 
-        if (!confirmRestore) return;
+        if (!confirmRestore)
+          return;
 
-        restoreBackup(backup);
+        restoreBackup(
+          backup
+        );
 
         alert(
           "✅ Backup restored successfully.\n\nPlease refresh the application."
         );
       } catch {
-        alert("❌ Invalid backup file.");
+        alert(
+          "❌ Invalid backup file."
+        );
       }
     };
 
     reader.readAsText(file);
   }
-
-  return (
+    return (
     <Box sx={{ p: 3 }}>
       <Typography
         variant="h4"
@@ -134,6 +182,29 @@ useEffect(() => {
 
       <Card sx={{ borderRadius: 4 }}>
         <CardContent>
+
+          {/* Congregation */}
+
+          <Typography
+            variant="h6"
+            gutterBottom
+          >
+            🏛 Congregation
+          </Typography>
+
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Congregation Name"
+            value={congregationName}
+            onChange={(e) =>
+              setCongregationName(
+                e.target.value
+              )
+            }
+          />
+
+          <Divider sx={{ my: 4 }} />
 
           {/* Study Resources */}
 
@@ -150,7 +221,9 @@ useEffect(() => {
             margin="normal"
             value={midweekLink}
             onChange={(e) =>
-              setMidweekLink(e.target.value)
+              setMidweekLink(
+                e.target.value
+              )
             }
           />
 
@@ -160,7 +233,9 @@ useEffect(() => {
             margin="normal"
             value={weekendLink}
             onChange={(e) =>
-              setWeekendLink(e.target.value)
+              setWeekendLink(
+                e.target.value
+              )
             }
           />
 
@@ -217,7 +292,7 @@ useEffect(() => {
 
           <Divider sx={{ my: 4 }} />
 
-          {/* Privileges & Responsibilities */}
+          {/* Privileges */}
 
           <Typography
             variant="h6"
@@ -256,7 +331,7 @@ useEffect(() => {
 
           <Divider sx={{ my: 4 }} />
 
-          {/* Backup & Restore */}
+          {/* Backup */}
 
           <Typography
             variant="h6"
@@ -300,6 +375,7 @@ useEffect(() => {
           <Button
             variant="contained"
             size="large"
+            startIcon={<SaveRoundedIcon />}
             onClick={saveAllSettings}
           >
             Save Settings
