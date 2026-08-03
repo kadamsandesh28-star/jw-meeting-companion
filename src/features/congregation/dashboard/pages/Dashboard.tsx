@@ -4,6 +4,7 @@ import DashboardHeader from "../components/DashboardHeader";
 import CongregationOverviewCard from "../components/CongregationOverviewCard";
 import OverseersCard from "../components/OverseersCard";
 import CongregationDepartmentsCard from "../components/CongregationDepartmentsCard";
+import MeetingSchedulesCard from "../components/MeetingSchedulesCard";
 import QuickActionsCard from "../components/QuickActionsCard";
 import RecentActivityCard, {
   Activity,
@@ -20,11 +21,20 @@ import { loadCongregationProfile } from "../../../settings/storage/congregationP
 export default function Dashboard() {
   const profile = loadCongregationProfile();
 
-  const publisherCount = publisherService.getAll().length;
-  const elderCount = bodyMemberService.getAll().length;
-  const serviceGroupCount = serviceGroupService.getAll().length;
-  const territoryCount = territoryService.getAll().length;
-  const committeeCount = serviceCommitteeService.getAll().length;
+  const publisherCount =
+    publisherService.getAll().length;
+
+  const elderCount =
+    bodyMemberService.getAll().length;
+
+  const serviceGroupCount =
+    serviceGroupService.getAll().length;
+
+  const territoryCount =
+    territoryService.getAll().length;
+
+  const committeeCount =
+    serviceCommitteeService.getAll().length;
 
   const activities: Activity[] = [
     ...publisherService.getAll().map((p) => ({
@@ -71,36 +81,85 @@ export default function Dashboard() {
     >
       <Stack spacing={4}>
         <DashboardHeader
-          congregationName={profile.congregationName}
+          congregationName={
+            profile.congregationName
+          }
         />
 
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, lg: 8 }}>
+        <Grid
+          container
+          spacing={3}
+        >
+          <Grid
+            size={{
+              xs: 12,
+              lg: 8,
+            }}
+          >
             <CongregationOverviewCard
-              publisherCount={publisherCount}
+              publisherCount={
+                publisherCount
+              }
               elderCount={elderCount}
-              serviceGroupCount={serviceGroupCount}
-              territoryCount={territoryCount}
-              committeeCount={committeeCount}
+              serviceGroupCount={
+                serviceGroupCount
+              }
+              territoryCount={
+                territoryCount
+              }
+              committeeCount={
+                committeeCount
+              }
             />
           </Grid>
 
-          <Grid size={{ xs: 12, lg: 4 }}>
+          <Grid
+            size={{
+              xs: 12,
+              lg: 4,
+            }}
+          >
             <OverseersCard />
           </Grid>
         </Grid>
 
-        <Grid container spacing={3}>
-          <Grid size={{ xs: 12, lg: 7 }}>
+        {/* Departments + Meeting Schedule + Quick Actions */}
+
+        <Grid
+          container
+          spacing={3}
+        >
+          <Grid
+            size={{
+              xs: 12,
+              md: 4,
+            }}
+          >
             <CongregationDepartmentsCard />
           </Grid>
 
-          <Grid size={{ xs: 12, lg: 5 }}>
+          <Grid
+            size={{
+              xs: 12,
+              md: 4,
+            }}
+          >
+            <MeetingSchedulesCard />
+          </Grid>
+
+          <Grid
+            size={{
+              xs: 12,
+              md: 4,
+            }}
+          >
             <QuickActionsCard />
           </Grid>
         </Grid>
 
-        <RecentActivityCard activities={activities} />
+        <RecentActivityCard
+          activities={activities}
+        />
       </Stack>
     </Box>
   );
