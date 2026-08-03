@@ -5,8 +5,6 @@ import CongregationOverviewCard from "../components/CongregationOverviewCard";
 import OverseersCard from "../components/OverseersCard";
 import CongregationDepartmentsCard from "../components/CongregationDepartmentsCard";
 import QuickActionsCard from "../components/QuickActionsCard";
-import MeetingSchedulesCard from "../components/MeetingSchedulesCard";
-
 import RecentActivityCard, {
   Activity,
 } from "../components/RecentActivityCard";
@@ -17,7 +15,11 @@ import { serviceGroupService } from "../../service-groups/services/serviceGroupS
 import { territoryService } from "../../territories/services/territoryService";
 import { serviceCommitteeService } from "../../service-committee/services/serviceCommitteeService";
 
+import { loadCongregationProfile } from "../../../settings/storage/congregationProfileStorage";
+
 export default function Dashboard() {
+  const profile = loadCongregationProfile();
+
   const publisherCount = publisherService.getAll().length;
   const elderCount = bodyMemberService.getAll().length;
   const serviceGroupCount = serviceGroupService.getAll().length;
@@ -68,9 +70,10 @@ export default function Dashboard() {
       }}
     >
       <Stack spacing={4}>
-        <DashboardHeader congregationName="West Hills Congregation" />
+        <DashboardHeader
+          congregationName={profile.congregationName}
+        />
 
-        {/* Overview + Overseers */}
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, lg: 8 }}>
             <CongregationOverviewCard
@@ -87,21 +90,16 @@ export default function Dashboard() {
           </Grid>
         </Grid>
 
-        {/* Departments + Meeting Schedules */}
         <Grid container spacing={3}>
           <Grid size={{ xs: 12, lg: 7 }}>
             <CongregationDepartmentsCard />
           </Grid>
 
           <Grid size={{ xs: 12, lg: 5 }}>
-            <Stack spacing={3}>
-              <MeetingSchedulesCard />
-              <QuickActionsCard />
-            </Stack>
+            <QuickActionsCard />
           </Grid>
         </Grid>
 
-        {/* Recent Activity */}
         <RecentActivityCard activities={activities} />
       </Stack>
     </Box>
