@@ -71,6 +71,11 @@ import ServiceCommitteeEditor from "./features/congregation/service-committee/pa
 import DepartmentsPage from "./features/congregation/departments/pages/DepartmentsPage";
 import DepartmentDetailsPage from "./features/congregation/departments/pages/DepartmentDetailsPage";
 
+// Meeting Schedule
+import MidweekMeetingPage from "./features/meeting-schedule/midweek/MidweekMeetingPage";
+import WeekendMeetingPage from "./features/meeting-schedule/weekend/WeekendMeetingPage";
+import FieldServicePage from "./features/meeting-schedule/field-service/FieldServicePage";
+
 export default function AppRoutes() {
   return (
     <Routes>
@@ -179,7 +184,22 @@ export default function AppRoutes() {
           path="/congregation"
           element={<Dashboard />}
         />
+{/* Meeting Schedule */}
 
+<Route
+  path="/congregation/midweek"
+  element={<MidweekMeetingPage />}
+/>
+
+<Route
+  path="/congregation/weekend"
+  element={<WeekendMeetingPage />}
+/>
+
+<Route
+  path="/congregation/field-service"
+  element={<FieldServicePage />}
+/>
         {/* Publishers */}
         <Route
           path="/congregation/publishers"

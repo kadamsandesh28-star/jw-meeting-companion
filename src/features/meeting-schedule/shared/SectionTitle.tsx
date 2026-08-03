@@ -1,19 +1,27 @@
-import { Typography } from "@mui/material";
+import {
+  Divider,
+  Stack,
+  Typography,
+} from "@mui/material";
 
 interface Props {
-  children: React.ReactNode;
+  title: string;
 }
 
 export default function SectionTitle({
-  children,
+  title,
 }: Props) {
   return (
-    <Typography
-      variant="h5"
-      fontWeight={700}
-      color="success.main"
-    >
-      {children}
-    </Typography>
+    <Stack spacing={2}>
+      <Typography
+        variant="h6"
+        fontWeight={700}
+        color="success.main"
+      >
+        {title}
+      </Typography>
+
+      <Divider />
+    </Stack>
   );
 }

@@ -1,96 +1,97 @@
-import MenuBookRoundedIcon from "@mui/icons-material/MenuBookRounded";
+import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
+import ChurchRoundedIcon from "@mui/icons-material/ChurchRounded";
 import GroupsRoundedIcon from "@mui/icons-material/GroupsRounded";
-import HistoryRoundedIcon from "@mui/icons-material/HistoryRounded";
-import RecordVoiceOverRoundedIcon from "@mui/icons-material/RecordVoiceOverRounded";
+import ViewAgendaRoundedIcon from "@mui/icons-material/ViewAgendaRounded";
 
-import { Grid } from "@mui/material";
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  Grid,
+  Stack,
+  Typography,
+} from "@mui/material";
 
-import MeetingCard from "./MeetingCard";
-import MeetingScheduleHeader from "./MeetingScheduleHeader";
+const cards = [
+  {
+    title: "Midweek Meeting",
+    description:
+      "Prepare one or two months of Midweek Meeting schedules and export to PDF.",
+    icon: <CalendarMonthRoundedIcon color="success" />,
+  },
+  {
+    title: "Weekend Meeting",
+    description:
+      "Assign chairman, public speaker, Watchtower conductor, reader and prayers.",
+    icon: <ChurchRoundedIcon color="success" />,
+  },
+  {
+    title: "Field Service",
+    description:
+      "Prepare the monthly field service arrangement for the congregation.",
+    icon: <GroupsRoundedIcon color="success" />,
+  },
+  {
+    title: "Other Schedule",
+    description:
+      "Create congregation schedules for cleaning, maintenance and special events.",
+    icon: <ViewAgendaRoundedIcon color="success" />,
+  },
+];
 
-interface Props {
-  onMidweek?: () => void;
-  onWeekend?: () => void;
-  onFieldService?: () => void;
-  onHistory?: () => void;
-}
-
-export default function MeetingDashboard({
-  onMidweek,
-  onWeekend,
-  onFieldService,
-  onHistory,
-}: Props) {
+export default function MeetingDashboard() {
   return (
-    <>
-      <MeetingScheduleHeader />
-
-      <Grid
-        container
-        spacing={3}
-      >
+    <Grid
+      container
+      spacing={3}
+    >
+      {cards.map((card) => (
         <Grid
+          key={card.title}
           size={{
             xs: 12,
-            md: 6,
+            sm: 6,
+            md: 3,
           }}
         >
-          <MeetingCard
-            title="📖 Midweek Meeting"
-            description="Prepare monthly Meeting Workbook schedules, assign brothers, songs, prayers and meeting parts."
-            color="#2e7d32"
-            icon={<MenuBookRoundedIcon fontSize="large" />}
-            onClick={onMidweek}
-          />
-        </Grid>
+          <Card
+            elevation={0}
+            sx={{
+              height: "100%",
+              borderRadius: 4,
+              border: 1,
+              borderColor: "divider",
+            }}
+          >
+            <CardActionArea
+              sx={{
+                height: "100%",
+                p: 3,
+              }}
+            >
+              <CardContent>
+                <Stack spacing={2}>
+                  {card.icon}
 
-        <Grid
-          size={{
-            xs: 12,
-            md: 6,
-          }}
-        >
-          <MeetingCard
-            title="📘 Weekend Meeting"
-            description="Manage chairman, public talk speaker, Watchtower conductor, reader and prayers."
-            color="#1565c0"
-            icon={
-              <RecordVoiceOverRoundedIcon fontSize="large" />
-            }
-            onClick={onWeekend}
-          />
-        </Grid>
+                  <Typography
+                    variant="h6"
+                    fontWeight={700}
+                  >
+                    {card.title}
+                  </Typography>
 
-        <Grid
-          size={{
-            xs: 12,
-            md: 6,
-          }}
-        >
-          <MeetingCard
-            title="🤝 Field Service Arrangement"
-            description="Create monthly witnessing arrangements with locations, witnessing forms and assigned brothers."
-            color="#ef6c00"
-            icon={<GroupsRoundedIcon fontSize="large" />}
-            onClick={onFieldService}
-          />
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                  >
+                    {card.description}
+                  </Typography>
+                </Stack>
+              </CardContent>
+            </CardActionArea>
+          </Card>
         </Grid>
-
-        <Grid
-          size={{
-            xs: 12,
-            md: 6,
-          }}
-        >
-          <MeetingCard
-            title="📚 Schedule History"
-            description="View, edit, duplicate and export previously created meeting schedules."
-            color="#6a1b9a"
-            icon={<HistoryRoundedIcon fontSize="large" />}
-            onClick={onHistory}
-          />
-        </Grid>
-      </Grid>
-    </>
+      ))}
+    </Grid>
   );
 }
