@@ -1,53 +1,69 @@
 import {
-  FieldServiceEntry,
+  FieldServiceArrangement,
+  FieldServiceDay,
   FieldServiceSchedule,
+  FieldServiceWeek,
 } from "../models/FieldServiceSchedule";
 
-function createEntry(): FieldServiceEntry {
+function createArrangement(): FieldServiceArrangement {
+  return {
+    id: crypto.randomUUID(),
+    time: "",
+    arrangement: "",
+    location: "",
+    conductor: "",
+    notes: "",
+  };
+}
+
+function createDay(day: string): FieldServiceDay {
+  return {
+    day,
+    arrangements: [createArrangement()],
+  };
+}
+
+function createWeek(
+  weekNumber: number,
+  weekLabel: string
+): FieldServiceWeek {
   return {
     id: crypto.randomUUID(),
 
-    date: "",
+    weekNumber,
 
-    day: "",
+    weekLabel,
 
-    time: "",
-
-    arrangement: "",
-
-    location: "",
-
-    conductor: "",
-
-    notes: "",
+    days: [
+      createDay("Monday"),
+      createDay("Wednesday"),
+      createDay("Thursday"),
+      createDay("Friday"),
+      createDay("Saturday"),
+    ],
   };
 }
 
 export function createEmptyFieldServiceSchedule(
   month: string
 ): FieldServiceSchedule {
-  const now = Date.now();
-
   return {
     id: crypto.randomUUID(),
 
-    title: `Field Service - ${month}`,
+    title: `${month} Field Service Schedule`,
 
     month,
 
-    entries: [
-      createEntry(),
-      createEntry(),
-      createEntry(),
-      createEntry(),
-      createEntry(),
-      createEntry(),
-      createEntry(),
-      createEntry(),
+    weeks: [
+      createWeek(1, "Week 1"),
+      createWeek(2, "Week 2"),
+      createWeek(3, "Week 3"),
+      createWeek(4, "Week 4"),
+      createWeek(5, "Week 5"),
     ],
 
-    createdAt: now,
+    createdAt: Date.now(),
 
-    updatedAt: now,
+    updatedAt: Date.now(),
   };
 }

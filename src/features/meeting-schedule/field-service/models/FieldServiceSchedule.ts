@@ -1,9 +1,5 @@
-export interface FieldServiceEntry {
+export interface FieldServiceArrangement {
   id: string;
-
-  date: string;
-
-  day: string;
 
   time: string;
 
@@ -16,6 +12,22 @@ export interface FieldServiceEntry {
   notes: string;
 }
 
+export interface FieldServiceDay {
+  day: string;
+
+  arrangements: FieldServiceArrangement[];
+}
+
+export interface FieldServiceWeek {
+  id: string;
+
+  weekNumber: number;
+
+  weekLabel: string;
+
+  days: FieldServiceDay[];
+}
+
 export interface FieldServiceSchedule {
   id: string;
 
@@ -23,7 +35,7 @@ export interface FieldServiceSchedule {
 
   month: string;
 
-  entries: FieldServiceEntry[];
+  weeks: FieldServiceWeek[];
 
   createdAt: number;
 

@@ -1,7 +1,10 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-import { FieldServiceSchedule } from "../models/FieldServiceSchedule";
+import {
+  FieldServiceArrangement,
+  FieldServiceSchedule,
+} from "../models/FieldServiceSchedule";
 
 export function exportFieldServicePdf(
   schedule: FieldServiceSchedule
@@ -9,52 +12,83 @@ export function exportFieldServicePdf(
   const doc = new jsPDF();
 
   doc.setFontSize(20);
-  doc.text(
-    "JW Meeting Companion",
-    14,
-    20
-  );
+  doc.text("JW Meeting Companion", 14, 20);
 
   doc.setFontSize(16);
-  doc.text(
-    "Field Service Schedule",
-    14,
-    30
-  );
+  doc.text("Field Service Schedule", 14, 30);
 
   doc.setFontSize(12);
-  doc.text(
-    schedule.month,
-    14,
-    38
-  );
+  doc.text(schedule.month, 14, 38);
 
-  autoTable(doc, {
-    startY: 48,
+  let y = 50;
 
-    theme: "grid",
+  schedule.weeks.forEach((week) => {
+    if (y > 250) {
+      doc.addPage();
+      y = 20;
+    }
 
-    head: [[
-      "Date",
-      "Day",
-      "Time",
-      "Arrangement",
-      "Location",
-      "Conductor",
-      "Notes",
-    ]],
+    doc.setFontSize(15);
+    doc.text(week.weekLabel, 14, y);
 
-    body: schedule.entries.map(
-      (entry) => [
-        entry.date,
-        entry.day,
-        entry.time,
-        entry.arrangement,
-        entry.location,
-        entry.conductor,
-        entry.notes,
-      ]
-    ),
+    y += 8;
+
+    week.days.forEach((day) => {
+      if (y > 245) {
+        doc.addPage();
+        y = 20;
+      }
+
+      doc.setFontSize(13);
+      doc.text(day.day, 18, y);
+
+      y += 4;
+
+      const body: string[][] = [];
+
+      day.arrangements.forEach(
+        (arrangement: FieldServiceArrangement) => {
+          body.push([
+            arrangement.time,
+            arrangement.arrangement,
+            arrangement.location,
+            arrangement.conductor,
+            arrangement.notes,
+          ]);
+        }
+      );
+
+      if (body.length === 0) {
+        body.push([
+          "",
+          "",
+          "",
+          "",
+          "",
+        ]);
+      }
+
+      autoTable(doc, {
+        startY: y,
+
+        theme: "grid",
+
+        head: [[
+          "Time",
+          "Arrangement",
+          "Location",
+          "Conductor",
+          "Notes",
+        ]],
+
+        body,
+      });
+
+      y =
+        (doc as any).lastAutoTable.finalY + 8;
+    });
+
+    y += 6;
   });
 
   doc.save(

@@ -13,19 +13,17 @@ import {
 } from "@mui/material";
 
 import {
-  FieldServiceEntry,
+  FieldServiceArrangement,
   FieldServiceSchedule,
 } from "./models/FieldServiceSchedule";
 
 import { createEmptyFieldServiceSchedule } from "./services/createEmptyFieldServiceSchedule";
 
-import {
-  saveSchedule,
-} from "./storage/fieldServiceStorage";
+import { saveSchedule } from "./storage/fieldServiceStorage";
 
 import { exportFieldServicePdf } from "./export/exportFieldServicePdf";
 
-import FieldServiceTable from "./FieldServiceTable";
+import FieldServiceWeekAccordion from "./components/FieldServiceWeekAccordion";
 
 export default function FieldServiceEditor() {
   const [schedule, setSchedule] =
@@ -35,19 +33,92 @@ export default function FieldServiceEditor() {
       )
     );
 
-  function updateEntry(
-    updatedEntry: FieldServiceEntry
+  function updateArrangement(
+    weekId: string,
+    dayName: string,
+    updated: FieldServiceArrangement
   ) {
     setSchedule((current) => ({
       ...current,
 
       updatedAt: Date.now(),
 
-      entries: current.entries.map((entry) =>
-        entry.id === updatedEntry.id
-          ? updatedEntry
-          : entry
-      ),
+      weeks: current.weeks.map((week) => {
+        if (week.id !== weekId) {
+          return week;
+        }
+
+        return {
+          ...week,
+
+          days: week.days.map((day) => {
+            if (day.day !== dayName) {
+              return day;
+            }
+
+            return {
+              ...day,
+
+              arrangements:
+                day.arrangements.map(
+                  (arrangement) =>
+                    arrangement.id === updated.id
+                      ? updated
+                      : arrangement
+                ),
+            };
+          }),
+        };
+      }),
+    }));
+  }
+
+  function addArrangement(
+    weekId: string,
+    dayName: string
+  ) {
+    setSchedule((current) => ({
+      ...current,
+
+      updatedAt: Date.now(),
+
+      weeks: current.weeks.map((week) => {
+        if (week.id !== weekId) {
+          return week;
+        }
+
+        return {
+          ...week,
+
+          days: week.days.map((day) => {
+            if (day.day !== dayName) {
+              return day;
+            }
+
+            return {
+              ...day,
+
+              arrangements: [
+                ...day.arrangements,
+
+                {
+                  id: crypto.randomUUID(),
+
+                  time: "",
+
+                  arrangement: "",
+
+                  location: "",
+
+                  conductor: "",
+
+                  notes: "",
+                },
+              ],
+            };
+          }),
+        };
+      }),
     }));
   }
 
@@ -66,8 +137,7 @@ export default function FieldServiceEditor() {
   function handlePrint() {
     window.print();
   }
-
-  return (
+    return (
     <Paper
       elevation={0}
       sx={{
@@ -130,15 +200,35 @@ export default function FieldServiceEditor() {
         </Stack>
 
         <Typography color="text.secondary">
-          Prepare the monthly Field Service
-          schedule, save it and export it as
-          a PDF.
+          Prepare the monthly Field Service schedule.
+          Each week contains meeting days, and each day
+          can contain multiple arrangements.
         </Typography>
 
-        <FieldServiceTable
-          entries={schedule.entries}
-          onChange={updateEntry}
-        />
+        <Stack spacing={3}>
+          {schedule.weeks.map((week) => (
+            <FieldServiceWeekAccordion
+              key={week.id}
+              week={week}
+              onArrangementChange={(
+                day,
+                arrangement
+              ) =>
+                updateArrangement(
+                  week.id,
+                  day,
+                  arrangement
+                )
+              }
+              onAddArrangement={(day) =>
+                addArrangement(
+                  week.id,
+                  day
+                )
+              }
+            />
+          ))}
+        </Stack>
       </Stack>
     </Paper>
   );
