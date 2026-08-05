@@ -19,6 +19,7 @@ export default function CalendarCard() {
   const {
     events,
     saveEvent,
+    deleteEvent,
   } = useCalendarEvents();
 
   const [currentMonth, setCurrentMonth] =
@@ -59,12 +60,15 @@ export default function CalendarCard() {
 
       return (
         d.getMonth() === currentMonth.getMonth() &&
-        d.getFullYear() === currentMonth.getFullYear()
+        d.getFullYear() ===
+          currentMonth.getFullYear()
       );
     });
   }, [events, currentMonth]);
 
-  const handleDayClick = (date: string) => {
+  const handleDayClick = (
+    date: string
+  ) => {
     setSelectedDate(date);
     setSelectedEvent(undefined);
     setDialogOpen(true);
@@ -84,7 +88,6 @@ export default function CalendarCard() {
       | Omit<DashboardEvent, "id">
   ) => {
     saveEvent(event);
-
     setDialogOpen(false);
   };
 
@@ -98,7 +101,6 @@ export default function CalendarCard() {
       }}
     >
       <CardContent>
-
         <CalendarHeader
           month={currentMonth}
           onPrevious={previousMonth}
@@ -128,8 +130,11 @@ export default function CalendarCard() {
             setDialogOpen(false)
           }
           onSave={handleSave}
+          onDelete={(id) => {
+            deleteEvent(id);
+            setDialogOpen(false);
+          }}
         />
-
       </CardContent>
     </Card>
   );

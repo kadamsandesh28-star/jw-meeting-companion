@@ -20,9 +20,14 @@ interface EventDialogProps {
   initialDate: string;
   event?: DashboardEvent;
   onClose: () => void;
+
   onSave: (
-    event: Omit<DashboardEvent, "id"> | DashboardEvent
+    event:
+      | Omit<DashboardEvent, "id">
+      | DashboardEvent
   ) => void;
+
+  onDelete?: (id: string) => void;
 }
 
 const categories: EventCategory[] = [
@@ -39,6 +44,7 @@ export default function EventDialog({
   event,
   onClose,
   onSave,
+  onDelete,
 }: EventDialogProps) {
   const [title, setTitle] = useState("");
   const [date, setDate] = useState(initialDate);
@@ -86,6 +92,23 @@ export default function EventDialog({
     onClose();
   };
 
+  const handleDelete = () => {
+    if (!event || !onDelete) {
+      return;
+    }
+
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this event?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    onDelete(event.id);
+    onClose();
+  };
+
   return (
     <Dialog
       open={open}
@@ -103,7 +126,9 @@ export default function EventDialog({
             label="Title"
             fullWidth
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) =>
+              setTitle(e.target.value)
+            }
           />
 
           <TextField
@@ -114,7 +139,9 @@ export default function EventDialog({
               shrink: true,
             }}
             value={date}
-            onChange={(e) => setDate(e.target.value)}
+            onChange={(e) =>
+              setDate(e.target.value)
+            }
           />
 
           <TextField
@@ -128,7 +155,9 @@ export default function EventDialog({
               step: 300,
             }}
             value={time}
-            onChange={(e) => setTime(e.target.value)}
+            onChange={(e) =>
+              setTime(e.target.value)
+            }
           />
 
           <TextField
@@ -137,7 +166,9 @@ export default function EventDialog({
             fullWidth
             value={category}
             onChange={(e) =>
-              setCategory(e.target.value as EventCategory)
+              setCategory(
+                e.target.value as EventCategory
+              )
             }
           >
             {categories.map((cat) => (
@@ -156,22 +187,46 @@ export default function EventDialog({
             rows={4}
             fullWidth
             value={notes}
-            onChange={(e) => setNotes(e.target.value)}
+            onChange={(e) =>
+              setNotes(e.target.value)
+            }
           />
         </Stack>
       </DialogContent>
 
-      <DialogActions>
-        <Button onClick={onClose}>
-          Cancel
-        </Button>
+      <DialogActions
+        sx={{
+          justifyContent: "space-between",
+          px: 3,
+          pb: 2,
+        }}
+      >
+        <div>
+          {event && (
+            <Button
+              color="error"
+              onClick={handleDelete}
+            >
+              Delete
+            </Button>
+          )}
+        </div>
 
-        <Button
-          variant="contained"
-          onClick={handleSave}
+        <Stack
+          direction="row"
+          spacing={1}
         >
-          Save
-        </Button>
+          <Button onClick={onClose}>
+            Cancel
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={handleSave}
+          >
+            Save
+          </Button>
+        </Stack>
       </DialogActions>
     </Dialog>
   );
