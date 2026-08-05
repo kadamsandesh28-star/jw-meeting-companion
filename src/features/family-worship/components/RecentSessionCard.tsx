@@ -1,5 +1,7 @@
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
+import CalendarTodayRoundedIcon from "@mui/icons-material/CalendarTodayRounded";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
+import ScheduleRoundedIcon from "@mui/icons-material/ScheduleRounded";
 
 import {
   Card,
@@ -10,6 +12,10 @@ import {
 } from "@mui/material";
 
 import { FamilyWorshipSession } from "../models/FamilyWorshipSession";
+import {
+  formatSessionDate,
+  formatSessionTime,
+} from "../utils/dateFormatter";
 
 interface Props {
   session: FamilyWorshipSession;
@@ -61,24 +67,67 @@ export default function RecentSessionCard({
             {session.theme}
           </Typography>
 
-          <Stack
-            direction="row"
-            spacing={1}
-            alignItems="center"
-          >
-            <AccessTimeRoundedIcon
-              fontSize="small"
-              color="action"
-            />
-
-            <Typography
-              variant="body2"
-              color="text.secondary"
+          <Stack spacing={1}>
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
             >
-              {new Date(
-                session.updatedAt
-              ).toLocaleDateString()}
-            </Typography>
+              <CalendarTodayRoundedIcon
+                fontSize="small"
+                color="primary"
+              />
+
+              <Typography
+                variant="body2"
+                color="text.secondary"
+              >
+                {formatSessionDate(
+                  session.scheduledDate
+                )}
+              </Typography>
+            </Stack>
+
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
+            >
+              <ScheduleRoundedIcon
+                fontSize="small"
+                color="primary"
+              />
+
+              <Typography
+                variant="body2"
+                color="text.secondary"
+              >
+                {formatSessionTime(
+                  session.scheduledTime
+                )}
+              </Typography>
+            </Stack>
+
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
+            >
+              <AccessTimeRoundedIcon
+                fontSize="small"
+                color="action"
+              />
+
+              <Typography
+                variant="body2"
+                color="text.secondary"
+              >
+                Last updated{" "}
+                {new Date(
+                  session.updatedAt
+                ).toLocaleDateString()}
+              </Typography>
+            </Stack>
           </Stack>
 
           <Chip

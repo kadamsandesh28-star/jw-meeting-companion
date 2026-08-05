@@ -1,124 +1,187 @@
 import { TDocumentDefinitions } from "pdfmake/interfaces";
 
+import { createPdfCover } from "../../../shared/pdf/PdfCover";
+import { createPdfFooter } from "../../../shared/pdf/PdfFooter";
+import { createPdfSection } from "../../../shared/pdf/PdfSection";
+import { createPdfSessionOverview } from "../../../shared/pdf/PdfSessionOverview";
+import { PdfTheme } from "../../../shared/pdf/PdfTheme";
+import { PdfTypography } from "../../../shared/pdf/PdfTypography";
+
 import { FamilyWorshipExport } from "./FamilyWorshipExport";
 
 export function familyWorshipPdfDefinition(
   data: FamilyWorshipExport
 ): TDocumentDefinitions {
   return {
-    pageMargins: [40, 50, 40, 50],
+    pageMargins: PdfTheme.page.margins,
 
     content: [
-      {
-        text: "📖 Family Worship",
-        style: "title",
-      },
+      createPdfCover({
+        title: "FAMILY WORSHIP",
+        description:
+          "Faith • Family • Spiritual Growth",
+      }),
 
-      {
-        text: data.title,
-        style: "heading",
-      },
-
-      {
-        text: data.subtitle,
-        margin: [0, 0, 0, 20],
-      },
-
-      {
-        text: "Bible Reading",
-        style: "section",
-      },
-
-      {
-        text: data.bibleReading,
-        margin: [0, 0, 0, 15],
-      },
-
-      {
-        text: "Opening",
-        style: "section",
-      },
-
-      {
-        ul: [
-          `Song: ${data.openingSong}`,
-          `Prayer: ${data.openingPrayer || "—"}`,
+      createPdfSessionOverview({
+        rows: [
+          {
+            label: "Title",
+            value: data.title,
+          },
+          {
+            label: "Theme",
+            value: data.subtitle,
+          },
+          {
+            label: "Bible Reading",
+            value: data.bibleReading,
+          },
+          {
+            label: "Generated",
+            value:
+              data.exportedAt.toLocaleDateString(),
+          },
         ],
-      },
+      }),
 
-      {
-        text: "Discussion Questions",
-        style: "section",
-      },
+      ...createPdfSection(
+        "📖 Bible Reading",
+        [
+          {
+            text: data.bibleReading,
+            style: "heading",
+            alignment: "center",
+            margin: [0, 8, 0, 12],
+          },
 
-      {
-        ul: data.discussionQuestions,
-      },
+          {
+            canvas: [
+              {
+                type: "line",
+                x1: 0,
+                y1: 0,
+                x2: 430,
+                y2: 0,
+                lineWidth: 0.8,
+                lineColor: "#D9E6F2",
+              },
+            ],
+            margin: [0, 0, 0, 12],
+          },
 
-      {
-        text: "Notes",
-        style: "section",
-      },
+          {
+            text:
+              "Read this passage together before discussing the questions below.",
+            style: "bodyMuted",
+            alignment: "center",
+          },
+        ]
+      ),
 
-      {
-        text:
-          data.notes || "No notes.",
-        margin: [0, 0, 0, 15],
-      },
+      ...createPdfSection(
+        "🎵 Opening",
+        [
+          {
+            columns: [
+              {
+                width: 100,
+                text: "Song",
+                bold: true,
+              },
+              {
+                text:
+                  data.openingSong,
+              },
+            ],
+            margin: [0, 0, 0, 8],
+          },
 
-      {
-        text: "Family Goals",
-        style: "section",
-      },
+          {
+            columns: [
+              {
+                width: 100,
+                text: "Prayer",
+                bold: true,
+              },
+              {
+                text:
+                  data.openingPrayer ||
+                  "—",
+              },
+            ],
+          },
+        ]
+      ),
 
-      {
-        ul: data.goals,
-      },
+      ...createPdfSection(
+        "💬 Discussion Questions",
+        {
+          ol: data.discussionQuestions,
+          margin: [0, 6, 0, 0],
+        }
+      ),
 
-      {
-        text: "Closing",
-        style: "section",
-      },
+      ...createPdfSection(
+        "📝 Notes",
+        {
+          text:
+            data.notes?.trim() ||
+            "No notes recorded for this session.",
+          style: "body",
+        }
+      ),
 
-      {
-        ul: [
-          `Song: ${data.closingSong}`,
-          `Prayer: ${data.closingPrayer || "—"}`,
-        ],
-      },
+      ...createPdfSection(
+        "🎯 Family Goals",
+        {
+          ul: data.goals,
+        }
+      ),
 
-      {
-        text: `Generated ${data.exportedAt.toLocaleString()}`,
-        alignment: "right",
-        margin: [0, 30, 0, 0],
-        fontSize: 9,
-        color: "gray",
-      },
+      ...createPdfSection(
+        "🎵 Closing",
+        [
+          {
+            columns: [
+              {
+                width: 100,
+                text: "Song",
+                bold: true,
+              },
+              {
+                text:
+                  data.closingSong,
+              },
+            ],
+            margin: [0, 0, 0, 8],
+          },
+
+          {
+            columns: [
+              {
+                width: 100,
+                text: "Prayer",
+                bold: true,
+              },
+              {
+                text:
+                  data.closingPrayer ||
+                  "—",
+              },
+            ],
+          },
+        ]
+      ),
+
+      createPdfFooter(
+        data.exportedAt
+      ),
     ],
 
-    styles: {
-      title: {
-        fontSize: 24,
-        bold: true,
-        alignment: "center",
-        margin: [0, 0, 0, 20],
-      },
-
-      heading: {
-        fontSize: 18,
-        bold: true,
-        margin: [0, 0, 0, 8],
-      },
-
-      section: {
-        fontSize: 14,
-        bold: true,
-        margin: [0, 18, 0, 8],
-      },
-    },
+    styles: PdfTypography,
 
     defaultStyle: {
-      fontSize: 11,
+      fontSize: 12,
     },
   };
 }

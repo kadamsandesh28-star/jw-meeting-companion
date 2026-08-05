@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Divider,
+  MenuItem,
   Paper,
   Stack,
   TextField,
@@ -110,7 +111,67 @@ export default function WorshipSessionEditor({
             }
             fullWidth
           />
+<Stack
+  direction={{ xs: "column", md: "row" }}
+  spacing={2}
+>
+  <TextField
+    label="Scheduled Date"
+    type="date"
+    value={session.scheduledDate}
+    onChange={(e) =>
+      update(
+        "scheduledDate",
+        e.target.value
+      )
+    }
+    InputLabelProps={{
+      shrink: true,
+    }}
+    fullWidth
+  />
 
+  <TextField
+    label="Scheduled Time"
+    type="time"
+    value={session.scheduledTime}
+    onChange={(e) =>
+      update(
+        "scheduledTime",
+        e.target.value
+      )
+    }
+    InputLabelProps={{
+      shrink: true,
+    }}
+    fullWidth
+  />
+</Stack>
+
+<TextField
+  select
+  label="Category"
+  value={session.category}
+  onChange={(e) =>
+    update(
+      "category",
+      e.target.value as FamilyWorshipSession["category"]
+    )
+  }
+  fullWidth
+>
+  <MenuItem value="family-worship">
+    Family Worship
+  </MenuItem>
+
+  <MenuItem value="personal-study">
+    Personal Study
+  </MenuItem>
+
+  <MenuItem value="meeting-preparation">
+    Meeting Preparation
+  </MenuItem>
+</TextField>
           <TextField
             label="Bible Reading"
             value={session.bibleReading}

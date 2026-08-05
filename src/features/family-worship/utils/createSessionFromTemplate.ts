@@ -6,12 +6,21 @@ export function createSessionFromTemplate(
 ): FamilyWorshipSession {
   const now = Date.now();
 
+  // Today's date (YYYY-MM-DD)
+  const today = new Date().toISOString().split("T")[0];
+
   return {
     id: crypto.randomUUID(),
 
     title: template.title,
 
     theme: template.theme,
+
+    scheduledDate: today,
+
+    scheduledTime: "19:00",
+
+    category: "family-worship",
 
     bibleReading: template.bibleReading,
 

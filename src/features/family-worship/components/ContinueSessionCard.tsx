@@ -9,6 +9,10 @@ import {
 } from "@mui/material";
 
 import { FamilyWorshipSession } from "../models/FamilyWorshipSession";
+import {
+  formatSessionDate,
+  formatSessionTime,
+} from "../utils/dateFormatter";
 
 interface Props {
   session: FamilyWorshipSession | null;
@@ -43,7 +47,7 @@ export default function ContinueSessionCard({
           color="#1E293B"
           gutterBottom
         >
-          📖 Continue Last Worship
+          👨‍👩‍👧‍👦 Continue Last Worship
         </Typography>
 
         <Typography
@@ -52,8 +56,7 @@ export default function ContinueSessionCard({
             lineHeight: 1.7,
           }}
         >
-          You haven't created a family
-          worship session yet.
+          You haven't created a family worship session yet.
         </Typography>
       </Paper>
     );
@@ -87,7 +90,7 @@ export default function ContinueSessionCard({
           fontWeight={700}
           color="#1565C0"
         >
-          📖 Continue Last Worship
+          👨‍👩‍👧‍👦 Continue Last Worship
         </Typography>
 
         <Typography
@@ -101,12 +104,33 @@ export default function ContinueSessionCard({
         <Typography
           sx={{
             color: "#64748B",
-            fontSize: "1rem",
           }}
         >
           <strong>Theme:</strong>{" "}
           {session.theme || "No theme"}
         </Typography>
+
+        <Stack spacing={0.5}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+          >
+            📅{" "}
+            {formatSessionDate(
+              session.scheduledDate
+            )}
+          </Typography>
+
+          <Typography
+            variant="body2"
+            color="text.secondary"
+          >
+            🕖{" "}
+            {formatSessionTime(
+              session.scheduledTime
+            )}
+          </Typography>
+        </Stack>
 
         <Stack
           direction="row"

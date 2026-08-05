@@ -2,8 +2,14 @@ import { useMemo, useState } from "react";
 
 import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import {
+  Alert,
   Box,
   Button,
+  Chip,
+  LinearProgress,
+  Paper,
+  Stack,
+  Typography,
 } from "@mui/material";
 
 import ContinueSessionCard from "../components/ContinueSessionCard";
@@ -22,6 +28,10 @@ import { FamilyWorshipSession } from "../models/FamilyWorshipSession";
 import { WorshipTemplate } from "../models/WorshipTemplate";
 import { createEmptySession } from "../utils/createEmptySession";
 import { createSessionFromTemplate } from "../utils/createSessionFromTemplate";
+import {
+  formatSessionDate,
+  formatSessionTime,
+} from "../utils/dateFormatter";
 import { getRandomTemplate } from "../utils/getRandomTemplate";
 
 export default function FamilyWorshipPage() {
@@ -66,6 +76,31 @@ export default function FamilyWorshipPage() {
 
   const lastSession =
     recentSessions[0] ?? null;
+
+  const upcomingSessions =
+    useMemo(
+      () =>
+        [...sessions]
+          .filter(
+            (session) =>
+              !!session.scheduledDate
+          )
+          .sort((a, b) => {
+            const left = new Date(
+              `${a.scheduledDate}T${a.scheduledTime}`
+            ).getTime();
+
+            const right = new Date(
+              `${b.scheduledDate}T${b.scheduledTime}`
+            ).getTime();
+
+            return left - right;
+          }),
+      [sessions]
+    );
+
+  const nextSession =
+    upcomingSessions[0] ?? null;
 
   function handleNewSession() {
     setSession(createEmptySession());
@@ -165,6 +200,114 @@ export default function FamilyWorshipPage() {
     >
       <FamilyWorshipHeader />
 
+      {nextSession && (
+        <Paper
+          elevation={0}
+          sx={{
+            p: 4,
+            mt: 4,
+            mb: 4,
+            borderRadius: 4,
+            border: 2,
+            borderColor:
+              "primary.main",
+          }}
+        >
+          <Stack spacing={2}>
+            <Chip
+              label="NEXT FAMILY WORSHIP"
+              color="primary"
+              sx={{
+                width: "fit-content",
+                fontWeight: 700,
+              }}
+            />
+
+            <Typography
+              variant="h4"
+              fontWeight={700}
+            >
+              {nextSession.title ||
+                "Family Worship"}
+            </Typography>
+
+            {nextSession.theme && (
+              <Typography
+                color="text.secondary"
+              >
+                {nextSession.theme}
+              </Typography>
+            )}
+
+            <Typography color="text.secondary">
+              📅{" "}
+              {formatSessionDate(
+                nextSession.scheduledDate
+              )}
+            </Typography>
+
+            <Typography color="text.secondary">
+              🕖{" "}
+              {formatSessionTime(
+                nextSession.scheduledTime
+              )}
+            </Typography>
+{nextSession.goals.length > 0 && (
+  <>
+    <Typography
+      variant="subtitle2"
+      fontWeight={700}
+    >
+      Goal Progress
+    </Typography>
+
+    <LinearProgress
+      variant="determinate"
+      value={
+        (nextSession.goals.filter(
+          (goal) => goal.completed
+        ).length /
+          nextSession.goals.length) *
+        100
+      }
+      sx={{
+        height: 10,
+        borderRadius: 999,
+      }}
+    />
+
+    <Typography
+      variant="body2"
+      color="text.secondary"
+    >
+      {
+        nextSession.goals.filter(
+          (goal) => goal.completed
+        ).length
+      }{" "}
+      of {nextSession.goals.length} goals completed
+    </Typography>
+  </>
+)}
+            <Alert severity="info">
+              Your next scheduled
+              Family Worship session.
+            </Alert>
+
+            <Button
+              variant="contained"
+              onClick={() =>
+                handleContinue(
+                  nextSession
+                )
+              }
+            >
+              Open Session
+            </Button>
+          </Stack>
+        </Paper>
+      )}
+
       <Box
         display="flex"
         justifyContent="flex-end"
@@ -200,6 +343,86 @@ export default function FamilyWorshipPage() {
         }
       />
 
+      {upcomingSessions.length >
+        1 && (
+        <Paper
+          elevation={0}
+          sx={{
+            mt: 5,
+            p: 3,
+            borderRadius: 4,
+            border: 1,
+            borderColor:
+              "divider",
+          }}
+        >
+          <Typography
+            variant="h6"
+            fontWeight={700}
+            mb={2}
+          >
+            Upcoming Sessions
+          </Typography>
+
+          <Stack spacing={2}>
+            {upcomingSessions
+              .slice(1)
+              .map((item) => (
+                <Paper
+                  key={item.id}
+                  variant="outlined"
+                  sx={{
+                    p: 2,
+                  }}
+                >
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Box>
+                      <Typography fontWeight={700}>
+                        {item.title}
+                      </Typography>
+
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                      >
+                        📅{" "}
+                        {formatSessionDate(
+                          item.scheduledDate
+                        )}
+                      </Typography>
+
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                      >
+                        🕖{" "}
+                        {formatSessionTime(
+                          item.scheduledTime
+                        )}
+                      </Typography>
+                    </Box>
+
+                    <Button
+                      size="small"
+                      onClick={() =>
+                        handleContinue(
+                          item
+                        )
+                      }
+                    >
+                      Open
+                    </Button>
+                  </Stack>
+                </Paper>
+              ))}
+          </Stack>
+        </Paper>
+      )}
+
       <Box sx={{ mt: 5 }}>
         <RecentSessionList
           sessions={recentSessions}
@@ -208,10 +431,14 @@ export default function FamilyWorshipPage() {
 
       <TemplatePreviewDialog
         open={previewOpen}
-        template={selectedTemplate}
+        template={
+          selectedTemplate
+        }
         onClose={() => {
           setPreviewOpen(false);
-          setSelectedTemplate(null);
+          setSelectedTemplate(
+            null
+          );
         }}
         onUse={handleUseTemplate}
       />

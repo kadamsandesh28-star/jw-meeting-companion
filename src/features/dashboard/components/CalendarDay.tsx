@@ -20,10 +20,13 @@ export default function CalendarDay({
     return <Box sx={{ height: 56 }} />;
   }
 
-  const date = new Date(year, month, day);
-  const dateString = date.toISOString().split("T")[0];
+  // Build the date string without UTC conversion.
+  const dateString =
+    `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 
-  const dayEvents = events.filter((event) => event.date === dateString);
+  const dayEvents = events.filter(
+    (event) => event.date === dateString
+  );
 
   const today = new Date();
 
@@ -38,7 +41,9 @@ export default function CalendarDay({
       sx={{
         height: 56,
         border: "1px solid",
-        borderColor: isToday ? "primary.main" : "divider",
+        borderColor: isToday
+          ? "primary.main"
+          : "divider",
         borderRadius: 2,
         cursor: "pointer",
         position: "relative",
@@ -56,14 +61,20 @@ export default function CalendarDay({
     >
       <Typography
         fontWeight={isToday ? 700 : 500}
-        color={isToday ? "primary.main" : "text.primary"}
+        color={
+          isToday
+            ? "primary.main"
+            : "text.primary"
+        }
       >
         {day}
       </Typography>
 
       {dayEvents.length > 0 && (
         <Tooltip
-          title={dayEvents.map((e) => e.title).join(", ")}
+          title={dayEvents
+            .map((e) => e.title)
+            .join(", ")}
         >
           <Box
             sx={{
@@ -73,26 +84,32 @@ export default function CalendarDay({
               gap: 0.5,
             }}
           >
-            {dayEvents.slice(0, 3).map((event) => (
-              <Box
-                key={event.id}
-                sx={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: "50%",
-                  bgcolor:
-                    event.category === "Meeting"
-                      ? "#2563EB"
-                      : event.category === "Assembly"
-                      ? "#16A34A"
-                      : event.category === "Convention"
-                      ? "#9333EA"
-                      : event.category === "Reminder"
-                      ? "#EA580C"
-                      : "#64748B",
-                }}
-              />
-            ))}
+            {dayEvents
+              .slice(0, 3)
+              .map((event) => (
+                <Box
+                  key={event.id}
+                  sx={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: "50%",
+                    bgcolor:
+                      event.category ===
+                      "Meeting"
+                        ? "#2563EB"
+                        : event.category ===
+                          "Assembly"
+                        ? "#16A34A"
+                        : event.category ===
+                          "Convention"
+                        ? "#9333EA"
+                        : event.category ===
+                          "Reminder"
+                        ? "#EA580C"
+                        : "#64748B",
+                  }}
+                />
+              ))}
           </Box>
         </Tooltip>
       )}

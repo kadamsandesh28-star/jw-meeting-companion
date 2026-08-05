@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 
 import {
@@ -12,8 +14,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-
-import { useState } from "react";
 
 import {
   MediaAttachment,
@@ -51,24 +51,67 @@ export default function MediaAttachmentsEditor({
   const [type, setType] =
     useState<MediaType>("video");
 
+  const [
+    editingAttachment,
+    setEditingAttachment,
+  ] =
+    useState<MediaAttachment | null>(
+      null
+    );
+
+  function resetForm() {
+    setTitle("");
+    setUrl("");
+    setType("video");
+    setEditingAttachment(null);
+  }
+
+  function handleEdit(
+    attachment: MediaAttachment
+  ) {
+    setEditingAttachment(
+      attachment
+    );
+
+    setTitle(attachment.title);
+    setUrl(attachment.url);
+    setType(attachment.type);
+
+    setOpen(true);
+  }
+
   function handleSave() {
     if (!title.trim() || !url.trim()) {
       return;
     }
 
-    onChange([
-      ...value,
-      {
-        id: crypto.randomUUID(),
-        title,
-        url,
-        type,
-      },
-    ]);
+    if (editingAttachment) {
+      onChange(
+        value.map((item) =>
+          item.id ===
+          editingAttachment.id
+            ? {
+                ...item,
+                title,
+                url,
+                type,
+              }
+            : item
+        )
+      );
+    } else {
+      onChange([
+        ...value,
+        {
+          id: crypto.randomUUID(),
+          title,
+          url,
+          type,
+        },
+      ]);
+    }
 
-    setTitle("");
-    setUrl("");
-    setType("video");
+    resetForm();
     setOpen(false);
   }
 
@@ -108,9 +151,10 @@ export default function MediaAttachmentsEditor({
             startIcon={
               <AddRoundedIcon />
             }
-            onClick={() =>
-              setOpen(true)
-            }
+            onClick={() => {
+              resetForm();
+              setOpen(true);
+            }}
           >
             Add
           </Button>
@@ -126,7 +170,12 @@ export default function MediaAttachmentsEditor({
               (attachment) => (
                 <MediaAttachmentCard
                   key={attachment.id}
-                  attachment={attachment}
+                  attachment={
+                    attachment
+                  }
+                  onEdit={
+                    handleEdit
+                  }
                   onDelete={
                     handleDelete
                   }
@@ -139,14 +188,17 @@ export default function MediaAttachmentsEditor({
 
       <Dialog
         open={open}
-        onClose={() =>
-          setOpen(false)
-        }
+        onClose={() => {
+          resetForm();
+          setOpen(false);
+        }}
         fullWidth
         maxWidth="sm"
       >
         <DialogTitle>
-          Add Media
+          {editingAttachment
+            ? "Edit Media"
+            : "Add Media"}
         </DialogTitle>
 
         <DialogContent>
@@ -162,6 +214,7 @@ export default function MediaAttachmentsEditor({
                   e.target.value
                 )
               }
+              fullWidth
             />
 
             <TextField
@@ -174,6 +227,7 @@ export default function MediaAttachmentsEditor({
                     .value as MediaType
                 )
               }
+              fullWidth
             >
               {mediaTypes.map((item) => (
                 <MenuItem
@@ -193,15 +247,17 @@ export default function MediaAttachmentsEditor({
                   e.target.value
                 )
               }
+              fullWidth
             />
           </Stack>
         </DialogContent>
 
         <DialogActions>
           <Button
-            onClick={() =>
-              setOpen(false)
-            }
+            onClick={() => {
+              resetForm();
+              setOpen(false);
+            }}
           >
             Cancel
           </Button>
@@ -210,7 +266,9 @@ export default function MediaAttachmentsEditor({
             variant="contained"
             onClick={handleSave}
           >
-            Save
+            {editingAttachment
+              ? "Save Changes"
+              : "Save"}
           </Button>
         </DialogActions>
       </Dialog>

@@ -2,9 +2,11 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 
 import {
+  Box,
   Button,
   Checkbox,
   IconButton,
+  LinearProgress,
   Paper,
   Stack,
   TextField,
@@ -78,6 +80,21 @@ export default function FamilyGoalsEditor({
     );
   }
 
+  const completedGoals =
+    value.filter(
+      (goal) => goal.completed
+    ).length;
+
+  const totalGoals =
+    value.length;
+
+  const progress =
+    totalGoals === 0
+      ? 0
+      : (completedGoals /
+          totalGoals) *
+        100;
+
   return (
     <Paper
       elevation={0}
@@ -95,6 +112,38 @@ export default function FamilyGoalsEditor({
         >
           Family Goals
         </Typography>
+
+        <Box>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            mb={1}
+          >
+            <Typography
+              variant="body2"
+              fontWeight={600}
+            >
+              Progress
+            </Typography>
+
+            <Typography
+              variant="body2"
+              color="text.secondary"
+            >
+              {completedGoals} of{" "}
+              {totalGoals} completed
+            </Typography>
+          </Stack>
+
+          <LinearProgress
+            variant="determinate"
+            value={progress}
+            sx={{
+              height: 10,
+              borderRadius: 999,
+            }}
+          />
+        </Box>
 
         {value.map((goal) => (
           <Stack
