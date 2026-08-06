@@ -4,10 +4,7 @@ import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import NightsStayRoundedIcon from "@mui/icons-material/NightsStayRounded";
 import WbSunnyRoundedIcon from "@mui/icons-material/WbSunnyRounded";
-import {
-  Box,
-  Fab,
-} from "@mui/material";
+import { Box, Fab } from "@mui/material";
 
 import AddScheduleDialog from "../components/AddScheduleDialog";
 import ProgressCard from "../components/ProgressCard";
@@ -93,16 +90,15 @@ const defaultItems: ScheduleItem[] = [
 ];
 
 export default function LifeSchedulePage() {
-  const [dialogOpen, setDialogOpen] =
-    useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-  const [items, setItems] =
-    useState<ScheduleItem[]>([]);
+  const [editingItem, setEditingItem] =
+    useState<ScheduleItem | null>(null);
 
-  // Load once
+  const [items, setItems] = useState<ScheduleItem[]>([]);
+
   useEffect(() => {
-    const saved =
-      scheduleService.getAll();
+    const saved = scheduleService.getAll();
 
     if (saved.length > 0) {
       setItems(saved);
@@ -111,7 +107,6 @@ export default function LifeSchedulePage() {
     }
   }, []);
 
-  // Auto Save
   useEffect(() => {
     if (items.length > 0) {
       scheduleService.saveAll(items);
@@ -131,21 +126,42 @@ export default function LifeSchedulePage() {
     );
   }
 
-  function handleAddActivity(
-    item: ScheduleItem
-  ) {
-    setItems((current) =>
-      [...current, item].sort((a, b) =>
+  function handleSave(item: ScheduleItem) {
+    setItems((current) => {
+      const exists = current.some(
+        (x) => x.id === item.id
+      );
+
+      const updated = exists
+        ? current.map((x) =>
+            x.id === item.id ? item : x
+          )
+        : [...current, item];
+
+      return updated.sort((a, b) =>
         a.time.localeCompare(b.time)
-      )
+      );
+    });
+
+    setEditingItem(null);
+    setDialogOpen(false);
+  }
+
+  function handleEdit(item: ScheduleItem) {
+    setEditingItem(item);
+    setDialogOpen(true);
+  }
+
+  function handleDelete(id: string) {
+    setItems((current) =>
+      current.filter((item) => item.id !== id)
     );
   }
 
   const completed = useMemo(
     () =>
-      items.filter(
-        (item) => item.completed
-      ).length,
+      items.filter((item) => item.completed)
+        .length,
     [items]
   );
 
@@ -180,15 +196,15 @@ export default function LifeSchedulePage() {
       <ScheduleSection
         title="Morning"
         subtitle="Start your day spiritually and positively."
-        icon={
-          <WbSunnyRoundedIcon color="warning" />
-        }
+        icon={<WbSunnyRoundedIcon color="warning" />}
       >
         {morning.map((item) => (
           <ScheduleRow
             key={item.id}
             item={item}
             onToggle={handleToggle}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
           />
         ))}
       </ScheduleSection>
@@ -196,15 +212,15 @@ export default function LifeSchedulePage() {
       <ScheduleSection
         title="Afternoon"
         subtitle="Continue your day with purpose."
-        icon={
-          <LightModeRoundedIcon color="primary" />
-        }
+        icon={<LightModeRoundedIcon color="primary" />}
       >
         {afternoon.map((item) => (
           <ScheduleRow
             key={item.id}
             item={item}
             onToggle={handleToggle}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
           />
         ))}
       </ScheduleSection>
@@ -212,24 +228,25 @@ export default function LifeSchedulePage() {
       <ScheduleSection
         title="Evening"
         subtitle="Wind down and reflect on your day."
-        icon={
-          <NightsStayRoundedIcon color="secondary" />
-        }
+        icon={<NightsStayRoundedIcon color="secondary" />}
       >
         {evening.map((item) => (
           <ScheduleRow
             key={item.id}
             item={item}
             onToggle={handleToggle}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
           />
         ))}
       </ScheduleSection>
 
       <Fab
         color="primary"
-        onClick={() =>
-          setDialogOpen(true)
-        }
+        onClick={() => {
+          setEditingItem(null);
+          setDialogOpen(true);
+        }}
         sx={{
           position: "fixed",
           bottom: 24,
@@ -241,10 +258,12 @@ export default function LifeSchedulePage() {
 
       <AddScheduleDialog
         open={dialogOpen}
-        onClose={() =>
-          setDialogOpen(false)
-        }
-        onSave={handleAddActivity}
+        item={editingItem}
+        onClose={() => {
+          setDialogOpen(false);
+          setEditingItem(null);
+        }}
+        onSave={handleSave}
       />
     </Box>
   );

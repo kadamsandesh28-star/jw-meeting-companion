@@ -1,16 +1,66 @@
-import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
+import CheckBoxOutlineBlankRoundedIcon from "@mui/icons-material/CheckBoxOutlineBlankRounded";
 import EventRoundedIcon from "@mui/icons-material/EventRounded";
-import { Card, CardContent, Chip, Stack, Typography } from "@mui/material";
+import MenuBookRoundedIcon from "@mui/icons-material/MenuBookRounded";
+import GroupsRoundedIcon from "@mui/icons-material/GroupsRounded";
+import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 
-interface NextMeetingCardProps {
+import {
+  Card,
+  CardContent,
+  Checkbox,
+  Chip,
+  Divider,
+  Stack,
+  Typography,
+} from "@mui/material";
+
+export interface ReminderItem {
+  id: string;
   title: string;
-  countdown: string;
+  subtitle: string;
+  badge: string;
+  completed: boolean;
+  icon: "meeting" | "family" | "bible" | "report";
 }
 
-export default function NextMeetingCard({
-  title,
-  countdown,
-}: NextMeetingCardProps) {
+interface RemindersCardProps {
+  reminders: ReminderItem[];
+  onToggle: (id: string) => void;
+}
+
+function getReminderIcon(icon: ReminderItem["icon"]) {
+  switch (icon) {
+    case "meeting":
+      return (
+        <GroupsRoundedIcon color="primary" />
+      );
+
+    case "family":
+      return (
+        <EventRoundedIcon color="secondary" />
+      );
+
+    case "bible":
+      return (
+        <MenuBookRoundedIcon color="success" />
+      );
+
+    case "report":
+      return (
+        <AssignmentRoundedIcon color="warning" />
+      );
+
+    default:
+      return (
+        <CheckBoxOutlineBlankRoundedIcon />
+      );
+  }
+}
+
+export default function RemindersCard({
+  reminders,
+  onToggle,
+}: RemindersCardProps) {
   return (
     <Card
       elevation={0}
@@ -32,59 +82,68 @@ export default function NextMeetingCard({
             variant="h6"
             fontWeight={700}
           >
-            ⏳ Next Meeting
+            🔔 Reminders
           </Typography>
 
           <Chip
             size="small"
             color="primary"
-            label={countdown}
+            label="View All"
           />
         </Stack>
 
-        <Typography
-          variant="h5"
-          fontWeight={700}
-          gutterBottom
-        >
-          {title}
-        </Typography>
+        {reminders.map((reminder, index) => (
+          <Stack key={reminder.id}>
 
-        <Stack
-          direction="row"
-          spacing={3}
-          mt={2}
-        >
-          <Stack
-            direction="row"
-            spacing={1}
-            alignItems="center"
-          >
-            <EventRoundedIcon
-              fontSize="small"
-              color="primary"
-            />
+            <Stack
+              direction="row"
+              alignItems="center"
+              spacing={2}
+              py={1.5}
+            >
+              <Checkbox
+                checked={reminder.completed}
+                onChange={() =>
+                  onToggle(reminder.id)
+                }
+              />
 
-            <Typography color="text.secondary">
-              See Meeting Schedule
-            </Typography>
+              {getReminderIcon(
+                reminder.icon
+              )}
+
+              <Stack flex={1}>
+                <Typography
+                  fontWeight={700}
+                >
+                  {reminder.title}
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                >
+                  {reminder.subtitle}
+                </Typography>
+              </Stack>
+
+              <Chip
+                label={reminder.badge}
+                size="small"
+                color={
+                  reminder.completed
+                    ? "success"
+                    : "primary"
+                }
+              />
+            </Stack>
+
+            {index <
+              reminders.length - 1 && (
+              <Divider />
+            )}
           </Stack>
-
-          <Stack
-            direction="row"
-            spacing={1}
-            alignItems="center"
-          >
-            <AccessTimeRoundedIcon
-              fontSize="small"
-              color="primary"
-            />
-
-            <Typography color="text.secondary">
-              {countdown}
-            </Typography>
-          </Stack>
-        </Stack>
+        ))}
 
       </CardContent>
     </Card>

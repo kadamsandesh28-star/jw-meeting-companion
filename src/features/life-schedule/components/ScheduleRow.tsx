@@ -1,6 +1,8 @@
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import AutoStoriesRoundedIcon from "@mui/icons-material/AutoStoriesRounded";
+import DeleteOutlineRoundedIcon from "@mui/icons-material/DeleteOutlineRounded";
 import DirectionsWalkRoundedIcon from "@mui/icons-material/DirectionsWalkRounded";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import FreeBreakfastRoundedIcon from "@mui/icons-material/FreeBreakfastRounded";
 import GroupsRoundedIcon from "@mui/icons-material/GroupsRounded";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
@@ -11,6 +13,7 @@ import WorkRoundedIcon from "@mui/icons-material/WorkRounded";
 import {
   Avatar,
   Checkbox,
+  IconButton,
   Paper,
   Stack,
   Typography,
@@ -21,6 +24,8 @@ import { ScheduleItem } from "../models/ScheduleItem";
 interface Props {
   item: ScheduleItem;
   onToggle: (id: string) => void;
+  onEdit: (item: ScheduleItem) => void;
+  onDelete: (id: string) => void;
 }
 
 function getActivityIcon(name: string) {
@@ -57,6 +62,8 @@ function getActivityIcon(name: string) {
 export default function ScheduleRow({
   item,
   onToggle,
+  onEdit,
+  onDelete,
 }: Props) {
   return (
     <Paper
@@ -68,7 +75,6 @@ export default function ScheduleRow({
         border: 1,
         borderColor: "divider",
         bgcolor: "background.paper",
-        cursor: "pointer",
         transition: "all .2s ease",
         "&:hover": {
           borderColor: "primary.main",
@@ -84,9 +90,7 @@ export default function ScheduleRow({
       >
         <Checkbox
           checked={item.completed}
-          onChange={() =>
-            onToggle(item.id)
-          }
+          onChange={() => onToggle(item.id)}
         />
 
         <Typography
@@ -126,6 +130,20 @@ export default function ScheduleRow({
         >
           {item.activity}
         </Typography>
+
+        <IconButton
+          color="primary"
+          onClick={() => onEdit(item)}
+        >
+          <EditRoundedIcon />
+        </IconButton>
+
+        <IconButton
+          color="error"
+          onClick={() => onDelete(item.id)}
+        >
+          <DeleteOutlineRoundedIcon />
+        </IconButton>
       </Stack>
     </Paper>
   );

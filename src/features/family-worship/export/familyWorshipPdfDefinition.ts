@@ -18,8 +18,7 @@ export function familyWorshipPdfDefinition(
     content: [
       createPdfCover({
         title: "FAMILY WORSHIP",
-        description:
-          "Faith • Family • Spiritual Growth",
+        description: "Faith • Family • Spiritual Growth",
       }),
 
       createPdfSessionOverview({
@@ -38,11 +37,43 @@ export function familyWorshipPdfDefinition(
           },
           {
             label: "Generated",
-            value:
-              data.exportedAt.toLocaleDateString(),
+            value: data.exportedAt.toLocaleDateString(),
           },
         ],
       }),
+
+      // Opening moved above Bible Reading
+      ...createPdfSection(
+        "🎵 Opening",
+        [
+          {
+            columns: [
+              {
+                width: 100,
+                text: "Song",
+                bold: true,
+              },
+              {
+                text: data.openingSong,
+              },
+            ],
+            margin: [0, 0, 0, 8],
+          },
+
+          {
+            columns: [
+              {
+                width: 100,
+                text: "Prayer",
+                bold: true,
+              },
+              {
+                text: data.openingPrayer || "—",
+              },
+            ],
+          },
+        ]
+      ),
 
       ...createPdfSection(
         "📖 Bible Reading",
@@ -74,41 +105,6 @@ export function familyWorshipPdfDefinition(
               "Read this passage together before discussing the questions below.",
             style: "bodyMuted",
             alignment: "center",
-          },
-        ]
-      ),
-
-      ...createPdfSection(
-        "🎵 Opening",
-        [
-          {
-            columns: [
-              {
-                width: 100,
-                text: "Song",
-                bold: true,
-              },
-              {
-                text:
-                  data.openingSong,
-              },
-            ],
-            margin: [0, 0, 0, 8],
-          },
-
-          {
-            columns: [
-              {
-                width: 100,
-                text: "Prayer",
-                bold: true,
-              },
-              {
-                text:
-                  data.openingPrayer ||
-                  "—",
-              },
-            ],
           },
         ]
       ),
@@ -149,8 +145,7 @@ export function familyWorshipPdfDefinition(
                 bold: true,
               },
               {
-                text:
-                  data.closingSong,
+                text: data.closingSong,
               },
             ],
             margin: [0, 0, 0, 8],
@@ -164,18 +159,14 @@ export function familyWorshipPdfDefinition(
                 bold: true,
               },
               {
-                text:
-                  data.closingPrayer ||
-                  "—",
+                text: data.closingPrayer || "—",
               },
             ],
           },
         ]
       ),
 
-      createPdfFooter(
-        data.exportedAt
-      ),
+      createPdfFooter(data.exportedAt),
     ],
 
     styles: PdfTypography,

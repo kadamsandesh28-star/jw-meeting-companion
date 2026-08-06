@@ -95,6 +95,9 @@ export function createPdfCard(
   );
 
   return {
+    // Prevent the card from splitting across pages
+    unbreakable: true,
+
     table: {
       widths: ["*"],
 

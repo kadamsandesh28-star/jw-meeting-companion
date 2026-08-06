@@ -21,12 +21,14 @@ import {
 
 interface Props {
   open: boolean;
+  item?: ScheduleItem | null;
   onClose: () => void;
   onSave: (item: ScheduleItem) => void;
 }
 
 export default function AddScheduleDialog({
   open,
+  item,
   onClose,
   onSave,
 }: Props) {
@@ -39,12 +41,18 @@ export default function AddScheduleDialog({
     useState<SchedulePeriod>("Morning");
 
   useEffect(() => {
-    if (open) {
+    if (!open) return;
+
+    if (item) {
+      setTime(item.time);
+      setActivity(item.activity);
+      setPeriod(item.period);
+    } else {
       setTime("");
       setActivity("");
       setPeriod("Morning");
     }
-  }, [open]);
+  }, [open, item]);
 
   function handleSave() {
     if (!time.trim()) return;
@@ -52,7 +60,7 @@ export default function AddScheduleDialog({
     if (!activity.trim()) return;
 
     onSave({
-      id: crypto.randomUUID(),
+      id: item?.id ?? crypto.randomUUID(),
 
       time,
 
@@ -60,9 +68,11 @@ export default function AddScheduleDialog({
 
       period,
 
-      completed: false,
+      completed:
+        item?.completed ?? false,
 
-      icon: "activity",
+      icon:
+        item?.icon ?? "activity",
     });
 
     onClose();
@@ -76,7 +86,9 @@ export default function AddScheduleDialog({
       maxWidth="sm"
     >
       <DialogTitle>
-        Add Activity
+        {item
+          ? "Edit Activity"
+          : "Add Activity"}
       </DialogTitle>
 
       <DialogContent>
@@ -147,7 +159,7 @@ export default function AddScheduleDialog({
           variant="contained"
           onClick={handleSave}
         >
-          Save
+          {item ? "Update" : "Save"}
         </Button>
       </DialogActions>
     </Dialog>
