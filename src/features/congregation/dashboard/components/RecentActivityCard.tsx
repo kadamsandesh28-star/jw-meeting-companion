@@ -1,88 +1,24 @@
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardContent,
-  Chip,
-  Divider,
   Stack,
   Typography,
 } from "@mui/material";
 
-import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import HistoryRoundedIcon from "@mui/icons-material/HistoryRounded";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 
-export interface Activity {
-  title: string;
-  subtitle: string;
-  createdAt: string;
-}
+export default function RecentActivityCard() {
+  function handleViewAll() {
+    // TODO:
+    // Navigate to Activity History page
+    // Example:
+    // navigate("/congregation/activity-history");
+  }
 
-interface RecentActivityCardProps {
-  activities: Activity[];
-}
-
-function ActivityRow({
-  activity,
-}: {
-  activity: Activity;
-}) {
-  return (
-    <Box
-      sx={{
-        p: 2,
-        borderRadius: 3,
-        border: "1px solid",
-        borderColor: "divider",
-        transition: "all .25s ease",
-        "&:hover": {
-          transform: "translateY(-2px)",
-          boxShadow: 2,
-        },
-      }}
-    >
-      <Stack
-        direction="row"
-        spacing={2}
-        alignItems="center"
-      >
-        <Avatar
-          sx={{
-            bgcolor: "#E3F2FD",
-            color: "primary.main",
-          }}
-        >
-          <PersonAddAltOutlinedIcon />
-        </Avatar>
-
-        <Box flex={1}>
-          <Typography fontWeight={700}>
-            {activity.title}
-          </Typography>
-
-          <Typography
-            color="text.secondary"
-            sx={{ mt: 0.5 }}
-          >
-            {activity.subtitle}
-          </Typography>
-        </Box>
-
-        <Chip
-          icon={<HistoryRoundedIcon />}
-          label={activity.createdAt}
-          size="small"
-          variant="outlined"
-        />
-      </Stack>
-    </Box>
-  );
-}
-
-export default function RecentActivityCard({
-  activities,
-}: RecentActivityCardProps) {
   return (
     <Card
       elevation={0}
@@ -92,98 +28,57 @@ export default function RecentActivityCard({
         borderColor: "divider",
       }}
     >
-      <CardContent sx={{ p: 4 }}>
-        <Typography
-          variant="h5"
-          fontWeight={700}
+      <CardContent
+        sx={{
+          p: 4,
+        }}
+      >
+        <Stack
+          direction="row"
+          spacing={2}
+          alignItems="center"
         >
-          Recent Activity
-        </Typography>
-
-        <Typography
-          color="text.secondary"
-          sx={{ mt: 1, mb: 3 }}
-        >
-          Latest updates across your congregation.
-        </Typography>
-
-        <Divider sx={{ mb: 3 }} />
-
-        {activities.length === 0 ? (
-          <Box
+          <Avatar
             sx={{
-              py: 6,
-              textAlign: "center",
+              width: 58,
+              height: 58,
+              bgcolor: "#E3F2FD",
+              color: "primary.main",
             }}
           >
-            <Avatar
-              sx={{
-                mx: "auto",
-                mb: 2,
-                width: 64,
-                height: 64,
-                bgcolor: "#E3F2FD",
-                color: "primary.main",
-              }}
-            >
-              <HistoryRoundedIcon fontSize="large" />
-            </Avatar>
+            <HistoryRoundedIcon />
+          </Avatar>
 
+          <Box flex={1}>
             <Typography
-              variant="h6"
-              fontWeight={600}
+              variant="h5"
+              fontWeight={700}
             >
-              No Recent Activity
+              Recent Activity
             </Typography>
 
             <Typography
               color="text.secondary"
-              sx={{ mt: 1 }}
+              sx={{ mt: 0.5 }}
             >
-              Activity will appear here as congregation
-              information is added.
+              Latest updates across your congregation.
             </Typography>
           </Box>
-        ) : (
-          <Stack spacing={2}>
-            {activities.map((activity, index) => (
-              <ActivityRow
-                key={index}
-                activity={activity}
-              />
-            ))}
-          </Stack>
-        )}
 
-        {activities.length > 0 && (
-          <>
-            <Divider sx={{ my: 3 }} />
-
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              sx={{
-                cursor: "pointer",
-                color: "primary.main",
-                "&:hover": {
-                  textDecoration: "underline",
-                },
-              }}
-            >
-              <Typography
-                fontWeight={600}
-                color="primary"
-              >
-                View Activity History
-              </Typography>
-
-              <ChevronRightRoundedIcon
-                color="primary"
-              />
-            </Stack>
-          </>
-        )}
+          <Button
+            variant="outlined"
+            endIcon={<ChevronRightRoundedIcon />}
+            onClick={handleViewAll}
+            sx={{
+              borderRadius: 3,
+              px: 3,
+              py: 1,
+              fontWeight: 700,
+            }}
+          >
+            View All Activity
+          </Button>
+        </Stack>
       </CardContent>
     </Card>
   );

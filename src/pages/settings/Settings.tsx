@@ -69,6 +69,23 @@ export default function Settings() {
     setCongregationName,
   ] = useState("");
 
+  const [kingdomHall, setKingdomHall] =
+  useState("");
+
+const [circuit, setCircuit] =
+  useState("");
+
+const [language, setLanguage] =
+  useState("English");
+
+const [scriptureText, setScriptureText] =
+  useState("");
+
+const [
+  scriptureReference,
+  setScriptureReference,
+] = useState("");
+
   const { setMode } = useAppTheme();
 
   const fileInputRef =
@@ -101,6 +118,19 @@ export default function Settings() {
     setCongregationName(
       profile.congregationName
     );
+    setKingdomHall(profile.kingdomHall);
+
+setCircuit(profile.circuit);
+
+setLanguage(profile.language);
+
+setScriptureText(
+  profile.scriptureText
+);
+
+setScriptureReference(
+  profile.scriptureReference
+);
   }, []);
 
   function saveAllSettings() {
@@ -119,9 +149,14 @@ export default function Settings() {
 
     setUserRole(userRole);
 
-    saveCongregationProfile({
-      congregationName,
-    });
+  saveCongregationProfile({
+  congregationName,
+  kingdomHall,
+  circuit,
+  language,
+  scriptureText,
+  scriptureReference,
+});
 
     alert(
       "✅ Settings saved successfully!"
@@ -203,6 +238,60 @@ export default function Settings() {
               )
             }
           />
+
+<TextField
+  fullWidth
+  margin="normal"
+  label="Kingdom Hall"
+  value={kingdomHall}
+  onChange={(e) =>
+    setKingdomHall(e.target.value)
+  }
+/>
+
+<TextField
+  fullWidth
+  margin="normal"
+  label="Circuit"
+  value={circuit}
+  onChange={(e) =>
+    setCircuit(e.target.value)
+  }
+/>
+
+<TextField
+  fullWidth
+  margin="normal"
+  label="Language"
+  value={language}
+  onChange={(e) =>
+    setLanguage(e.target.value)
+  }
+/>
+
+<TextField
+  fullWidth
+  margin="normal"
+  label="Dashboard Scripture"
+  value={scriptureText}
+  onChange={(e) =>
+    setScriptureText(
+      e.target.value
+    )
+  }
+/>
+
+<TextField
+  fullWidth
+  margin="normal"
+  label="Scripture Reference"
+  value={scriptureReference}
+  onChange={(e) =>
+    setScriptureReference(
+      e.target.value
+    )
+  }
+/>
 
           <Divider sx={{ my: 4 }} />
 

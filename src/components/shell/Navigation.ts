@@ -11,9 +11,12 @@ import {
   Layers,
   Map,
   Shield,
+  Gavel,
 } from "lucide-react";
 
-export type WorkspaceType = "personal" | "congregation";
+export type WorkspaceType =
+  | "personal"
+  | "congregation";
 
 export interface NavigationItem {
   label: string;
@@ -64,6 +67,7 @@ export const navigation: NavigationGroup[] = [
       },
     ],
   },
+
   {
     workspace: "congregation",
     title: "Congregation",
@@ -92,6 +96,11 @@ export const navigation: NavigationGroup[] = [
         label: "Body of Elders",
         path: "/congregation/body-of-elders",
         icon: Shield,
+      },
+      {
+        label: "Elders Meetings",
+        path: "/congregation/elders-meetings",
+        icon: Gavel,
       },
       {
         label: "Reports",

@@ -6,9 +6,7 @@ import OverseersCard from "../components/OverseersCard";
 import CongregationDepartmentsCard from "../components/CongregationDepartmentsCard";
 import MeetingSchedulesCard from "../components/MeetingSchedulesCard";
 import QuickActionsCard from "../components/QuickActionsCard";
-import RecentActivityCard, {
-  Activity,
-} from "../components/RecentActivityCard";
+import RecentActivityCard from "../components/RecentActivityCard";
 
 import { publisherService } from "../../publishers/services/publisherService";
 import { bodyMemberService } from "../../body-of-elders/services/bodyMemberService";
@@ -35,38 +33,6 @@ export default function Dashboard() {
 
   const committeeCount =
     serviceCommitteeService.getAll().length;
-
-  const activities: Activity[] = [
-    ...publisherService.getAll().map((p) => ({
-      title: `${p.firstName} ${p.lastName}`,
-      subtitle: "Publisher created",
-      createdAt: p.createdAt,
-    })),
-
-    ...serviceGroupService.getAll().map((g) => ({
-      title: g.name,
-      subtitle: "Service Group created",
-      createdAt: g.createdAt,
-    })),
-
-    ...territoryService.getAll().map((t) => ({
-      title: t.name,
-      subtitle: "Territory created",
-      createdAt: t.createdAt,
-    })),
-
-    ...serviceCommitteeService.getAll().map((c) => ({
-      title: c.name,
-      subtitle: "Service Committee created",
-      createdAt: c.createdAt,
-    })),
-  ]
-    .sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() -
-        new Date(a.createdAt).getTime()
-    )
-    .slice(0, 5);
 
   return (
     <Box
@@ -123,8 +89,6 @@ export default function Dashboard() {
           </Grid>
         </Grid>
 
-        {/* Departments + Meeting Schedule + Quick Actions */}
-
         <Grid
           container
           spacing={3}
@@ -157,9 +121,7 @@ export default function Dashboard() {
           </Grid>
         </Grid>
 
-        <RecentActivityCard
-          activities={activities}
-        />
+        <RecentActivityCard />
       </Stack>
     </Box>
   );

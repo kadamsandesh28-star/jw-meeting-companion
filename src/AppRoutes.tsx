@@ -43,6 +43,11 @@ import PublisherList from "./features/congregation/pages/PublisherList";
 import PublisherEditor from "./features/congregation/pages/PublisherEditor";
 import Reports from "./features/congregation/pages/Reports";
 
+import BodyOfEldersMeetingPage from "./features/congregation/elders-meetings/pages/BodyOfEldersMeetingPage";
+import ServiceCommitteeMeetingPage from "./features/congregation/elders-meetings/pages/ServiceCommitteeMeetingPage";
+import OtherMeetingsPage from "./features/congregation/elders-meetings/pages/OtherMeetingsPage";
+import MeetingLibraryPage from "./features/congregation/elders-meetings/pages/MeetingLibraryPage";
+
 // Service Groups
 import ServiceGroupList from "./features/congregation/service-groups/pages/ServiceGroupList";
 import ServiceGroupProfile from "./features/congregation/service-groups/pages/ServiceGroupProfile";
@@ -60,7 +65,7 @@ import BodyMemberEditor from "./features/congregation/body-of-elders/pages/BodyM
 
 // Tools & Settings
 import Tools from "./pages/tools/Tools";
-import Settings from "./pages/settings/Settings";
+import Settings from "./pages/settings/Settings"
 
 // Service Committee
 import ServiceCommitteeList from "./features/congregation/service-committee/pages/ServiceCommitteeList";
@@ -75,6 +80,8 @@ import DepartmentDetailsPage from "./features/congregation/departments/pages/Dep
 import MidweekMeetingPage from "./features/meeting-schedule/midweek/MidweekMeetingPage";
 import WeekendMeetingPage from "./features/meeting-schedule/weekend/WeekendMeetingPage";
 import FieldServicePage from "./features/meeting-schedule/field-service/FieldServicePage";
+
+
 
 export default function AppRoutes() {
   return (
@@ -158,6 +165,26 @@ export default function AppRoutes() {
           path="/ministry"
           element={<MinistryDashboard />}
         />
+{/* Elders Meetings */}
+<Route
+  path="/congregation/elders-meetings"
+  element={<MeetingLibraryPage />}
+/>
+
+<Route
+  path="/congregation/elders-meetings/body-of-elders"
+  element={<BodyOfEldersMeetingPage />}
+/>
+
+<Route
+  path="/congregation/elders-meetings/service-committee"
+  element={<ServiceCommitteeMeetingPage />}
+/>
+
+<Route
+  path="/congregation/elders-meetings/other"
+  element={<OtherMeetingsPage />}
+/>
         <Route
           path="/ministry/reports"
           element={<MinistryReports />}
@@ -311,9 +338,9 @@ export default function AppRoutes() {
 
         {/* Settings */}
         <Route
-          path="/settings"
-          element={<Settings />}
-        />
+  path="/settings"
+  element={<Settings />}
+/>
       </Route>
     </Routes>
   );
