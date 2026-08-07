@@ -8,15 +8,21 @@ import {
 
 import { useAgenda } from "../hooks/useAgenda";
 
-import type { Meeting } from "../models/Meeting";
+import type {
+  Meeting,
+  AttendanceMember,
+} from "../models/Meeting";
 
 interface MeetingContextValue {
   meeting: Meeting;
+
   setMeeting: React.Dispatch<
     React.SetStateAction<Meeting>
   >;
 
-  agenda: ReturnType<typeof useAgenda>;
+  agenda: ReturnType<
+    typeof useAgenda
+  >;
 }
 
 const MeetingContext =
@@ -56,7 +62,8 @@ export function MeetingProvider({
         nextChairman: "",
       },
 
-      attendance: [],
+      attendance:
+        [] as AttendanceMember[],
 
       agenda: [],
 
@@ -73,7 +80,9 @@ export function MeetingProvider({
   );
 
   return (
-    <MeetingContext.Provider value={value}>
+    <MeetingContext.Provider
+      value={value}
+    >
       {children}
     </MeetingContext.Provider>
   );

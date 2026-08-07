@@ -1,5 +1,11 @@
 import type { AgendaItem } from "./AgendaItem";
 
+export interface AttendanceMember {
+  id: string;
+  name: string;
+  present: boolean;
+}
+
 export interface MeetingInfo {
   congregation: string;
   meetingType: string;
@@ -22,7 +28,7 @@ export interface Meeting {
 
   info: MeetingInfo;
 
-  attendance: string[];
+  attendance: AttendanceMember[];
 
   agenda: AgendaItem[];
 
