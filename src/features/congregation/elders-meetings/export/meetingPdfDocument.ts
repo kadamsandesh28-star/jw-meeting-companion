@@ -13,12 +13,18 @@ import {
 export function createMeetingPdfDocument(
   meeting: Meeting
 ): TDocumentDefinitions {
-  const attendance =
+  const congregationName =
+    meeting.info.congregation ||
+    "My Congregation";
+
+  const attendance: Content[] =
     meeting.attendance.length > 0
-      ? meeting.attendance.map((name) => ({
-          text: `• ${name}`,
-          margin: [0, 2, 0, 2],
-        }))
+      ? meeting.attendance.map(
+          (member) => ({
+            text: `${member.present ? "✓" : "☐"} ${member.name}`,
+            margin: [0, 2, 0, 2],
+          })
+        )
       : [
           {
             text: "No attendance recorded.",
@@ -27,60 +33,62 @@ export function createMeetingPdfDocument(
 
   const agenda: Content[] =
     meeting.agenda.length > 0
-      ? meeting.agenda.flatMap((item, index) => [
-          {
-            text: `${index + 1}. ${item.title}`,
-            style: "sectionHeader",
-          },
+      ? meeting.agenda.flatMap(
+          (item, index) => [
+            {
+              text: `${index + 1}. ${item.title}`,
+              style: "sectionHeader",
+            },
 
-          {
-            columns: [
-              {
-                text: [
-                  {
-                    text: "Proposed By: ",
-                    style: "label",
-                  },
-                  item.proposedBy || "-",
-                ],
-              },
+            {
+              columns: [
+                {
+                  text: [
+                    {
+                      text: "Proposed By: ",
+                      style: "label",
+                    },
+                    item.proposedBy || "-",
+                  ],
+                },
 
-              {
-                text: [
-                  {
-                    text: "Duration: ",
-                    style: "label",
-                  },
-                  `${item.duration} min`,
-                ],
-                alignment: "right",
-              },
-            ],
-            margin: [0, 0, 0, 6],
-          },
+                {
+                  text: [
+                    {
+                      text: "Duration: ",
+                      style: "label",
+                    },
+                    `${item.duration} min`,
+                  ],
+                  alignment: "right",
+                },
+              ],
+              margin: [0, 0, 0, 6],
+            },
 
-          {
-            text: [
-              {
-                text: "Reference: ",
-                style: "label",
-              },
-              item.reference || "-",
-            ],
-            margin: [0, 0, 0, 4],
-          },
+            {
+              text: [
+                {
+                  text: "Reference: ",
+                  style: "label",
+                },
+                item.reference || "-",
+              ],
+              margin: [0, 0, 0, 4],
+            },
 
-          {
-            text: [
-              {
-                text: "Notes: ",
-                style: "label",
-              },
-              item.notes || "No notes.",
-            ],
-            margin: [0, 0, 0, 12],
-          },
-        ])
+            {
+              text: [
+                {
+                  text: "Notes: ",
+                  style: "label",
+                },
+                item.notes || "No notes.",
+              ],
+              margin: [0, 0, 0, 12],
+            },
+          ]
+        )
       : [
           {
             text: "No agenda items.",
@@ -102,8 +110,13 @@ export function createMeetingPdfDocument(
 
     content: [
       {
-        text: "Body of Elders Meeting",
+        text: congregationName,
         style: "title",
+      },
+
+      {
+        text: "Body of Elders Meeting",
+        style: "subtitle",
       },
 
       {
@@ -126,7 +139,8 @@ export function createMeetingPdfDocument(
                   text: "Congregation: ",
                   style: "label",
                 },
-                meeting.info.congregation,
+                meeting.info.congregation ||
+                  congregationName,
               ],
             },
 
@@ -136,7 +150,8 @@ export function createMeetingPdfDocument(
                   text: "Date: ",
                   style: "label",
                 },
-                meeting.info.meetingDate,
+                meeting.info.meetingDate ||
+                  "-",
               ],
             },
 
@@ -146,7 +161,8 @@ export function createMeetingPdfDocument(
                   text: "Time: ",
                   style: "label",
                 },
-                meeting.info.meetingTime,
+                meeting.info.meetingTime ||
+                  "-",
               ],
             },
           ],
@@ -158,7 +174,8 @@ export function createMeetingPdfDocument(
                   text: "Chairman: ",
                   style: "label",
                 },
-                meeting.info.chairman,
+                meeting.info.chairman ||
+                  "-",
               ],
             },
 
@@ -168,7 +185,8 @@ export function createMeetingPdfDocument(
                   text: "Opening Prayer: ",
                   style: "label",
                 },
-                meeting.info.openingPrayer,
+                meeting.info.openingPrayer ||
+                  "-",
               ],
             },
 
@@ -178,7 +196,8 @@ export function createMeetingPdfDocument(
                   text: "Closing Prayer: ",
                   style: "label",
                 },
-                meeting.info.closingPrayer,
+                meeting.info.closingPrayer ||
+                  "-",
               ],
             },
           ],

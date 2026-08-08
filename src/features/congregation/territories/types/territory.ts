@@ -9,6 +9,12 @@ export type TerritoryStatus =
   | "Assigned"
   | "Completed";
 
+export type TerritoryAttachment = {
+  name: string;
+  type: "pdf" | "image";
+  data: string;
+};
+
 export interface Territory {
   id: string;
 
@@ -22,6 +28,8 @@ export interface Territory {
 
   addressNotes: string;
   mapReference: string;
+
+  attachment?: TerritoryAttachment;
 
   lastWorked?: string;
   nextDue?: string;

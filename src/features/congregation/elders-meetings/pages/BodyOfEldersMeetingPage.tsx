@@ -16,143 +16,148 @@ import AgendaCard from "../components/AgendaCard";
 import MinutesCard from "../components/MinutesCard";
 import AssignmentsCard from "../components/AssignmentsCard";
 
-import { MeetingProvider } from "../context/MeetingContext";
+import {
+  MeetingProvider,
+  useMeeting,
+} from "../context/MeetingContext";
 
 import ExportButton from "../export/ExportButton";
 import { meetingPdfService } from "../export/meetingPdfService";
 
-import type { Meeting } from "../models/Meeting";
-
 import { loadCongregationProfile } from "../../../../features/settings/storage/congregationProfileStorage";
 import { meetingService } from "../services/meetingService";
 
-export default function BodyOfEldersMeetingPage() {
+function MeetingWorkspace() {
+  const { meeting, setMeeting } =
+    useMeeting();
+
   const profile =
     loadCongregationProfile();
 
-  const meeting: Meeting = {
-    id: crypto.randomUUID(),
+  function handleSave() {
+    const updatedMeeting = {
+      ...meeting,
 
-    title: "Body of Elders Meeting",
+      info: {
+        ...meeting.info,
 
-    createdAt: new Date().toISOString(),
+        congregation:
+          meeting.info.congregation ||
+          profile.congregationName,
+      },
 
-    updatedAt: new Date().toISOString(),
+      updatedAt:
+        new Date().toISOString(),
+    };
 
-    archived: false,
+    setMeeting(updatedMeeting);
 
-    info: {
-      congregation:
-        profile.congregationName,
+    meetingService.save(
+      updatedMeeting
+    );
 
-      meetingType:
-        "Body of Elders",
+    alert(
+      "✅ Meeting saved successfully."
+    );
+  }
 
-      meetingDate: new Date()
-        .toISOString()
-        .split("T")[0],
+  function handleExportPdf() {
+    const pdfMeeting = {
+      ...meeting,
 
-      meetingTime: "19:00",
+      info: {
+        ...meeting.info,
 
-      chairman: "",
+        congregation:
+          meeting.info.congregation ||
+          profile.congregationName,
+      },
+    };
 
-      openingPrayer: "",
-
-      closingPrayer: "",
-
-      nextChairman: "",
-    },
-
-    attendance: [],
-
-    agenda: [],
-
-    minutes: "",
-  };
+    meetingPdfService.export(
+      pdfMeeting
+    );
+  }
 
   return (
-    <MeetingProvider>
-      <Box
-        sx={{
-          maxWidth: 1600,
-          mx: "auto",
-          px: {
-            xs: 2,
-            md: 4,
-          },
-          py: 4,
-        }}
-      >
-        <Stack spacing={3}>
-          <MeetingHeader
-            title="Body of Elders Meeting"
-            subtitle="Manage agenda, attendance, minutes and follow-up assignments."
-            actions={
-              <Stack
-                direction="row"
-                spacing={2}
+    <Box
+      sx={{
+        maxWidth: 1600,
+        mx: "auto",
+        px: {
+          xs: 2,
+          md: 4,
+        },
+        py: 4,
+      }}
+    >
+      <Stack spacing={3}>
+        <MeetingHeader
+          title="Body of Elders Meeting"
+          subtitle="Manage agenda, attendance, minutes and follow-up assignments."
+          actions={
+            <Stack
+              direction="row"
+              spacing={2}
+            >
+              <Button
+                variant="outlined"
+                startIcon={
+                  <SaveRoundedIcon />
+                }
+                onClick={handleSave}
               >
-                <Button
-                  variant="outlined"
-                  startIcon={
-                    <SaveRoundedIcon />
-                  }
-                  onClick={() => {
-                    meetingService.save(
-                      meeting
-                    );
+                Save
+              </Button>
 
-                    alert(
-                      "✅ Meeting saved successfully."
-                    );
-                  }}
-                >
-                  Save
-                </Button>
+              <ExportButton
+                onPdf={
+                  handleExportPdf
+                }
+              />
+            </Stack>
+          }
+        />
 
-                <ExportButton
-                  onPdf={() =>
-                    meetingPdfService.export(
-                      meeting
-                    )
-                  }
-                />
-              </Stack>
-            }
-          />
-
+        <Grid
+          container
+          spacing={3}
+        >
           <Grid
-            container
-            spacing={3}
+            size={{
+              xs: 12,
+              md: 8,
+            }}
           >
-            <Grid
-              size={{
-                xs: 12,
-                md: 8,
-              }}
-            >
-              <MeetingInfoCard />
-            </Grid>
-
-            <Grid
-              size={{
-                xs: 12,
-                md: 4,
-              }}
-            >
-              <AttendanceCard />
-            </Grid>
+            <MeetingInfoCard />
           </Grid>
 
-          <AgendaCard />
+          <Grid
+            size={{
+              xs: 12,
+              md: 4,
+            }}
+          >
+            <AttendanceCard />
+          </Grid>
+        </Grid>
 
-          <MinutesCard />
+        <AgendaCard />
 
-          <AssignmentsCard />
+        <MinutesCard />
 
-          <MeetingFooter />
-        </Stack>
-      </Box>
+        <AssignmentsCard />
+
+        <MeetingFooter />
+      </Stack>
+    </Box>
+  );
+}
+
+export default function BodyOfEldersMeetingPage() {
+  return (
+    <MeetingProvider>
+      <MeetingWorkspace />
     </MeetingProvider>
   );
 }
